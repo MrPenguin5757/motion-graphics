@@ -1,0 +1,22 @@
+{
+  "name": "curb-ads",
+  "version": "1.0.0",
+  "description": "Motion-graphics ad templates for the Curb app, built with Remotion.",
+  "scripts": {
+    "studio": "remotion studio",
+    "render:9x16": "remotion render CurbAd-9x16 out/curb-9x16.mp4",
+    "render:4x5": "remotion render CurbAd-4x5 out/curb-4x5.mp4",
+    "render:1x1": "remotion render CurbAd-1x1 out/curb-1x1.mp4",
+    "render:all": "npm run render:9x16 && npm run render:4x5 && npm run render:1x1"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.192",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.192"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.3",
+    "typescript": "5.5.4"
+  }
+}

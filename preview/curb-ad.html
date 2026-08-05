@@ -1,0 +1,565 @@
+<title>Curb — Sample Motion Ad</title>
+<style>
+  :root{
+    --ink:#0C0A14;
+    --ink-2:#151223;
+    --coral:#FF5A3C;
+    --amber:#FFB23E;
+    --paper:#F7F3EC;
+    --mint:#38E0B0;
+    --muted:#8A83A6;
+    --stage:#08070F;
+    --disp: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Arial", system-ui, sans-serif;
+    --mono: ui-monospace, "SF Mono", "SFMono-Regular", "Menlo", "Consolas", monospace;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    background:
+      radial-gradient(120% 90% at 50% -10%, #17132a 0%, var(--stage) 60%) fixed;
+    color:var(--paper);
+    font-family:var(--disp);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:clamp(16px,3vh,30px);
+    padding:24px 16px 32px;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- studio header ---------- */
+  .studio-tag{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.28em;
+    text-transform:uppercase;
+    color:var(--muted);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .studio-tag .dot{ width:6px;height:6px;border-radius:50%;background:var(--coral);box-shadow:0 0 12px var(--coral); }
+
+  /* ---------- device frame ---------- */
+  .frame{
+    position:relative;
+    height:min(74vh,720px);
+    max-width:92vw;
+    aspect-ratio:var(--arw) / var(--arh);
+    border-radius:calc(var(--u) * 5);
+    overflow:hidden;
+    background:var(--ink);
+    box-shadow:
+      0 0 0 calc(var(--u) * 0.9) #201b33,
+      0 0 0 calc(var(--u) * 1.6) #0a0812,
+      0 40px 90px -20px rgba(0,0,0,.8),
+      0 0 120px -30px var(--coral);
+    cursor:pointer;
+    isolation:isolate;
+    --u:6px;
+    --arw:9; --arh:16;
+  }
+
+  /* scene layers */
+  .scene{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:calc(var(--u) * 8) calc(var(--u) * 7);
+    opacity:0;
+    transition:opacity .22s ease;
+    pointer-events:none;
+    gap:calc(var(--u) * 3);
+  }
+  .scene.on{ opacity:1; }
+
+  .bg-coral{ background:radial-gradient(120% 120% at 30% 10%, #ff6f52, var(--coral) 70%); color:var(--ink); }
+  .bg-ink{ background:radial-gradient(130% 100% at 50% 30%, #1b1630, var(--ink) 70%); color:var(--paper); }
+  .bg-paper{ background:radial-gradient(120% 120% at 70% 0%, #fffdf8, var(--paper) 75%); color:var(--ink); }
+
+  /* corner timecode tag inside every scene */
+  .tag{
+    position:absolute;
+    top:calc(var(--u) * 6);
+    left:calc(var(--u) * 7);
+    right:calc(var(--u) * 7);
+    display:flex;
+    justify-content:space-between;
+    font-family:var(--mono);
+    font-size:calc(var(--u) * 2.3);
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    opacity:.62;
+  }
+
+  /* kinetic headline */
+  .kicker{
+    font-family:var(--mono);
+    font-size:calc(var(--u) * 2.6);
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    font-weight:600;
+  }
+  .head{
+    font-weight:900;
+    text-transform:uppercase;
+    line-height:.92;
+    letter-spacing:-.01em;
+    font-size:calc(var(--u) * 11);
+    margin:0;
+    text-wrap:balance;
+  }
+  .head .word{ display:block; }
+  .head .em{ color:var(--ink); }
+  .bg-ink .head .em{ color:var(--coral); }
+
+  .sub{
+    font-weight:600;
+    font-size:calc(var(--u) * 4.4);
+    line-height:1.15;
+    max-width:80%;
+    opacity:.92;
+  }
+
+  .rule{
+    height:calc(var(--u) * 0.8);
+    width:calc(var(--u) * 22);
+    background:var(--coral);
+    border-radius:99px;
+    transform-origin:left center;
+  }
+  .bg-coral .rule{ background:var(--ink); }
+
+  /* wordmark */
+  .wordmark{
+    display:flex;
+    align-items:baseline;
+    font-weight:900;
+    font-size:calc(var(--u) * 20);
+    letter-spacing:-.02em;
+    text-transform:uppercase;
+    line-height:1;
+  }
+  .wordmark span{ display:inline-block; }
+  .wordmark .k{ color:var(--coral); }
+  .under{
+    height:calc(var(--u) * 1.3);
+    background:var(--coral);
+    border-radius:99px;
+    transform-origin:left center;
+    box-shadow:0 0 calc(var(--u)*3) rgba(255,90,60,.6);
+  }
+  .tagline{
+    font-family:var(--mono);
+    font-size:calc(var(--u) * 3.1);
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+
+  /* feature chips */
+  .heading-sm{
+    font-weight:800;
+    text-transform:uppercase;
+    font-size:calc(var(--u) * 5);
+    letter-spacing:.02em;
+  }
+  .chips{ display:flex; flex-direction:column; gap:calc(var(--u) * 3); width:100%; align-items:center; }
+  .chip{
+    display:flex;
+    align-items:center;
+    gap:calc(var(--u) * 2.6);
+    background:rgba(12,10,20,.06);
+    border:calc(var(--u)*.35) solid rgba(12,10,20,.12);
+    border-radius:99px;
+    padding:calc(var(--u) * 2.4) calc(var(--u) * 4);
+    font-weight:700;
+    font-size:calc(var(--u) * 3.6);
+    text-align:left;
+  }
+  .bg-ink .chip{ background:rgba(247,243,236,.06); border-color:rgba(247,243,236,.14); }
+  .chip .ic{
+    flex:0 0 auto;
+    width:calc(var(--u) * 6);
+    height:calc(var(--u) * 6);
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    background:var(--coral);
+    color:var(--ink);
+  }
+  .chip.mint .ic{ background:var(--mint); }
+  .chip.amber .ic{ background:var(--amber); }
+  .chip .ic svg{ width:60%; height:60%; }
+
+  /* phone mockup */
+  .device{
+    position:relative;
+    width:calc(var(--u) * 40);
+    aspect-ratio:9/17;
+    background:var(--ink-2);
+    border-radius:calc(var(--u) * 5);
+    box-shadow:0 calc(var(--u)*3) calc(var(--u)*8) rgba(0,0,0,.35), inset 0 0 0 calc(var(--u)*.5) rgba(255,255,255,.06);
+    padding:calc(var(--u) * 2);
+    overflow:hidden;
+  }
+  .device .screen{
+    width:100%; height:100%;
+    border-radius:calc(var(--u) * 3.4);
+    background:linear-gradient(180deg,#141026,#0e0b1c);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+  }
+  .app-top{
+    padding:calc(var(--u)*3) calc(var(--u)*3) calc(var(--u)*1.5);
+    display:flex; align-items:center; justify-content:space-between;
+    color:var(--paper);
+    font-weight:900; text-transform:uppercase; letter-spacing:.04em;
+    font-size:calc(var(--u)*3.4);
+  }
+  .app-top .brand .k{ color:var(--coral); }
+  .app-hero{
+    margin:calc(var(--u)*1.5) calc(var(--u)*3);
+    border-radius:calc(var(--u)*2.4);
+    background:linear-gradient(135deg,var(--coral),var(--amber));
+    aspect-ratio:16/8;
+    display:flex; align-items:flex-end;
+    padding:calc(var(--u)*2.4);
+    color:var(--ink);
+    font-weight:800; font-size:calc(var(--u)*2.7);
+  }
+  .app-rows{ display:flex; flex-direction:column; gap:calc(var(--u)*1.6); padding:calc(var(--u)*2) calc(var(--u)*3); flex:1; }
+  .app-row{ display:flex; align-items:center; gap:calc(var(--u)*2); }
+  .app-row .av{ width:calc(var(--u)*5); height:calc(var(--u)*5); border-radius:calc(var(--u)*1.4); background:rgba(255,255,255,.1); flex:0 0 auto; }
+  .app-row .ln{ height:calc(var(--u)*1.5); border-radius:99px; background:rgba(255,255,255,.14); flex:1; }
+  .app-row .ln.short{ flex:.5; }
+  .app-row .pill{
+    flex:0 0 auto;
+    font-family:var(--mono);
+    font-size:calc(var(--u)*1.9);
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    padding:calc(var(--u)*.7) calc(var(--u)*1.6);
+    border-radius:99px;
+    font-weight:700;
+  }
+  .app-row .pill.paid{ background:rgba(56,224,176,.16); color:var(--mint); }
+  .app-row .pill.due{ background:rgba(255,90,60,.16); color:var(--coral); }
+  .app-cta{
+    margin:calc(var(--u)*2) calc(var(--u)*3) calc(var(--u)*3);
+    background:var(--coral);
+    color:var(--ink);
+    text-align:center;
+    font-weight:800; text-transform:uppercase; letter-spacing:.06em;
+    font-size:calc(var(--u)*2.8);
+    padding:calc(var(--u)*2.4);
+    border-radius:99px;
+  }
+
+  .feat-wrap{ display:flex; flex-direction:column; align-items:center; gap:calc(var(--u)*4.5); width:100%; }
+
+  /* CTA store badges */
+  .badges{ display:flex; flex-direction:column; gap:calc(var(--u) * 2.4); align-items:center; }
+  .badge{
+    display:flex; align-items:center; gap:calc(var(--u) * 2.4);
+    background:var(--ink); color:var(--paper);
+    border-radius:calc(var(--u) * 2.4);
+    padding:calc(var(--u) * 2.2) calc(var(--u) * 4.5);
+    min-width:calc(var(--u) * 46);
+  }
+  .badge svg{ width:calc(var(--u) * 5.4); height:calc(var(--u) * 5.4); flex:0 0 auto; }
+  .badge .bt{ text-align:left; line-height:1.05; }
+  .badge .bt small{ font-family:var(--mono); font-size:calc(var(--u) * 2); letter-spacing:.14em; text-transform:uppercase; opacity:.7; display:block; }
+  .badge .bt b{ font-size:calc(var(--u) * 3.5); font-weight:800; }
+
+  .cta-big{
+    font-weight:900; text-transform:uppercase;
+    font-size:calc(var(--u) * 15);
+    line-height:.9; letter-spacing:-.02em;
+    color:var(--ink);
+  }
+  .cta-big .k{ -webkit-text-stroke:calc(var(--u)*.4) var(--ink); color:transparent; }
+
+  /* progress bar */
+  .progress{
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height:calc(var(--u) * 1.1);
+    background:rgba(255,255,255,.12);
+    z-index:5;
+  }
+  .progress .fill{ height:100%; width:0%; background:var(--coral); box-shadow:0 0 12px var(--coral); }
+
+  .pausebadge{
+    position:absolute; inset:0; display:grid; place-items:center; z-index:6;
+    background:rgba(8,7,15,.35); opacity:0; transition:opacity .2s; pointer-events:none;
+  }
+  .frame.paused .pausebadge{ opacity:1; }
+  .pausebadge svg{ width:calc(var(--u)*14); height:calc(var(--u)*14); filter:drop-shadow(0 4px 20px rgba(0,0,0,.5)); }
+
+  /* ---------- controls ---------- */
+  .controls{
+    display:flex; align-items:center; gap:14px;
+    flex-wrap:wrap; justify-content:center;
+  }
+  .btn{
+    font-family:var(--disp);
+    font-weight:700;
+    font-size:13px;
+    letter-spacing:.04em;
+    color:var(--paper);
+    background:#1a1630;
+    border:1px solid #2a2445;
+    padding:10px 16px;
+    border-radius:10px;
+    cursor:pointer;
+    display:inline-flex; align-items:center; gap:8px;
+    transition:background .15s, border-color .15s, transform .05s;
+  }
+  .btn:hover{ background:#221c3d; border-color:#3a3260; }
+  .btn:active{ transform:translateY(1px); }
+  .btn:focus-visible{ outline:2px solid var(--coral); outline-offset:2px; }
+  .btn svg{ width:15px; height:15px; }
+
+  .segment{ display:flex; background:#141028; border:1px solid #2a2445; border-radius:10px; padding:3px; gap:2px; }
+  .segment button{
+    font-family:var(--mono);
+    font-size:12px; letter-spacing:.08em;
+    color:var(--muted);
+    background:transparent; border:0; cursor:pointer;
+    padding:7px 12px; border-radius:7px;
+    transition:color .15s, background .15s;
+  }
+  .segment button[aria-pressed="true"]{ color:var(--ink); background:var(--coral); font-weight:700; }
+  .segment button:focus-visible{ outline:2px solid var(--coral); outline-offset:2px; }
+
+  .note{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--muted);
+    text-align:center;
+    max-width:46ch;
+    line-height:1.7;
+  }
+  .note b{ color:var(--amber); font-weight:400; }
+
+  @media (prefers-reduced-motion: reduce){
+    .scene{ transition:none; }
+  }
+</style>
+
+<div class="studio-tag"><span class="dot"></span> Curb · Sample Motion Ad · Vertical Spot</div>
+
+<div class="frame" id="frame" role="button" tabindex="0" aria-label="Play or pause the ad">
+
+  <!-- SCENE 1 · HOOK -->
+  <section class="scene bg-coral" data-scene="0">
+    <div class="tag"><span>0:00</span><span>Curb</span></div>
+    <div class="kicker anim">Lawncare · detailing · service pros</div>
+    <h1 class="head">
+      <span class="word anim">Still running</span>
+      <span class="word anim">your business off</span>
+      <span class="word em anim">sticky notes?</span>
+    </h1>
+  </section>
+
+  <!-- SCENE 2 · TURN -->
+  <section class="scene bg-ink" data-scene="1">
+    <div class="tag"><span>0:03</span><span>Curb</span></div>
+    <div class="rule anim"></div>
+    <h2 class="head anim">One app.<br><span class="em">Whole operation.</span></h2>
+  </section>
+
+  <!-- SCENE 3 · LOGO REVEAL -->
+  <section class="scene bg-ink" data-scene="2">
+    <div class="tag"><span>0:05</span><span>Curb</span></div>
+    <div class="wordmark" aria-label="Curb">
+      <span class="k anim">C</span><span class="anim">U</span><span class="anim">R</span><span class="anim">B</span>
+    </div>
+    <div class="under anim" style="width:calc(var(--u) * 30)"></div>
+    <div class="tagline anim">Run your business from your phone</div>
+  </section>
+
+  <!-- SCENE 4 · FEATURE 1 -->
+  <section class="scene bg-paper" data-scene="3">
+    <div class="tag"><span>0:07</span><span>Curb</span></div>
+    <div class="feat-wrap">
+      <div class="heading-sm anim">Your whole day, sorted</div>
+      <div class="device anim">
+        <div class="screen">
+          <div class="app-top"><span class="brand">C<span class="k">U</span>RB</span><span>Today · 5 jobs</span></div>
+          <div class="app-hero">Optimized route · 5 stops · 32 min</div>
+          <div class="app-rows">
+            <div class="app-row"><span class="av"></span><span class="ln"></span><span class="pill paid">Paid</span></div>
+            <div class="app-row"><span class="av"></span><span class="ln short"></span><span class="pill due">Due</span></div>
+            <div class="app-row"><span class="av"></span><span class="ln"></span><span class="pill paid">Paid</span></div>
+            <div class="app-row"><span class="av"></span><span class="ln short"></span><span class="pill due">Due</span></div>
+          </div>
+          <div class="app-cta">Start route</div>
+        </div>
+      </div>
+      <div class="chip anim"><span class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z" fill="currentColor"/></svg></span>Jobs, clients &amp; routes — all in one place</div>
+    </div>
+  </section>
+
+  <!-- SCENE 5 · FEATURE 2 -->
+  <section class="scene bg-ink" data-scene="4">
+    <div class="tag"><span>0:10</span><span>Curb</span></div>
+    <div class="feat-wrap">
+      <div class="heading-sm anim">Get paid, not buried</div>
+      <div class="chips">
+        <div class="chip amber anim"><span class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3h9l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 3v4h4M8 13h8M8 17h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>PDF estimates &amp; invoices in seconds</div>
+        <div class="chip mint anim"><span class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-11" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>See who's paid — and who hasn't</div>
+        <div class="chip anim"><span class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2c3.9 0 7 3 7 6.8 0 4.6-7 12.2-7 12.2S5 13.4 5 8.8C5 5 8.1 2 12 2z" fill="currentColor"/><circle cx="12" cy="9" r="2.4" fill="var(--ink)"/></svg></span>Smart routes between every stop</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCENE 6 · CTA -->
+  <section class="scene bg-coral" data-scene="5">
+    <div class="tag"><span>0:13</span><span>Download now</span></div>
+    <div class="cta-big"><span class="anim">Get</span> <span class="k anim">Curb</span></div>
+    <div class="sub anim" style="max-width:82%">Run your whole operation from your pocket. Free on iOS &amp; Android.</div>
+    <div class="badges">
+      <div class="badge anim">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.7c0-2 1.6-3 1.7-3-.9-1.4-2.4-1.5-2.9-1.6-1.2-.1-2.4.7-3 .7-.6 0-1.6-.7-2.6-.7-1.3 0-2.6.8-3.3 2-1.4 2.4-.4 6 1 8 .7 1 1.4 2 2.4 2 .9 0 1.3-.6 2.4-.6 1.1 0 1.4.6 2.4.6 1 0 1.6-.9 2.3-1.9.7-1.1 1-2.1 1-2.2 0 0-1.9-.7-1.9-3zM14.6 6.3c.5-.6.9-1.5.8-2.3-.8 0-1.7.5-2.2 1.1-.5.5-.9 1.4-.8 2.2.9.1 1.7-.4 2.2-1z"/></svg>
+        <span class="bt"><small>Download on the</small><b>App Store</b></span>
+      </div>
+      <div class="badge anim">
+        <svg viewBox="0 0 24 24"><path d="M4 3l10 9-10 9c-.3-.2-.5-.5-.5-1V4c0-.5.2-.8.5-1z" fill="var(--mint)"/><path d="M14 12L4 21l11-6-1-3z" fill="var(--amber)"/><path d="M14 12L4 3l11 6-1 3z" fill="var(--coral)"/><path d="M15 9l4 2.2c.7.4.7 1.2 0 1.6L15 15l-1-3 1-3z" fill="#fff"/></svg>
+        <span class="bt"><small>Get it on</small><b>Google Play</b></span>
+      </div>
+    </div>
+  </section>
+
+  <div class="pausebadge"><svg viewBox="0 0 24 24" fill="var(--paper)"><path d="M8 5v14l11-7z"/></svg></div>
+  <div class="progress"><div class="fill" id="fill"></div></div>
+</div>
+
+<div class="controls">
+  <button class="btn" id="replay"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Replay</button>
+  <div class="segment" role="group" aria-label="Aspect ratio">
+    <button data-ar="9:16" aria-pressed="true">9:16</button>
+    <button data-ar="4:5" aria-pressed="false">4:5</button>
+    <button data-ar="1:1" aria-pressed="false">1:1</button>
+  </div>
+</div>
+
+<p class="note">Tap the frame to pause · <b>All copy, icons &amp; screens are placeholders</b> — tell me what Curb does and I'll swap in real messaging, brand colors &amp; screenshots, then render it to MP4 with Remotion.</p>
+
+<script>
+(function(){
+  const frame = document.getElementById('frame');
+  const fill  = document.getElementById('fill');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // frame-relative unit (like a local vmin): 1u = 1% of the frame's shorter side
+  const setUnit = () => {
+    const r = frame.getBoundingClientRect();
+    frame.style.setProperty('--u', (Math.min(r.width, r.height) / 100) + 'px');
+  };
+  new ResizeObserver(setUnit).observe(frame);
+  setUnit();
+
+  // aspect ratio toggle
+  document.querySelectorAll('.segment button').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      document.querySelectorAll('.segment button').forEach(x=>x.setAttribute('aria-pressed','false'));
+      b.setAttribute('aria-pressed','true');
+      const [w,h] = b.dataset.ar.split(':');
+      frame.style.setProperty('--arw', w);
+      frame.style.setProperty('--arh', h);
+      requestAnimationFrame(setUnit);
+    });
+  });
+
+  // ---- timeline (seconds) ----
+  const scenes = [
+    {start:0.0,  el:frame.querySelector('[data-scene="0"]')},
+    {start:3.0,  el:frame.querySelector('[data-scene="1"]')},
+    {start:4.9,  el:frame.querySelector('[data-scene="2"]')},
+    {start:7.3,  el:frame.querySelector('[data-scene="3"]')},
+    {start:9.9,  el:frame.querySelector('[data-scene="4"]')},
+    {start:12.6, el:frame.querySelector('[data-scene="5"]')},
+  ];
+  const TOTAL = 15.6;
+
+  const ease = 'cubic-bezier(.2,.8,.2,1)';
+  let anims = [];
+
+  function animateIn(sceneEl){
+    if (reduce){ sceneEl.querySelectorAll('.anim').forEach(e=>{e.style.opacity=1;e.style.transform='none';}); return; }
+    const items = sceneEl.querySelectorAll('.anim');
+    items.forEach((el,i)=>{
+      const a = el.animate(
+        [{opacity:0, transform:'translateY(22%) scale(.92)'},
+         {opacity:1, transform:'translateY(0) scale(1)'}],
+        {duration:560, delay:i*130, easing:ease, fill:'both'}
+      );
+      anims.push(a);
+    });
+    // special: underline & rule sweep
+    sceneEl.querySelectorAll('.under, .rule').forEach(el=>{
+      const a = el.animate(
+        [{transform:'scaleX(0)'},{transform:'scaleX(1)'}],
+        {duration:640, delay:520, easing:ease, fill:'both'}
+      );
+      anims.push(a);
+    });
+    const hero = sceneEl.querySelector('.anim-hero');
+    if (hero){
+      anims.push(hero.animate(
+        [{opacity:0, transform:'scale(1.08)'},{opacity:1, transform:'scale(1)'}],
+        {duration:700, delay:400, easing:ease, fill:'both'}));
+    }
+  }
+
+  let current = -1;
+  function setScene(i){
+    if (i === current) return;
+    current = i;
+    scenes.forEach((s,idx)=> s.el.classList.toggle('on', idx===i));
+    anims.forEach(a=>a.cancel()); anims = [];
+    animateIn(scenes[i].el);
+  }
+
+  // ---- clock ----
+  let t0 = performance.now();
+  let paused = false;
+  let pausedAt = 0;
+
+  function loop(now){
+    if (!paused){
+      let t = (now - t0)/1000;
+      if (t >= TOTAL){ t0 = now; t = 0; current = -1; }
+      let idx = 0;
+      for (let k=0;k<scenes.length;k++){ if (t >= scenes[k].start) idx = k; }
+      setScene(idx);
+      fill.style.width = (t/TOTAL*100) + '%';
+    }
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  function restart(){ t0 = performance.now(); paused=false; frame.classList.remove('paused'); current=-1; }
+  document.getElementById('replay').addEventListener('click', restart);
+
+  function togglePause(){
+    if (paused){ t0 = performance.now() - pausedAt; paused=false; frame.classList.remove('paused'); }
+    else { pausedAt = performance.now() - t0; paused=true; frame.classList.add('paused'); }
+  }
+  frame.addEventListener('click', togglePause);
+  frame.addEventListener('keydown', e=>{ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); togglePause(); }});
+})();
+</script>
