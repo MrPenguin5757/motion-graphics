@@ -268,6 +268,42 @@
     border-radius:99px;
   }
 
+  /* ---- faithful Curb home screen ---- */
+  .hs{ display:flex; flex-direction:column; height:100%; background:var(--paper); color:var(--ink); font-family:var(--body); text-align:left; }
+  .hs-top{ background:var(--ink); display:flex; align-items:center; gap:calc(var(--u)*1.4); padding:calc(var(--u)*2.4) calc(var(--u)*2.4) calc(var(--u)*2); }
+  .hs-logo{ width:calc(var(--u)*4.4); height:calc(var(--u)*4.4); border-radius:calc(var(--u)*1.3); background:var(--coral); color:#fff; font-family:var(--disp); font-weight:800; display:grid; place-items:center; font-size:calc(var(--u)*2.8); flex:0 0 auto; }
+  .hs-trade{ flex:1; background:rgba(255,255,255,.09); color:var(--paper); border-radius:99px; padding:calc(var(--u)*1) calc(var(--u)*1.8); font-size:calc(var(--u)*1.9); font-weight:600; }
+  .hs-gear{ color:var(--paper); opacity:.6; font-size:calc(var(--u)*2.4); }
+  .hs-body{ flex:1; padding:calc(var(--u)*2.2); display:flex; flex-direction:column; gap:calc(var(--u)*1.5); overflow:hidden; }
+  .hs-greet{ font-size:calc(var(--u)*1.9); color:var(--muted); }
+  .hs-date{ font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*3.6); line-height:1; margin-top:calc(var(--u)*-.3); }
+  .hs-weather{ display:flex; align-items:center; gap:calc(var(--u)*1.2); background:var(--concrete); border-left:calc(var(--u)*.7) solid var(--coral); border-radius:calc(var(--u)*1.4); padding:calc(var(--u)*1.3) calc(var(--u)*1.6); font-size:calc(var(--u)*1.9); font-weight:600; }
+  .hs-weather svg{ width:calc(var(--u)*2.6); height:calc(var(--u)*2.6); color:var(--coral); flex:0 0 auto; }
+  .hs-stats{ display:flex; gap:calc(var(--u)*1.3); }
+  .hs-stat{ flex:1; background:var(--concrete); border-radius:calc(var(--u)*1.6); padding:calc(var(--u)*1.5); display:flex; flex-direction:column; gap:calc(var(--u)*.5); }
+  .hs-stat span{ font-size:calc(var(--u)*1.5); color:var(--muted); }
+  .hs-stat b{ font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*2.7); }
+  .hs-stat b.green{ color:var(--mint); }
+  .hs-stat b.orange{ color:var(--coral); }
+  .hs-route{ background:var(--coral); color:#fff; display:flex; align-items:center; justify-content:center; gap:calc(var(--u)*1.2); font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*2.2); padding:calc(var(--u)*2); border-radius:calc(var(--u)*2); }
+  .hs-route svg{ width:calc(var(--u)*2.4); height:calc(var(--u)*2.4); }
+  .hs-run{ font-size:calc(var(--u)*1.5); letter-spacing:.14em; color:var(--muted); font-weight:700; }
+  .hs-job{ background:var(--concrete); border-radius:calc(var(--u)*1.6); padding:calc(var(--u)*1.5) calc(var(--u)*1.7); display:flex; justify-content:space-between; gap:calc(var(--u)*1.2); }
+  .hs-job-l{ display:flex; flex-direction:column; gap:calc(var(--u)*.35); min-width:0; }
+  .hs-time{ font-size:calc(var(--u)*1.5); color:var(--muted); }
+  .hs-job-l b{ font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*2.2); }
+  .hs-svc{ font-size:calc(var(--u)*1.5); color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .hs-job-r{ display:flex; flex-direction:column; align-items:flex-end; gap:calc(var(--u)*.5); flex:0 0 auto; }
+  .hs-job-r>b{ font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*2.2); }
+  .hs-status{ font-size:calc(var(--u)*1.5); font-weight:700; display:flex; align-items:center; gap:calc(var(--u)*.6); }
+  .hs-status::before{ content:''; width:calc(var(--u)*1); height:calc(var(--u)*1); border-radius:50%; background:currentColor; }
+  .hs-status.prog{ color:var(--coral); }
+  .hs-status.route{ color:var(--sky); }
+  .hs-unpaid{ font-size:calc(var(--u)*1.4); font-weight:700; color:var(--coral); background:rgba(215,95,31,.15); padding:calc(var(--u)*.3) calc(var(--u)*1.1); border-radius:99px; }
+  .hs-tabs{ display:flex; justify-content:space-between; padding:calc(var(--u)*1.4) calc(var(--u)*2.4) calc(var(--u)*2); border-top:1px solid rgba(33,30,26,.08); }
+  .hs-tabs span{ font-size:calc(var(--u)*1.5); color:var(--muted); font-weight:600; }
+  .hs-tabs span.on{ color:var(--coral); }
+
   .feat-wrap{ display:flex; flex-direction:column; align-items:center; gap:calc(var(--u)*4.5); width:100%; }
 
   /* CTA store badges */
@@ -401,15 +437,33 @@
       <div class="heading-sm anim">Every job in one place</div>
       <div class="device anim">
         <div class="screen">
-          <div class="app-top"><span class="brand">C<span class="k">U</span>RB</span><span>Today · 5 jobs</span></div>
-          <div class="app-hero">Optimized route · 5 stops · 32 min</div>
-          <div class="app-rows">
-            <div class="app-row"><span class="av"></span><span class="ln"></span><span class="pill paid">Paid</span></div>
-            <div class="app-row"><span class="av"></span><span class="ln short"></span><span class="pill due">Due</span></div>
-            <div class="app-row"><span class="av"></span><span class="ln"></span><span class="pill paid">Paid</span></div>
-            <div class="app-row"><span class="av"></span><span class="ln short"></span><span class="pill due">Due</span></div>
+          <div class="hs">
+            <div class="hs-top">
+              <span class="hs-logo">C</span>
+              <span class="hs-trade">All trades ⌄</span>
+            </div>
+            <div class="hs-body">
+              <div class="hs-greet">Good evening</div>
+              <div class="hs-date">Friday, June 12</div>
+              <div class="hs-weather"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg> Thunderstorm · 90°/72° · 29%</div>
+              <div class="hs-stats">
+                <div class="hs-stat"><span>Stops</span><b>8</b></div>
+                <div class="hs-stat"><span>Expected</span><b class="green">$1,244</b></div>
+                <div class="hs-stat"><span>Owed you</span><b class="orange">$3,102</b></div>
+              </div>
+              <div class="hs-route"><svg viewBox="0 0 24 24" fill="none"><path d="M3 11l18-8-8 18-2-8-8-2z" fill="currentColor"/></svg> Start today's route · 8 stops</div>
+              <div class="hs-run">TODAY'S RUN</div>
+              <div class="hs-job">
+                <div class="hs-job-l"><span class="hs-time">8:00a</span><b>Marcus Webb</b><span class="hs-svc">Full Detail · Auto Detailing</span></div>
+                <div class="hs-job-r"><b>$286</b><span class="hs-status prog">In progress</span><span class="hs-unpaid">Unpaid</span></div>
+              </div>
+              <div class="hs-job">
+                <div class="hs-job-l"><span class="hs-time">9:30a</span><b>The Hollises</b><span class="hs-svc">Window Washing</span></div>
+                <div class="hs-job-r"><b>$280</b><span class="hs-status route">En route</span><span class="hs-unpaid">Unpaid</span></div>
+              </div>
+            </div>
+            <div class="hs-tabs"><span class="on">Home</span><span>Jobs</span><span>Route</span><span>Clients</span><span>Money</span></div>
           </div>
-          <div class="app-cta">Start route</div>
         </div>
       </div>
       <div class="chip anim"><span class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z" fill="currentColor"/></svg></span>Jobs, clients, routes &amp; money — one app</div>
