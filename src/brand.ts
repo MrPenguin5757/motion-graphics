@@ -1,57 +1,63 @@
 /**
  * Curb — brand + ad configuration
  * ---------------------------------
- * This is the ONE file to edit to make the ad on-brand.
- * Change colors, copy, and asset paths here; the composition reads from it.
+ * Values below come straight from the Curb Design System & Color Bible v1.0.
+ * This is the ONE file to edit to tune the ad. The composition reads from it.
  *
- * When you send the design bible + assets, we update:
- *   - colors        -> your real brand hex values
- *   - fonts         -> drop font files in /public/fonts and reference them
- *   - logoSrc       -> your real logo (PNG/SVG) in /public
- *   - screenshots   -> real app screenshots in /public/screens
+ * Assets you drop into the repo (see ASSETS.md):
+ *   public/logo/     -> logoSrc points here
+ *   public/screens/  -> screenshots used in the phone frames
+ *   public/fonts/    -> not needed; fonts load from Google Fonts at render time
  */
 
 export const brand = {
+  // From the Color Bible. Keys kept stable so the composition wires straight in.
   colors: {
-    ink: '#0C0A14',
-    ink2: '#151223',
-    coral: '#FF5A3C', // primary accent — swap for Curb's brand color
-    amber: '#FFB23E',
-    paper: '#F7F3EC',
-    mint: '#38E0B0',
-    muted: '#8A83A6',
+    ink: '#1D1A16', // Asphalt — dark ground / dark text on light scenes
+    ink2: '#26221C', // Asphalt Mid — device body / dark card surface
+    coral: '#D75F1F', // Curb Orange — primary action / brand accent
+    coralPress: '#BF5316', // pressed accent
+    amber: '#F3A847', // Marigold — recurring / secondary accent
+    paper: '#F4EFE4', // Sand — light ground
+    concrete: '#FBF8F1', // card surface (light)
+    mint: '#3C7A59', // Lawn — paid / success
+    sky: '#2F6FB0', // Sky — en route / info
+    muted: '#7A7264', // Gravel — secondary text / labels
   },
 
-  // System stack now; replace with your brand face once you send the font file.
+  // Curb's brand typefaces. In Remotion these load via @remotion/google-fonts.
   fonts: {
-    display: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif',
-    mono: 'ui-monospace, "SF Mono", Menlo, Consolas, monospace',
+    display: "'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    body: "'Hanken Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    mono: "ui-monospace, 'SF Mono', Menlo, Consolas, monospace",
   },
 
-  // null = use the built-in text wordmark "CURB". Set to '/logo.png' once provided.
+  // Set to your logo once it's in public/logo (e.g. '/logo/curb-logo-standalone.png').
+  // null = render the "CURB" text wordmark in brand type.
   logoSrc: null as string | null,
 
+  // Voice: Direct · Field-ready · No subscription bullshit.
   copy: {
-    kicker: 'Lawncare · detailing · service pros',
-    hook: ['Still running', 'your business off', 'sticky notes?'],
-    turn: ['One app.', 'Whole operation.'],
+    kicker: 'Lawncare · detailing · pressure washing',
+    hook: ['Running the day off', 'texts, notes', 'and memory?'],
+    turn: ['One app runs', 'the whole job.'],
     wordmark: 'CURB',
-    tagline: 'Run your business from your phone',
-    feature1Heading: 'Your whole day, sorted',
-    feature1Chip: 'Jobs, clients & routes — all in one place',
-    feature2Heading: 'Get paid, not buried',
+    tagline: 'Field service, handled.',
+    feature1Heading: 'Every job in one place',
+    feature1Chip: 'Jobs, clients, routes & money — one app',
+    feature2Heading: 'Get paid, skip the busywork',
     feature2Chips: [
       'PDF estimates & invoices in seconds',
-      "See who's paid — and who hasn't",
-      'Smart routes between every stop',
+      "Always know who's paid",
+      'No monthly subscription',
     ],
     ctaLine1: 'Get',
     ctaLine2: 'Curb',
-    ctaSub: 'Run your whole operation from your pocket. Free on iOS & Android.',
+    ctaSub: 'Run the whole operation from your pocket. Free on iOS & Android — no subscription.',
   },
 } as const;
 
-// Timeline in seconds; the composition converts to frames at 30fps.
+// Timeline in seconds; converted to frames at 30fps by the composition.
 export const timeline = {
   fps: 30,
   scenes: [
@@ -59,7 +65,7 @@ export const timeline = {
     { name: 'turn', dur: 1.9 },
     { name: 'logo', dur: 2.4 },
     { name: 'feature1', dur: 2.6 },
-    { name: 'feature2', dur: 2.7 },
+    { name: 'feature2', dur: 2.8 },
     { name: 'cta', dur: 3.0 },
   ],
 } as const;

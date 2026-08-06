@@ -1,15 +1,17 @@
 <title>Curb — Sample Motion Ad</title>
 <style>
   :root{
-    --ink:#0C0A14;
-    --ink-2:#151223;
-    --coral:#FF5A3C;
-    --amber:#FFB23E;
-    --paper:#F7F3EC;
-    --mint:#38E0B0;
-    --muted:#8A83A6;
-    --stage:#08070F;
-    --disp: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Arial", system-ui, sans-serif;
+    --ink:#1D1A16;      /* Asphalt */
+    --ink-2:#26221C;    /* Asphalt Mid */
+    --coral:#D75F1F;    /* Curb Orange */
+    --amber:#F3A847;    /* Marigold */
+    --paper:#F4EFE4;    /* Sand */
+    --mint:#3C7A59;     /* Lawn (paid) */
+    --sky:#2F6FB0;      /* Sky (en route) */
+    --muted:#7A7264;    /* Gravel */
+    --stage:#151310;    /* deep asphalt studio */
+    --disp: "Bricolage Grotesque", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", system-ui, sans-serif;
+    --body: "Hanken Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
     --mono: ui-monospace, "SF Mono", "SFMono-Regular", "Menlo", "Consolas", monospace;
   }
 
@@ -196,8 +198,9 @@
     background:var(--coral);
     color:var(--ink);
   }
-  .chip.mint .ic{ background:var(--mint); }
+  .chip.mint .ic{ background:var(--mint); color:var(--paper); }
   .chip.amber .ic{ background:var(--amber); }
+  .chip.sky .ic{ background:var(--sky); color:var(--paper); }
   .chip .ic svg{ width:60%; height:60%; }
 
   /* phone mockup */
@@ -366,11 +369,11 @@
   <!-- SCENE 1 · HOOK -->
   <section class="scene bg-coral" data-scene="0">
     <div class="tag"><span>0:00</span><span>Curb</span></div>
-    <div class="kicker anim">Lawncare · detailing · service pros</div>
+    <div class="kicker anim">Lawncare · detailing · pressure washing</div>
     <h1 class="head">
-      <span class="word anim">Still running</span>
-      <span class="word anim">your business off</span>
-      <span class="word em anim">sticky notes?</span>
+      <span class="word anim">Running the day off</span>
+      <span class="word anim">texts, notes</span>
+      <span class="word em anim">and memory?</span>
     </h1>
   </section>
 
@@ -378,7 +381,7 @@
   <section class="scene bg-ink" data-scene="1">
     <div class="tag"><span>0:03</span><span>Curb</span></div>
     <div class="rule anim"></div>
-    <h2 class="head anim">One app.<br><span class="em">Whole operation.</span></h2>
+    <h2 class="head anim">One app runs<br><span class="em">the whole job.</span></h2>
   </section>
 
   <!-- SCENE 3 · LOGO REVEAL -->
@@ -388,14 +391,14 @@
       <span class="k anim">C</span><span class="anim">U</span><span class="anim">R</span><span class="anim">B</span>
     </div>
     <div class="under anim" style="width:calc(var(--u) * 30)"></div>
-    <div class="tagline anim">Run your business from your phone</div>
+    <div class="tagline anim">Field service, handled.</div>
   </section>
 
   <!-- SCENE 4 · FEATURE 1 -->
   <section class="scene bg-paper" data-scene="3">
     <div class="tag"><span>0:07</span><span>Curb</span></div>
     <div class="feat-wrap">
-      <div class="heading-sm anim">Your whole day, sorted</div>
+      <div class="heading-sm anim">Every job in one place</div>
       <div class="device anim">
         <div class="screen">
           <div class="app-top"><span class="brand">C<span class="k">U</span>RB</span><span>Today · 5 jobs</span></div>
@@ -409,7 +412,7 @@
           <div class="app-cta">Start route</div>
         </div>
       </div>
-      <div class="chip anim"><span class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z" fill="currentColor"/></svg></span>Jobs, clients &amp; routes — all in one place</div>
+      <div class="chip anim"><span class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z" fill="currentColor"/></svg></span>Jobs, clients, routes &amp; money — one app</div>
     </div>
   </section>
 
@@ -417,11 +420,11 @@
   <section class="scene bg-ink" data-scene="4">
     <div class="tag"><span>0:10</span><span>Curb</span></div>
     <div class="feat-wrap">
-      <div class="heading-sm anim">Get paid, not buried</div>
+      <div class="heading-sm anim">Get paid, skip the busywork</div>
       <div class="chips">
         <div class="chip amber anim"><span class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3h9l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 3v4h4M8 13h8M8 17h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>PDF estimates &amp; invoices in seconds</div>
-        <div class="chip mint anim"><span class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-11" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>See who's paid — and who hasn't</div>
-        <div class="chip anim"><span class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2c3.9 0 7 3 7 6.8 0 4.6-7 12.2-7 12.2S5 13.4 5 8.8C5 5 8.1 2 12 2z" fill="currentColor"/><circle cx="12" cy="9" r="2.4" fill="var(--ink)"/></svg></span>Smart routes between every stop</div>
+        <div class="chip mint anim"><span class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-11" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Always know who's paid</div>
+        <div class="chip sky anim"><span class="ic"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.4"/><path d="M6 6l12 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span>No monthly subscription</div>
       </div>
     </div>
   </section>
@@ -430,7 +433,7 @@
   <section class="scene bg-coral" data-scene="5">
     <div class="tag"><span>0:13</span><span>Download now</span></div>
     <div class="cta-big"><span class="anim">Get</span> <span class="k anim">Curb</span></div>
-    <div class="sub anim" style="max-width:82%">Run your whole operation from your pocket. Free on iOS &amp; Android.</div>
+    <div class="sub anim" style="max-width:84%">Run the whole operation from your pocket. Free on iOS &amp; Android — no subscription.</div>
     <div class="badges">
       <div class="badge anim">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.7c0-2 1.6-3 1.7-3-.9-1.4-2.4-1.5-2.9-1.6-1.2-.1-2.4.7-3 .7-.6 0-1.6-.7-2.6-.7-1.3 0-2.6.8-3.3 2-1.4 2.4-.4 6 1 8 .7 1 1.4 2 2.4 2 .9 0 1.3-.6 2.4-.6 1.1 0 1.4.6 2.4.6 1 0 1.6-.9 2.3-1.9.7-1.1 1-2.1 1-2.2 0 0-1.9-.7-1.9-3zM14.6 6.3c.5-.6.9-1.5.8-2.3-.8 0-1.7.5-2.2 1.1-.5.5-.9 1.4-.8 2.2.9.1 1.7-.4 2.2-1z"/></svg>
@@ -456,7 +459,7 @@
   </div>
 </div>
 
-<p class="note">Tap the frame to pause · <b>All copy, icons &amp; screens are placeholders</b> — tell me what Curb does and I'll swap in real messaging, brand colors &amp; screenshots, then render it to MP4 with Remotion.</p>
+<p class="note">Tap to pause · <b>Real Curb palette, copy &amp; voice now applied</b> — the phone is still a stylized mock; drop your real screenshots into <b>public/screens</b> and they slot into the Remotion render + this preview.</p>
 
 <script>
 (function(){
