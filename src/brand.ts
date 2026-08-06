@@ -49,11 +49,11 @@ export const brand = {
     feature2Chips: [
       'PDF estimates & invoices in seconds',
       "Always know who's paid",
-      'No monthly subscription',
+      'Request payment in one tap',
     ],
     ctaLine1: 'Get',
     ctaLine2: 'Curb',
-    ctaSub: 'Run the whole operation from your pocket. Free on iOS & Android — no subscription.',
+    ctaSub: 'Just $5/month — or $89 once, yours forever. Run your whole operation from your pocket.',
   },
 } as const;
 
