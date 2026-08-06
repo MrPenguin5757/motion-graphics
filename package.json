@@ -4,6 +4,7 @@
   "description": "Motion-graphics ad templates for the Curb app, built with Remotion.",
   "scripts": {
     "studio": "remotion studio",
+    "build:preview": "node scripts/build-preview.mjs",
     "render:9x16": "remotion render CurbAd-9x16 out/curb-9x16.mp4",
     "render:4x5": "remotion render CurbAd-4x5 out/curb-4x5.mp4",
     "render:1x1": "remotion render CurbAd-1x1 out/curb-1x1.mp4",
