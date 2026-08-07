@@ -58,7 +58,25 @@ body{
 .ln .rise{ display:block; transform:translateY(110%); }
 
 /* generic hidden-until-animated */
-.anim,.pop{ opacity:0; }
+.anim,.pop,.a2,.punch{ opacity:0; }
+.ln2{ display:block; }
+
+/* comparison table */
+.cmp{ width:100%; background:var(--asphalt-2); border-radius:calc(var(--u)*2.6); padding:calc(var(--u)*0.6) calc(var(--u)*2.6) calc(var(--u)*1.8); }
+.cmp-row{ display:grid; grid-template-columns:1fr calc(var(--u)*22) calc(var(--u)*17); align-items:center; gap:calc(var(--u)*1); padding:calc(var(--u)*1.7) 0; border-top:1px solid rgba(244,239,228,.10); font-family:var(--body); font-size:calc(var(--u)*2.3); text-align:left; }
+.cmp-row:first-child{ border-top:0; padding-top:calc(var(--u)*1.8); }
+.cmp-l{ color:var(--sand); font-weight:600; }
+.cmp-head .cmp-l{ color:var(--gravel-dk); font-weight:700; }
+.c-curb,.c-oth{ justify-self:center; display:flex; align-items:center; justify-content:center; text-align:center; }
+.c-curb{ color:var(--curb-dk); }
+.c-oth{ color:var(--gravel-dk); }
+.c-curb.val,.c-oth.val{ font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*1.95); letter-spacing:-.02em; }
+.cmp-head .c-curb{ background:var(--curb); color:#fff; border-radius:99px; padding:calc(var(--u)*.5) calc(var(--u)*2); font-family:var(--disp); font-weight:800; }
+.cmp-head .c-oth{ font-weight:700; }
+.cmp .ck{ width:calc(var(--u)*3.4); height:calc(var(--u)*3.4); color:var(--lawn-dk); }
+.cmp .xx{ width:calc(var(--u)*3); height:calc(var(--u)*3); color:var(--gravel); }
+.cmp-url{ font-family:var(--body); font-weight:700; letter-spacing:.06em; color:var(--curb-dk); font-size:calc(var(--u)*2.9); }
+.s-light .cmp-url{ color:var(--curb); }
 
 .rule{ height:calc(var(--u)*0.9); width:calc(var(--u)*20); background:var(--curb); border-radius:99px; transform:scaleX(0); transform-origin:left center; }
 .s-dark .rule{ background:var(--curb-dk); }
@@ -153,11 +171,10 @@ body{
   <!-- 1 · HOOK -->
   <section class="scene s-dark" data-scene="0">
     <div class="tag"><span>0:00</span><span>Curb</span></div>
-    <div class="label anim">Lawncare · detailing · pressure washing</div>
-    <h1 class="h1">
-      <span class="ln"><span class="rise">Running the day</span></span>
-      <span class="ln"><span class="rise">off texts</span></span>
-      <span class="ln"><span class="rise accent">and memory?</span></span>
+    <div class="label punch">Lawn crews · detailers · washers</div>
+    <h1 class="h1" id="hookh1">
+      <span class="ln2 punch">Still running it all</span>
+      <span class="ln2 punch accent">in your head?</span>
     </h1>
   </section>
 
@@ -234,9 +251,28 @@ body{
     </div>
   </section>
 
-  <!-- 6 · ENDCARD -->
-  <section class="scene s-light" data-scene="5">
-    <div class="tag"><span>0:13</span><span>Download</span></div>
+  <!-- 6 · COMPARISON -->
+  <section class="scene s-dark" data-scene="5">
+    <div class="tag"><span>0:12</span><span>vs. the others</span></div>
+    <div class="feat-wrap" style="gap:calc(var(--u)*3.6)">
+      <h2 class="h1" style="font-size:calc(var(--u)*7); line-height:1">
+        <span class="ln"><span class="rise">Without the price.</span></span>
+        <span class="ln"><span class="rise accent">Without the bloat.</span></span>
+      </h2>
+      <div class="cmp pop">
+        <div class="cmp-row cmp-head"><span class="cmp-l"></span><span class="c-curb">Curb</span><span class="c-oth">Others</span></div>
+        <div class="cmp-row a2"><span class="cmp-l">Price</span><span class="c-curb val">$5/mo · $89 once</span><span class="c-oth val">$40–600/mo</span></div>
+        <div class="cmp-row a2"><span class="cmp-l">No subscription required</span><span class="c-curb"><svg class="ck" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-11" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="c-oth"><svg class="xx" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span></div>
+        <div class="cmp-row a2"><span class="cmp-l">Made for your trade, not enterprise</span><span class="c-curb"><svg class="ck" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-11" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="c-oth"><svg class="xx" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span></div>
+        <div class="cmp-row a2"><span class="cmp-l">Everything you need, none you don't</span><span class="c-curb"><svg class="ck" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-11" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="c-oth"><svg class="xx" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span></div>
+      </div>
+      <div class="cmp-url anim">getcurb.net</div>
+    </div>
+  </section>
+
+  <!-- 7 · ENDCARD -->
+  <section class="scene s-light" data-scene="6">
+    <div class="tag"><span>0:16</span><span>Download</span></div>
     <svg class="curb-mark draw-mark" style="width:calc(var(--u)*26);height:calc(var(--u)*26)" viewBox="0 0 56 56" aria-hidden="true"><rect width="56" height="56" rx="14" fill="#D75F1F"/><path class="mk-p" d="M38 15 C29 15 21 20 21 26 L21 33" stroke="#F4EFE4" stroke-width="7" fill="none"/><path class="mk-p" d="M21 33 L40 33" stroke="#F4EFE4" stroke-width="7"/><circle class="mk-ring" cx="40" cy="33" r="3.5" fill="none" stroke="#D75F1F" stroke-width="2" opacity="0"/><circle class="mk-dot" cx="40" cy="33" r="3.5" fill="#F4EFE4"/></svg>
     <span class="wordmark anim" style="font-size:calc(var(--u)*17)">Curb</span>
     <div class="under"></div>
@@ -247,6 +283,7 @@ body{
         <span class="bt"><small>Download on the</small><b>App Store</b></span>
       </span>
     </div>
+    <div class="cmp-url anim" style="margin-top:calc(var(--u)*1.2)">getcurb.net</div>
   </section>
 
   <div class="trans" id="trans"></div>
@@ -281,8 +318,8 @@ body{
     requestAnimationFrame(setUnit);
   }));
 
-  const scenes=[0,3.2,5.2,7.4,10.6,13.4].map((start,i)=>({start,el:frame.querySelector('[data-scene="'+i+'"]')}));
-  const TOTAL=17.8;
+  const scenes=[0,3.0,4.8,6.8,9.8,12.4,16.4].map((start,i)=>({start,el:frame.querySelector('[data-scene="'+i+'"]')}));
+  const TOTAL=20.6;
   let anims=[], timers=[];
   const A=(el,frames,opt)=>{ const a=el.animate(frames,Object.assign({fill:'both'},opt)); anims.push(a); return a; };
   const T=(fn,ms)=>{ timers.push(setTimeout(fn,ms)); };
@@ -292,6 +329,7 @@ body{
   const fadeUp=(el,d=0,dur=560,dy='26%')=>A(el,[{opacity:0,transform:'translateY('+dy+') scale(.94)'},{opacity:1,transform:'none'}],{duration:dur,delay:d,easing:OUT});
   const pop=(el,d=0,dur=560)=>A(el,[{opacity:0,transform:'translateY(30%) scale(.9)'},{opacity:1,transform:'none'}],{duration:dur,delay:d,easing:BACK});
   const sweep=(el,d=0,dur=620)=>A(el,[{transform:'scaleX(0)'},{transform:'scaleX(1)'}],{duration:dur,delay:d,easing:OUT});
+  const punch=(el,d=0,dur=440)=>A(el,[{opacity:0,transform:'scale(1.3)'},{opacity:1,transform:'scale(1)'}],{duration:dur,delay:d,easing:'cubic-bezier(.15,.9,.3,1.15)'});
 
   function drawMark(svg,d=0){
     const paths=svg.querySelectorAll('.mk-p'), dot=svg.querySelector('.mk-dot'), ring=svg.querySelector('.mk-ring');
@@ -311,7 +349,11 @@ body{
   function enter(i){
     const s=scenes[i].el;
     if(reduce){ setFinal(s); s.querySelectorAll('[data-count]').forEach(e=>e.textContent=(e.dataset.prefix||'')+(+e.dataset.count).toLocaleString()); return; }
-    if(i===0){ fadeUp(s.querySelector('.label'),0); s.querySelectorAll('.rise').forEach((e,k)=>rise(e,180+k*140)); }
+    if(i===0){
+      punch(s.querySelector('.label'),0,380);
+      const L=s.querySelectorAll('.ln2'); punch(L[0],170); punch(L[1],330);
+      A(s.querySelector('#hookh1'),[{transform:'translateX(0)'},{transform:'translateX(-1.4%)'},{transform:'translateX(1%)'},{transform:'translateX(-.5%)'},{transform:'translateX(0)'}],{duration:300,delay:560,easing:'ease-out'});
+    }
     else if(i===1){ sweep(s.querySelector('.rule'),0); s.querySelectorAll('.rise').forEach((e,k)=>rise(e,220+k*150)); }
     else if(i===2){ fadeUp(s.querySelector('.label'),0,460); drawMark(s.querySelector('.draw-mark'),200); fadeUp(s.querySelector('.wordmark'),760,560,'0%'); }
     else if(i===3){
@@ -323,11 +365,18 @@ body{
     }
     else if(i===4){ fadeUp(s.querySelector('.h2'),0); s.querySelectorAll('.chip').forEach((e,k)=>{ A(e,[{opacity:0,transform:'translateX(-14%) scale(.95)'},{opacity:1,transform:'none'}],{duration:540,delay:220+k*150,easing:BACK}); }); }
     else if(i===5){
+      s.querySelectorAll('.rise').forEach((e,k)=>rise(e,120+k*150));
+      pop(s.querySelector('.cmp'),420,560);
+      s.querySelectorAll('.cmp .a2').forEach((e,k)=>fadeUp(e,700+k*120,460,'26%'));
+      fadeUp(s.querySelector('.cmp-url'),1360);
+    }
+    else if(i===6){
       const end=drawMark(s.querySelector('.draw-mark'),260);
       fadeUp(s.querySelector('.wordmark'),end,600,'0%');
       sweep(s.querySelector('.under'),end+220);
       fadeUp(s.querySelector('.sub2'),end+420);
       fadeUp(s.querySelector('.badge').parentNode,end+620,600,'30%');
+      fadeUp(s.querySelector('.cmp-url'),end+820);
     }
   }
 
@@ -337,13 +386,16 @@ body{
   function slideIn(nu,from,dur){ nu.style.transform=from; nu.animate([{transform:from},{transform:'none'}],{duration:dur,easing:OUT,fill:'both'}); return dur; }
   function fadeIn(nu,dur){ nu.style.opacity='0'; nu.animate([{opacity:0},{opacity:1}],{duration:dur,easing:OUT,fill:'both'}); return dur; }
 
+  function zoomIn(nu,dur){ nu.style.transform='scale(1.12)'; nu.style.opacity='0'; nu.animate([{opacity:0,transform:'scale(1.12)'},{opacity:1,transform:'scale(1)'}],{duration:dur,easing:OUT,fill:'both'}); return dur; }
+
   const TX={
-    0:nu=>fadeIn(nu,420),                                            // dissolve into hook (loop restart)
+    0:nu=>zoomIn(nu,340),                                            // punchy zoom open
     1:nu=>clipIn(nu,'inset(100% 0 0 0)','inset(0% 0 0 0)',480),      // wipe up
     2:nu=>clipIn(nu,'circle(0% at 50% 50%)','circle(150% at 50% 50%)',520), // iris open
     3:nu=>clipIn(nu,'inset(0 100% 0 0)','inset(0 0 0 0)',480),        // wipe across (L→R)
     4:nu=>slideIn(nu,'translateY(100%)',520),                        // push up
-    5:nu=>clipIn(nu,'circle(0% at 50% 50%)','circle(150% at 50% 50%)',620), // slow iris into endcard
+    5:nu=>clipIn(nu,'inset(0 0 100% 0)','inset(0 0 0 0)',480),        // wipe down (into comparison)
+    6:nu=>clipIn(nu,'circle(0% at 50% 50%)','circle(150% at 50% 50%)',620), // slow iris into endcard
   };
 
   let current=-1;
