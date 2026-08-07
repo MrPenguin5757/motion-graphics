@@ -127,7 +127,7 @@ body{
 .badge .bt b{ font-family:var(--disp); font-size:calc(var(--u)*3.4); font-weight:800; letter-spacing:-.02em; }
 
 /* transition swipe + progress + pause */
-.swipe{ position:absolute; inset:0; background:var(--curb); transform:scaleX(0); transform-origin:left center; z-index:4; pointer-events:none; }
+.trans{ position:absolute; inset:0; background:var(--curb); transform:scaleX(0); transform-origin:left center; z-index:4; pointer-events:none; will-change:transform,clip-path,opacity; }
 .progress{ position:absolute; left:0; right:0; bottom:0; height:calc(var(--u)*1); background:rgba(244,239,228,.14); z-index:6; }
 .progress .fill{ height:100%; width:0%; background:var(--curb); }
 .pausebadge{ position:absolute; inset:0; display:grid; place-items:center; z-index:7; background:rgba(20,18,16,.35); opacity:0; transition:opacity .2s; pointer-events:none; }
@@ -249,7 +249,7 @@ body{
     </div>
   </section>
 
-  <div class="swipe" id="swipe"></div>
+  <div class="trans" id="trans"></div>
   <div class="pausebadge"><svg viewBox="0 0 24 24" fill="var(--sand)"><path d="M8 5v14l11-7z"/></svg></div>
   <div class="progress"><div class="fill" id="fill"></div></div>
 </div>
@@ -267,7 +267,7 @@ body{
 
 <script>
 (function(){
-  const frame=document.getElementById('frame'), fill=document.getElementById('fill'), swipe=document.getElementById('swipe');
+  const frame=document.getElementById('frame'), fill=document.getElementById('fill'), trans=document.getElementById('trans');
   const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const OUT='cubic-bezier(.2,.8,.2,1)', BACK='cubic-bezier(.34,1.4,.5,1)', WIPE='cubic-bezier(.7,0,.3,1)';
 
@@ -331,19 +331,48 @@ body{
     }
   }
 
+  const ASPH='#1D1A16', SAND='#F4EFE4', CURB_C='#D75F1F';
+  function swap(i){ scenes.forEach((s,idx)=>s.el.classList.toggle('on',idx===i)); enter(i); }
+  function baseTrans(bg){ trans.style.background=bg; trans.style.clipPath='none'; trans.style.opacity='1'; }
+
+  function txWipe(i,color,axis,o1,o2,done){
+    baseTrans(color); trans.style.transformOrigin=o1;
+    const zero=axis==='x'?'scaleX(0)':'scaleY(0)', full=axis==='x'?'scaleX(1)':'scaleY(1)';
+    trans.animate([{transform:zero},{transform:full}],{duration:210,easing:WIPE,fill:'both'}).onfinish=()=>{
+      swap(i); trans.style.transformOrigin=o2;
+      trans.animate([{transform:full},{transform:zero}],{duration:250,easing:WIPE,fill:'both'}).onfinish=()=>{ trans.style.transform='scaleX(0)'; done(); };
+    };
+  }
+  function txIris(i,color,done){
+    baseTrans(color); trans.style.transform='none';
+    trans.animate([{clipPath:'circle(0% at 50% 50%)'},{clipPath:'circle(72% at 50% 50%)'}],{duration:250,easing:OUT,fill:'both'}).onfinish=()=>{
+      swap(i);
+      trans.animate([{clipPath:'circle(72% at 50% 50%)'},{clipPath:'circle(0% at 50% 50%)'}],{duration:310,easing:OUT,fill:'both'}).onfinish=()=>{ trans.style.clipPath='circle(0% at 50% 50%)'; trans.style.transform='scaleX(0)'; done(); };
+    };
+  }
+  function txDissolve(i,done){
+    const oldEl=frame.querySelector('.scene.on'), nu=scenes[i].el;
+    nu.classList.add('on'); nu.style.opacity='0'; enter(i);
+    nu.animate([{opacity:0},{opacity:1}],{duration:380,easing:OUT,fill:'both'}).onfinish=()=>{ nu.style.opacity=''; };
+    if(oldEl&&oldEl!==nu){ oldEl.animate([{opacity:1},{opacity:0}],{duration:380,easing:OUT,fill:'both'}).onfinish=()=>{ oldEl.classList.remove('on'); done(); }; }
+    else done();
+  }
+
+  const TX={
+    0:(i,d)=>txIris(i,ASPH,d),
+    1:(i,d)=>txWipe(i,SAND,'y','bottom center','top center',d),
+    2:(i,d)=>txDissolve(i,d),
+    3:(i,d)=>txWipe(i,SAND,'x','left center','right center',d),
+    4:(i,d)=>txWipe(i,ASPH,'y','top center','bottom center',d),
+    5:(i,d)=>txIris(i,CURB_C,d),
+  };
+
   let current=-1, busy=false;
   function show(i){
-    if(i===current) return; current=i;
-    reset();
-    if(reduce){ scenes.forEach((s,idx)=>s.el.classList.toggle('on',idx===i)); enter(i); return; }
+    if(i===current) return; current=i; reset();
+    if(reduce){ swap(i); return; }
     busy=true;
-    A(swipe,[{transform:'scaleX(0)'},{transform:'scaleX(1)'}],{duration:200,easing:WIPE,transformOrigin:'left center'}).onfinish=()=>{
-      scenes.forEach((s,idx)=>s.el.classList.toggle('on',idx===i));
-      swipe.style.transformOrigin='right center';
-      const rev=swipe.animate([{transform:'scaleX(1)'},{transform:'scaleX(0)'}],{duration:240,easing:WIPE,fill:'both'});
-      enter(i);
-      rev.onfinish=()=>{ swipe.style.transformOrigin='left center'; busy=false; };
-    };
+    (TX[i]||TX[0])(i,()=>{ busy=false; });
   }
 
   if(!reduce) frame.querySelectorAll('[data-count]').forEach(e=>e.textContent=(e.dataset.prefix||'')+'0');
