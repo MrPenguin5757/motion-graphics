@@ -7,205 +7,84 @@
 @font-face{font-family:'Hanken Grotesk';font-weight:700;font-style:normal;font-display:block;src:url(FONT_HANKEN_700) format('woff2');}
 
 :root{
-  --sand:#F4EFE4;
-  --concrete:#FBF8F1;
-  --pebble:#ECE6D8;
-  --gravel:#7A7264;
-  --gravel-dk:#BDB4A4;
-  --ink:#211E1A;
-  --asphalt:#1D1A16;
-  --asphalt-2:#26221C;
-  --curb:#D75F1F;
-  --curb-dk:#E56A25;
-  --marigold:#F3A847;
-  --lawn:#3C7A59;
-  --lawn-dk:#4E9670;
-  --sky:#2F6FB0;
-  --sky-dk:#4D8BCB;
+  --sand:#F4EFE4; --concrete:#FBF8F1; --pebble:#ECE6D8;
+  --gravel:#7A7264; --gravel-dk:#BDB4A4; --ink:#211E1A;
+  --asphalt:#1D1A16; --asphalt-2:#26221C;
+  --curb:#D75F1F; --curb-dk:#E56A25; --marigold:#F3A847;
+  --lawn:#3C7A59; --lawn-dk:#4E9670; --sky:#2F6FB0; --sky-dk:#4D8BCB;
   --stage:#141210;
   --disp:'Bricolage Grotesque', Georgia, serif;
   --body:'Hanken Grotesk', Inter, system-ui, sans-serif;
 }
-
 *{ box-sizing:border-box; }
-
 body{
-  margin:0;
-  min-height:100vh;
-  background:var(--stage);
-  color:var(--sand);
+  margin:0; min-height:100vh; background:var(--stage); color:var(--sand);
   font-family:var(--body);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:clamp(16px,3vh,28px);
-  padding:24px 16px 32px;
-  -webkit-font-smoothing:antialiased;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:clamp(16px,3vh,28px); padding:24px 16px 32px; -webkit-font-smoothing:antialiased;
 }
-
-.studio-tag{
-  font-family:var(--body);
-  font-size:11px;
-  font-weight:700;
-  letter-spacing:.16em;
-  text-transform:uppercase;
-  color:var(--gravel);
-  display:flex; align-items:center; gap:10px;
-}
+.studio-tag{ font-family:var(--body); font-size:11px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--gravel); display:flex; align-items:center; gap:10px; }
 .studio-tag .dot{ width:6px;height:6px;border-radius:50%;background:var(--curb); }
 
-/* ---------- device frame ---------- */
 .frame{
-  position:relative;
-  height:min(74vh,720px);
-  max-width:92vw;
-  aspect-ratio:var(--arw) / var(--arh);
-  border-radius:calc(var(--u) * 5);
-  overflow:hidden;
-  background:var(--asphalt);
+  position:relative; height:min(74vh,720px); max-width:92vw;
+  aspect-ratio:var(--arw) / var(--arh); border-radius:calc(var(--u) * 5);
+  overflow:hidden; background:var(--asphalt);
   box-shadow:0 0 0 calc(var(--u)*0.9) #2a2620, 0 30px 70px -24px rgba(0,0,0,.75);
-  cursor:pointer;
-  isolation:isolate;
-  --u:6px; --arw:9; --arh:16;
+  cursor:pointer; isolation:isolate; --u:6px; --arw:9; --arh:16;
 }
-
 .scene{
-  position:absolute; inset:0;
-  display:flex; flex-direction:column;
-  align-items:center; justify-content:center;
-  text-align:center;
+  position:absolute; inset:0; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; text-align:center;
   padding:calc(var(--u) * 9) calc(var(--u) * 7);
-  opacity:0;
-  transition:opacity .2s ease;
-  pointer-events:none;
-  gap:calc(var(--u) * 3.2);
+  opacity:0; pointer-events:none; gap:calc(var(--u) * 3.2);
 }
 .scene.on{ opacity:1; }
-
-/* flat grounds — no gradients */
 .s-dark{ background:var(--asphalt); color:var(--sand); }
 .s-light{ background:var(--sand); color:var(--ink); }
-.accent{ color:var(--curb); }
-.s-dark .accent{ color:var(--curb-dk); }
+.accent{ color:var(--curb); } .s-dark .accent{ color:var(--curb-dk); }
 
-/* tiny corner label */
-.tag{
-  position:absolute; top:calc(var(--u)*6); left:calc(var(--u)*7); right:calc(var(--u)*7);
-  display:flex; justify-content:space-between;
-  font-family:var(--body); font-size:calc(var(--u)*2.1); font-weight:700;
-  letter-spacing:.12em; text-transform:uppercase; opacity:.55;
-}
+.tag{ position:absolute; top:calc(var(--u)*6); left:calc(var(--u)*7); right:calc(var(--u)*7); display:flex; justify-content:space-between; font-family:var(--body); font-size:calc(var(--u)*2.1); font-weight:700; letter-spacing:.12em; text-transform:uppercase; opacity:.5; }
 
-/* small uppercase Hanken label (the ONLY uppercase treatment) */
-.label{
-  font-family:var(--body);
-  font-weight:700;
-  font-size:calc(var(--u) * 2.6);
-  letter-spacing:.13em;
-  text-transform:uppercase;
-  color:var(--gravel);
-}
+.label{ font-family:var(--body); font-weight:700; font-size:calc(var(--u)*2.6); letter-spacing:.13em; text-transform:uppercase; color:var(--gravel); }
 .s-dark .label{ color:var(--gravel-dk); }
 
-/* display headline — Bricolage, mixed case, tight tracking */
-.h1{
-  font-family:var(--disp);
-  font-weight:800;
-  font-size:calc(var(--u) * 10.5);
-  line-height:.98;
-  letter-spacing:-.03em;
-  margin:0;
-  text-wrap:balance;
-}
-.h1 .ln{ display:block; }
+.h1{ font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*10.5); line-height:.98; letter-spacing:-.03em; margin:0; text-wrap:balance; }
+.h2{ font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*5.2); letter-spacing:-.02em; }
+.sub{ font-family:var(--body); font-weight:500; font-size:calc(var(--u)*4); line-height:1.2; max-width:82%; }
 
-.h2{
-  font-family:var(--disp);
-  font-weight:800;
-  font-size:calc(var(--u) * 5.2);
-  letter-spacing:-.02em;
-}
+/* masked line reveal */
+.ln{ display:block; overflow:hidden; padding-bottom:.04em; }
+.ln .rise{ display:block; transform:translateY(110%); }
 
-.sub{
-  font-family:var(--body);
-  font-weight:500;
-  font-size:calc(var(--u) * 4);
-  line-height:1.2;
-  max-width:82%;
-}
+/* generic hidden-until-animated */
+.anim,.pop{ opacity:0; }
 
-.rule{
-  height:calc(var(--u) * 0.9);
-  width:calc(var(--u) * 20);
-  background:var(--curb);
-  border-radius:99px;
-  transform-origin:left center;
-}
+.rule{ height:calc(var(--u)*0.9); width:calc(var(--u)*20); background:var(--curb); border-radius:99px; transform:scaleX(0); transform-origin:left center; }
 .s-dark .rule{ background:var(--curb-dk); }
 
-/* ---------- logo lockup ---------- */
+/* logo lockup */
 .curb-mark{ display:block; }
 .lockup{ display:flex; align-items:center; gap:calc(var(--u)*2.6); }
-.lockup .curb-mark{ width:calc(var(--u)*16); height:calc(var(--u)*16); }
-.wordmark{
-  font-family:var(--disp);
-  font-weight:800;
-  font-size:calc(var(--u) * 15);
-  letter-spacing:-.03em;
-  line-height:1;
-  color:var(--sand);
-}
-.under{
-  height:calc(var(--u) * 1.1);
-  width:calc(var(--u) * 26);
-  background:var(--curb-dk);
-  border-radius:99px;
-  transform-origin:left center;
-}
-.tagline{
-  font-family:var(--body);
-  font-weight:500;
-  font-size:calc(var(--u) * 3.4);
-  color:var(--gravel-dk);
-}
+.wordmark{ font-family:var(--disp); font-weight:800; letter-spacing:-.03em; line-height:1; color:var(--sand); }
+.s-light .wordmark{ color:var(--ink); }
+.under{ height:calc(var(--u)*1.1); width:calc(var(--u)*26); background:var(--curb-dk); border-radius:99px; transform:scaleX(0); transform-origin:left center; }
+.s-light .under{ background:var(--curb); }
+.tagline{ font-family:var(--body); font-weight:500; font-size:calc(var(--u)*3.4); color:var(--gravel-dk); }
+.s-light .tagline{ color:var(--gravel); }
+.mk-p{ stroke-linecap:round; } .mk-dot{ transform-box:fill-box; transform-origin:center; }
 
-/* ---------- feature chips ---------- */
-.chips{ display:flex; flex-direction:column; gap:calc(var(--u)*2.6); align-items:stretch; width:100%; }
-.chip{
-  display:flex; align-items:center; gap:calc(var(--u)*2.4);
-  background:var(--asphalt-2);
-  border-radius:calc(var(--u)*3);
-  padding:calc(var(--u)*2.6) calc(var(--u)*3.4);
-  font-family:var(--body); font-weight:600; font-size:calc(var(--u)*3.4);
-  text-align:left; color:var(--sand);
-}
+/* chips */
+.chips{ display:flex; flex-direction:column; gap:calc(var(--u)*2.6); width:100%; }
+.chip{ display:flex; align-items:center; gap:calc(var(--u)*2.4); background:var(--asphalt-2); border-radius:calc(var(--u)*3); padding:calc(var(--u)*2.6) calc(var(--u)*3.4); font-family:var(--body); font-weight:600; font-size:calc(var(--u)*3.4); text-align:left; color:var(--sand); }
 .s-light .chip{ background:var(--concrete); color:var(--ink); }
-.chip .ic{
-  flex:0 0 auto; width:calc(var(--u)*6.4); height:calc(var(--u)*6.4);
-  border-radius:calc(var(--u)*2);
-  display:grid; place-items:center; color:#fff;
-}
+.chip .ic{ flex:0 0 auto; width:calc(var(--u)*6.4); height:calc(var(--u)*6.4); border-radius:calc(var(--u)*2); display:grid; place-items:center; color:#fff; }
 .chip .ic svg{ width:58%; height:58%; }
-.ic.curb{ background:var(--curb); }
-.ic.lawn{ background:var(--lawn); }
-.ic.sky{ background:var(--sky); }
+.ic.curb{ background:var(--curb); } .ic.lawn{ background:var(--lawn); } .ic.sky{ background:var(--sky); }
 
-/* ---------- device / home screen mock ---------- */
-.device{
-  width:calc(var(--u) * 42);
-  aspect-ratio:9/18;
-  background:#000;
-  border-radius:calc(var(--u) * 5.2);
-  padding:calc(var(--u) * 1.4);
-  box-shadow:0 calc(var(--u)*2.5) calc(var(--u)*7) rgba(0,0,0,.4);
-}
-.screen{
-  width:100%; height:100%;
-  border-radius:calc(var(--u) * 4);
-  overflow:hidden;
-  background:var(--sand);
-}
+/* device / home screen */
+.device{ width:calc(var(--u)*42); aspect-ratio:9/18; background:#000; border-radius:calc(var(--u)*5.2); padding:calc(var(--u)*1.4); box-shadow:0 calc(var(--u)*2.5) calc(var(--u)*7) rgba(0,0,0,.4); }
+.screen{ width:100%; height:100%; border-radius:calc(var(--u)*4); overflow:hidden; background:var(--sand); }
 .hs{ display:flex; flex-direction:column; height:100%; background:var(--sand); color:var(--ink); font-family:var(--body); text-align:left; }
 .hs-top{ background:var(--asphalt); display:flex; align-items:center; gap:calc(var(--u)*1.4); padding:calc(var(--u)*2.2) calc(var(--u)*2.4) calc(var(--u)*1.8); }
 .hs-top .curb-mark{ width:calc(var(--u)*4.6); height:calc(var(--u)*4.6); flex:0 0 auto; }
@@ -219,8 +98,7 @@ body{
 .hs-stat{ flex:1; background:var(--concrete); border-radius:calc(var(--u)*1.6); padding:calc(var(--u)*1.5); display:flex; flex-direction:column; gap:calc(var(--u)*.5); }
 .hs-stat span{ font-size:calc(var(--u)*1.5); color:var(--gravel); }
 .hs-stat b{ font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*2.7); letter-spacing:-.03em; }
-.hs-stat b.green{ color:var(--lawn); }
-.hs-stat b.orange{ color:var(--curb); }
+.hs-stat b.green{ color:var(--lawn); } .hs-stat b.orange{ color:var(--curb); }
 .hs-route{ background:var(--curb); color:#fff; display:flex; align-items:center; justify-content:center; gap:calc(var(--u)*1.2); font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*2.2); letter-spacing:-.02em; padding:calc(var(--u)*2); border-radius:calc(var(--u)*2); }
 .hs-route svg{ width:calc(var(--u)*2.4); height:calc(var(--u)*2.4); }
 .hs-run{ font-family:var(--body); font-size:calc(var(--u)*1.5); letter-spacing:.13em; color:var(--gravel); font-weight:700; text-transform:uppercase; }
@@ -233,41 +111,32 @@ body{
 .hs-job-r>b{ font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*2.2); letter-spacing:-.03em; }
 .hs-status{ font-size:calc(var(--u)*1.5); font-weight:700; display:flex; align-items:center; gap:calc(var(--u)*.6); }
 .hs-status::before{ content:''; width:calc(var(--u)*1); height:calc(var(--u)*1); border-radius:50%; background:currentColor; }
-.hs-status.prog{ color:var(--curb); }
-.hs-status.route{ color:var(--sky); }
+.hs-status.prog{ color:var(--curb); } .hs-status.route{ color:var(--sky); }
 .hs-unpaid{ font-size:calc(var(--u)*1.35); font-weight:700; color:var(--curb); background:rgba(215,95,31,.14); padding:calc(var(--u)*.3) calc(var(--u)*1.1); border-radius:99px; }
 .hs-tabs{ display:flex; justify-content:space-between; padding:calc(var(--u)*1.4) calc(var(--u)*2.4) calc(var(--u)*2); border-top:1px solid rgba(33,30,26,.08); }
 .hs-tabs span{ font-size:calc(var(--u)*1.45); color:var(--gravel); font-weight:600; }
 .hs-tabs span.on{ color:var(--curb); }
-
 .feat-wrap{ display:flex; flex-direction:column; align-items:center; gap:calc(var(--u)*4); width:100%; }
 
-/* ---------- CTA ---------- */
-.cta-big{ font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*13); line-height:.95; letter-spacing:-.03em; color:var(--ink); }
-.cta-big .accent{ color:var(--curb); }
-.badge{
-  display:inline-flex; align-items:center; gap:calc(var(--u)*2.4);
-  background:var(--asphalt); color:var(--sand);
-  border-radius:calc(var(--u)*2.2);
-  padding:calc(var(--u)*2.2) calc(var(--u)*4.5);
-}
+/* endcard + badge */
+.sub2{ font-family:var(--body); font-weight:600; font-size:calc(var(--u)*3.4); color:var(--ink); }
+.badge{ display:inline-flex; align-items:center; gap:calc(var(--u)*2.4); background:var(--asphalt); color:var(--sand); border-radius:calc(var(--u)*2.2); padding:calc(var(--u)*2.2) calc(var(--u)*4.5); }
 .badge svg{ width:calc(var(--u)*5.2); height:calc(var(--u)*5.2); flex:0 0 auto; }
 .badge .bt{ text-align:left; line-height:1.05; }
 .badge .bt small{ font-family:var(--body); font-size:calc(var(--u)*1.9); letter-spacing:.08em; text-transform:uppercase; opacity:.7; display:block; }
 .badge .bt b{ font-family:var(--disp); font-size:calc(var(--u)*3.4); font-weight:800; letter-spacing:-.02em; }
 
-/* progress + pause */
-.progress{ position:absolute; left:0; right:0; bottom:0; height:calc(var(--u)*1); background:rgba(244,239,228,.14); z-index:5; }
+/* transition swipe + progress + pause */
+.swipe{ position:absolute; inset:0; background:var(--curb); transform:scaleX(0); transform-origin:left center; z-index:4; pointer-events:none; }
+.progress{ position:absolute; left:0; right:0; bottom:0; height:calc(var(--u)*1); background:rgba(244,239,228,.14); z-index:6; }
 .progress .fill{ height:100%; width:0%; background:var(--curb); }
-.pausebadge{ position:absolute; inset:0; display:grid; place-items:center; z-index:6; background:rgba(20,18,16,.35); opacity:0; transition:opacity .2s; pointer-events:none; }
+.pausebadge{ position:absolute; inset:0; display:grid; place-items:center; z-index:7; background:rgba(20,18,16,.35); opacity:0; transition:opacity .2s; pointer-events:none; }
 .frame.paused .pausebadge{ opacity:1; }
 .pausebadge svg{ width:calc(var(--u)*14); height:calc(var(--u)*14); }
 
-/* controls */
 .controls{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; justify-content:center; }
 .btn{ font-family:var(--body); font-weight:700; font-size:13px; color:var(--sand); background:#241f19; border:1px solid #3a3229; padding:10px 16px; border-radius:10px; cursor:pointer; display:inline-flex; align-items:center; gap:8px; }
-.btn:hover{ background:#2c261f; }
-.btn:focus-visible{ outline:2px solid var(--curb); outline-offset:2px; }
+.btn:hover{ background:#2c261f; } .btn:focus-visible{ outline:2px solid var(--curb); outline-offset:2px; }
 .btn svg{ width:15px; height:15px; }
 .segment{ display:flex; background:#1e1a15; border:1px solid #3a3229; border-radius:10px; padding:3px; gap:2px; }
 .segment button{ font-family:var(--body); font-weight:600; font-size:12px; letter-spacing:.06em; color:var(--gravel-dk); background:transparent; border:0; cursor:pointer; padding:7px 12px; border-radius:7px; }
@@ -275,49 +144,49 @@ body{
 .segment button:focus-visible{ outline:2px solid var(--curb); outline-offset:2px; }
 .note{ font-family:var(--body); font-size:12px; color:var(--gravel); text-align:center; max-width:52ch; line-height:1.6; }
 .note b{ color:var(--marigold); font-weight:600; }
-
-@media (prefers-reduced-motion: reduce){ .scene{ transition:none; } }
 </style>
 
 <div class="studio-tag"><span class="dot"></span> Curb · Sample Motion Ad · Vertical Spot</div>
 
 <div class="frame" id="frame" role="button" tabindex="0" aria-label="Play or pause the ad">
 
-  <!-- 1 · HOOK (dark) -->
+  <!-- 1 · HOOK -->
   <section class="scene s-dark" data-scene="0">
     <div class="tag"><span>0:00</span><span>Curb</span></div>
     <div class="label anim">Lawncare · detailing · pressure washing</div>
     <h1 class="h1">
-      <span class="ln anim">Running the day</span>
-      <span class="ln anim">off texts</span>
-      <span class="ln accent anim">and memory?</span>
+      <span class="ln"><span class="rise">Running the day</span></span>
+      <span class="ln"><span class="rise">off texts</span></span>
+      <span class="ln"><span class="rise accent">and memory?</span></span>
     </h1>
   </section>
 
-  <!-- 2 · TURN (light) -->
+  <!-- 2 · TURN -->
   <section class="scene s-light" data-scene="1">
     <div class="tag"><span>0:03</span><span>Curb</span></div>
-    <div class="rule anim"></div>
-    <h2 class="h1 anim">Curb runs<br><span class="accent">the whole job.</span></h2>
+    <div class="rule"></div>
+    <h2 class="h1">
+      <span class="ln"><span class="rise">Curb runs</span></span>
+      <span class="ln"><span class="rise accent">the whole job.</span></span>
+    </h2>
   </section>
 
-  <!-- 3 · LOGO (dark) -->
+  <!-- 3 · LOGO reveal (mid) -->
   <section class="scene s-dark" data-scene="2">
     <div class="tag"><span>0:05</span><span>Curb</span></div>
+    <div class="label anim">Meet</div>
     <div class="lockup">
-      <svg class="curb-mark anim" viewBox="0 0 56 56" aria-hidden="true"><rect width="56" height="56" rx="14" fill="#D75F1F"/><path d="M38 15 C29 15 21 20 21 26 L21 33" stroke="#F4EFE4" stroke-width="7" stroke-linecap="round" fill="none"/><path d="M21 33 L40 33" stroke="#F4EFE4" stroke-width="7" stroke-linecap="round"/><circle cx="40" cy="33" r="3.5" fill="#F4EFE4"/></svg>
-      <span class="wordmark anim">Curb</span>
+      <svg class="curb-mark draw-mark" style="width:calc(var(--u)*13);height:calc(var(--u)*13)" viewBox="0 0 56 56" aria-hidden="true"><rect width="56" height="56" rx="14" fill="#D75F1F"/><path class="mk-p" d="M38 15 C29 15 21 20 21 26 L21 33" stroke="#F4EFE4" stroke-width="7" fill="none"/><path class="mk-p" d="M21 33 L40 33" stroke="#F4EFE4" stroke-width="7"/><circle class="mk-dot" cx="40" cy="33" r="3.5" fill="#F4EFE4"/></svg>
+      <span class="wordmark anim" style="font-size:calc(var(--u)*13)">Curb</span>
     </div>
-    <div class="under anim"></div>
-    <div class="tagline anim">Field service, handled.</div>
   </section>
 
-  <!-- 4 · FEATURE 1 (light) -->
+  <!-- 4 · FEATURE 1 -->
   <section class="scene s-light" data-scene="3">
     <div class="tag"><span>0:07</span><span>Curb</span></div>
     <div class="feat-wrap">
       <div class="h2 anim">Every job in one place</div>
-      <div class="device anim">
+      <div class="device pop">
         <div class="screen">
           <div class="hs">
             <div class="hs-top">
@@ -325,21 +194,21 @@ body{
               <span class="hs-trade">All trades ⌄</span>
             </div>
             <div class="hs-body">
-              <div class="hs-greet">Good evening</div>
-              <div class="hs-date">Friday, June 12</div>
-              <div class="hs-weather"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg> Thunderstorm · 90°/72° · 29%</div>
+              <div class="hs-greet j">Good evening</div>
+              <div class="hs-date j">Friday, June 12</div>
+              <div class="hs-weather j"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg> Thunderstorm · 90°/72° · 29%</div>
               <div class="hs-stats">
-                <div class="hs-stat"><span>Stops</span><b>8</b></div>
-                <div class="hs-stat"><span>Expected</span><b class="green">$1,244</b></div>
-                <div class="hs-stat"><span>Owed you</span><b class="orange">$3,102</b></div>
+                <div class="hs-stat j"><span>Stops</span><b data-count="8">8</b></div>
+                <div class="hs-stat j"><span>Expected</span><b class="green" data-count="1244" data-prefix="$">$1,244</b></div>
+                <div class="hs-stat j"><span>Owed you</span><b class="orange" data-count="3102" data-prefix="$">$3,102</b></div>
               </div>
-              <div class="hs-route"><svg viewBox="0 0 24 24" fill="none"><path d="M3 11l18-8-8 18-2-8-8-2z" fill="currentColor"/></svg> Start today's route · 8 stops</div>
-              <div class="hs-run">Today's run</div>
-              <div class="hs-job">
+              <div class="hs-route j"><svg viewBox="0 0 24 24" fill="none"><path d="M3 11l18-8-8 18-2-8-8-2z" fill="currentColor"/></svg> Start today's route · 8 stops</div>
+              <div class="hs-run j">Today's run</div>
+              <div class="hs-job j">
                 <div class="hs-job-l"><span class="hs-time">8:00a</span><b>Marcus Webb</b><span class="hs-svc">Full Detail · Auto Detailing</span></div>
                 <div class="hs-job-r"><b>$286</b><span class="hs-status prog">In progress</span><span class="hs-unpaid">Unpaid</span></div>
               </div>
-              <div class="hs-job">
+              <div class="hs-job j">
                 <div class="hs-job-l"><span class="hs-time">9:30a</span><b>The Hollises</b><span class="hs-svc">Window Washing</span></div>
                 <div class="hs-job-r"><b>$280</b><span class="hs-status route">En route</span><span class="hs-unpaid">Unpaid</span></div>
               </div>
@@ -348,31 +217,30 @@ body{
           </div>
         </div>
       </div>
-      <div class="chip anim"><span class="ic curb"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z" fill="currentColor"/></svg></span>Jobs, clients, routes &amp; money — one app</div>
+      <div class="chip pop"><span class="ic curb"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z" fill="currentColor"/></svg></span>Jobs, clients, routes &amp; money — one app</div>
     </div>
   </section>
 
-  <!-- 5 · FEATURE 2 (dark) -->
+  <!-- 5 · FEATURE 2 -->
   <section class="scene s-dark" data-scene="4">
     <div class="tag"><span>0:10</span><span>Curb</span></div>
     <div class="feat-wrap">
       <div class="h2 anim">Get paid, skip the busywork</div>
       <div class="chips">
-        <div class="chip anim"><span class="ic curb"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3h9l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="2"/><path d="M14 3v4h4M8 13h8M8 17h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>PDF estimates &amp; invoices in seconds</div>
-        <div class="chip anim"><span class="ic lawn"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-11" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Always know who's paid</div>
-        <div class="chip anim"><span class="ic sky"><svg viewBox="0 0 24 24" fill="none"><path d="M3 11l18-8-8 18-2-8-8-2z" fill="currentColor"/></svg></span>Request payment in one tap</div>
+        <div class="chip pop"><span class="ic curb"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3h9l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="2"/><path d="M14 3v4h4M8 13h8M8 17h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>PDF estimates &amp; invoices in seconds</div>
+        <div class="chip pop"><span class="ic lawn"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-11" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Always know who's paid</div>
+        <div class="chip pop"><span class="ic sky"><svg viewBox="0 0 24 24" fill="none"><path d="M3 11l18-8-8 18-2-8-8-2z" fill="currentColor"/></svg></span>Request payment in one tap</div>
       </div>
     </div>
   </section>
 
-  <!-- 6 · CTA (light) -->
+  <!-- 6 · ENDCARD -->
   <section class="scene s-light" data-scene="5">
     <div class="tag"><span>0:13</span><span>Download</span></div>
-    <div class="lockup" style="margin-bottom:calc(var(--u)*1)">
-      <svg class="curb-mark anim" viewBox="0 0 56 56" aria-hidden="true" style="width:calc(var(--u)*9);height:calc(var(--u)*9)"><rect width="56" height="56" rx="14" fill="#D75F1F"/><path d="M38 15 C29 15 21 20 21 26 L21 33" stroke="#F4EFE4" stroke-width="7" stroke-linecap="round" fill="none"/><path d="M21 33 L40 33" stroke="#F4EFE4" stroke-width="7" stroke-linecap="round"/><circle cx="40" cy="33" r="3.5" fill="#F4EFE4"/></svg>
-    </div>
-    <div class="cta-big"><span class="anim">Get</span> <span class="accent anim">Curb</span></div>
-    <div class="sub anim">Just $5/month — or $89 once, yours forever.</div>
+    <svg class="curb-mark draw-mark" style="width:calc(var(--u)*26);height:calc(var(--u)*26)" viewBox="0 0 56 56" aria-hidden="true"><rect width="56" height="56" rx="14" fill="#D75F1F"/><path class="mk-p" d="M38 15 C29 15 21 20 21 26 L21 33" stroke="#F4EFE4" stroke-width="7" fill="none"/><path class="mk-p" d="M21 33 L40 33" stroke="#F4EFE4" stroke-width="7"/><circle class="mk-ring" cx="40" cy="33" r="3.5" fill="none" stroke="#D75F1F" stroke-width="2" opacity="0"/><circle class="mk-dot" cx="40" cy="33" r="3.5" fill="#F4EFE4"/></svg>
+    <span class="wordmark anim" style="font-size:calc(var(--u)*17)">Curb</span>
+    <div class="under"></div>
+    <div class="sub2 anim">Just $5/month — or $89 once, yours forever.</div>
     <div class="anim">
       <span class="badge">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.7c0-2 1.6-3 1.7-3-.9-1.4-2.4-1.5-2.9-1.6-1.2-.1-2.4.7-3 .7-.6 0-1.6-.7-2.6-.7-1.3 0-2.6.8-3.3 2-1.4 2.4-.4 6 1 8 .7 1 1.4 2 2.4 2 .9 0 1.3-.6 2.4-.6 1.1 0 1.4.6 2.4.6 1 0 1.6-.9 2.3-1.9.7-1.1 1-2.1 1-2.2 0 0-1.9-.7-1.9-3zM14.6 6.3c.5-.6.9-1.5.8-2.3-.8 0-1.7.5-2.2 1.1-.5.5-.9 1.4-.8 2.2.9.1 1.7-.4 2.2-1z"/></svg>
@@ -381,6 +249,7 @@ body{
     </div>
   </section>
 
+  <div class="swipe" id="swipe"></div>
   <div class="pausebadge"><svg viewBox="0 0 24 24" fill="var(--sand)"><path d="M8 5v14l11-7z"/></svg></div>
   <div class="progress"><div class="fill" id="fill"></div></div>
 </div>
@@ -394,85 +263,106 @@ body{
   </div>
 </div>
 
-<p class="note">Tap to pause · <b>Real Curb brand — Bricolage + Hanken fonts, Sand/Asphalt palette, the route-mark logo, iOS only.</b> Recreated in code, so it's crisp and animatable.</p>
+<p class="note">Tap to pause · <b>Real Curb brand + full motion</b> — the logo draws itself as a route, numbers count up, chips fly in, and it holds on the endcard.</p>
 
 <script>
 (function(){
-  const frame = document.getElementById('frame');
-  const fill  = document.getElementById('fill');
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const frame=document.getElementById('frame'), fill=document.getElementById('fill'), swipe=document.getElementById('swipe');
+  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const OUT='cubic-bezier(.2,.8,.2,1)', BACK='cubic-bezier(.34,1.4,.5,1)', WIPE='cubic-bezier(.7,0,.3,1)';
 
-  const setUnit = () => {
-    const r = frame.getBoundingClientRect();
-    frame.style.setProperty('--u', (Math.min(r.width, r.height) / 100) + 'px');
-  };
-  new ResizeObserver(setUnit).observe(frame);
-  setUnit();
+  const setUnit=()=>{ const r=frame.getBoundingClientRect(); frame.style.setProperty('--u',(Math.min(r.width,r.height)/100)+'px'); };
+  new ResizeObserver(setUnit).observe(frame); setUnit();
 
-  document.querySelectorAll('.segment button').forEach(b=>{
-    b.addEventListener('click', ()=>{
-      document.querySelectorAll('.segment button').forEach(x=>x.setAttribute('aria-pressed','false'));
-      b.setAttribute('aria-pressed','true');
-      const [w,h] = b.dataset.ar.split(':');
-      frame.style.setProperty('--arw', w);
-      frame.style.setProperty('--arh', h);
-      requestAnimationFrame(setUnit);
-    });
-  });
+  document.querySelectorAll('.segment button').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('.segment button').forEach(x=>x.setAttribute('aria-pressed','false'));
+    b.setAttribute('aria-pressed','true');
+    const [w,h]=b.dataset.ar.split(':'); frame.style.setProperty('--arw',w); frame.style.setProperty('--arh',h);
+    requestAnimationFrame(setUnit);
+  }));
 
-  const scenes = [
-    {start:0.0,  el:frame.querySelector('[data-scene="0"]')},
-    {start:3.0,  el:frame.querySelector('[data-scene="1"]')},
-    {start:4.9,  el:frame.querySelector('[data-scene="2"]')},
-    {start:7.3,  el:frame.querySelector('[data-scene="3"]')},
-    {start:9.9,  el:frame.querySelector('[data-scene="4"]')},
-    {start:12.6, el:frame.querySelector('[data-scene="5"]')},
-  ];
-  const TOTAL = 15.6;
-  const ease = 'cubic-bezier(.2,.8,.2,1)';
-  let anims = [];
+  const scenes=[0,3.2,5.2,7.4,10.6,13.4].map((start,i)=>({start,el:frame.querySelector('[data-scene="'+i+'"]')}));
+  const TOTAL=17.8;
+  let anims=[], timers=[];
+  const A=(el,frames,opt)=>{ const a=el.animate(frames,Object.assign({fill:'both'},opt)); anims.push(a); return a; };
+  const T=(fn,ms)=>{ timers.push(setTimeout(fn,ms)); };
+  function reset(){ anims.forEach(a=>{try{a.cancel()}catch(e){}}); anims=[]; timers.forEach(clearTimeout); timers=[]; }
 
-  function animateIn(sceneEl){
-    if (reduce){ sceneEl.querySelectorAll('.anim').forEach(e=>{e.style.opacity=1;e.style.transform='none';}); return; }
-    sceneEl.querySelectorAll('.anim').forEach((el,i)=>{
-      anims.push(el.animate(
-        [{opacity:0, transform:'translateY(20%) scale(.94)'},{opacity:1, transform:'translateY(0) scale(1)'}],
-        {duration:560, delay:i*120, easing:ease, fill:'both'}));
-    });
-    sceneEl.querySelectorAll('.under, .rule').forEach(el=>{
-      anims.push(el.animate([{transform:'scaleX(0)'},{transform:'scaleX(1)'}],{duration:620, delay:480, easing:ease, fill:'both'}));
-    });
+  const rise=(el,d=0,dur=620)=>A(el,[{transform:'translateY(110%)'},{transform:'translateY(0)'}],{duration:dur,delay:d,easing:BACK});
+  const fadeUp=(el,d=0,dur=560,dy='26%')=>A(el,[{opacity:0,transform:'translateY('+dy+') scale(.94)'},{opacity:1,transform:'none'}],{duration:dur,delay:d,easing:OUT});
+  const pop=(el,d=0,dur=560)=>A(el,[{opacity:0,transform:'translateY(30%) scale(.9)'},{opacity:1,transform:'none'}],{duration:dur,delay:d,easing:BACK});
+  const sweep=(el,d=0,dur=620)=>A(el,[{transform:'scaleX(0)'},{transform:'scaleX(1)'}],{duration:dur,delay:d,easing:OUT});
+
+  function drawMark(svg,d=0){
+    const paths=svg.querySelectorAll('.mk-p'), dot=svg.querySelector('.mk-dot'), ring=svg.querySelector('.mk-ring');
+    let acc=d;
+    paths.forEach(p=>{ const L=p.getTotalLength(); p.style.strokeDasharray=L; A(p,[{strokeDashoffset:L},{strokeDashoffset:0}],{duration:420,delay:acc,easing:OUT}); acc+=380; });
+    if(dot) A(dot,[{opacity:0,transform:'scale(0)'},{opacity:1,transform:'scale(1)'}],{duration:340,delay:acc,easing:BACK});
+    if(ring) A(ring,[{opacity:.7,transform:'scale(1)'},{opacity:0,transform:'scale(3.2)'}],{duration:700,delay:acc+120,easing:OUT});
+    return acc+340;
+  }
+  function countUp(el,d=0,dur=900){
+    const target=+el.dataset.count, pre=el.dataset.prefix||'';
+    T(()=>{ const t0=performance.now(); (function step(now){ const p=Math.min(1,(now-t0)/dur); const e=1-Math.pow(1-p,3); el.textContent=pre+Math.round(target*e).toLocaleString(); if(p<1) requestAnimationFrame(step); })(performance.now()); },d);
   }
 
-  let current = -1;
-  function setScene(i){
-    if (i === current) return;
-    current = i;
-    scenes.forEach((s,idx)=> s.el.classList.toggle('on', idx===i));
-    anims.forEach(a=>a.cancel()); anims = [];
-    animateIn(scenes[i].el);
+  const setFinal=el=>el.querySelectorAll('.anim,.pop,.rise,.rule,.under').forEach(e=>{e.style.opacity=1;e.style.transform='none';});
+
+  function enter(i){
+    const s=scenes[i].el;
+    if(reduce){ setFinal(s); s.querySelectorAll('[data-count]').forEach(e=>e.textContent=(e.dataset.prefix||'')+(+e.dataset.count).toLocaleString()); return; }
+    if(i===0){ fadeUp(s.querySelector('.label'),0); s.querySelectorAll('.rise').forEach((e,k)=>rise(e,180+k*140)); }
+    else if(i===1){ sweep(s.querySelector('.rule'),0); s.querySelectorAll('.rise').forEach((e,k)=>rise(e,220+k*150)); }
+    else if(i===2){ fadeUp(s.querySelector('.label'),0,460); drawMark(s.querySelector('.draw-mark'),200); fadeUp(s.querySelector('.wordmark'),760,560,'0%'); }
+    else if(i===3){
+      fadeUp(s.querySelector('.h2'),0);
+      pop(s.querySelector('.device'),140,640);
+      s.querySelectorAll('.hs-body .j').forEach((e,k)=>fadeUp(e,520+k*90,480,'40%'));
+      s.querySelectorAll('[data-count]').forEach((e,k)=>countUp(e,900+k*80,950));
+      pop(s.querySelector('.chip'),1720,560);
+    }
+    else if(i===4){ fadeUp(s.querySelector('.h2'),0); s.querySelectorAll('.chip').forEach((e,k)=>{ A(e,[{opacity:0,transform:'translateX(-14%) scale(.95)'},{opacity:1,transform:'none'}],{duration:540,delay:220+k*150,easing:BACK}); }); }
+    else if(i===5){
+      const end=drawMark(s.querySelector('.draw-mark'),260);
+      fadeUp(s.querySelector('.wordmark'),end,600,'0%');
+      sweep(s.querySelector('.under'),end+220);
+      fadeUp(s.querySelector('.sub2'),end+420);
+      fadeUp(s.querySelector('.badge').parentNode,end+620,600,'30%');
+    }
   }
 
-  let t0 = performance.now(), paused=false, pausedAt=0;
+  let current=-1, busy=false;
+  function show(i){
+    if(i===current) return; current=i;
+    reset();
+    if(reduce){ scenes.forEach((s,idx)=>s.el.classList.toggle('on',idx===i)); enter(i); return; }
+    busy=true;
+    A(swipe,[{transform:'scaleX(0)'},{transform:'scaleX(1)'}],{duration:200,easing:WIPE,transformOrigin:'left center'}).onfinish=()=>{
+      scenes.forEach((s,idx)=>s.el.classList.toggle('on',idx===i));
+      swipe.style.transformOrigin='right center';
+      const rev=swipe.animate([{transform:'scaleX(1)'},{transform:'scaleX(0)'}],{duration:240,easing:WIPE,fill:'both'});
+      enter(i);
+      rev.onfinish=()=>{ swipe.style.transformOrigin='left center'; busy=false; };
+    };
+  }
+
+  if(!reduce) frame.querySelectorAll('[data-count]').forEach(e=>e.textContent=(e.dataset.prefix||'')+'0');
+  let t0=performance.now(), paused=false, pausedAt=0;
   function loop(now){
-    if (!paused){
-      let t = (now - t0)/1000;
-      if (t >= TOTAL){ t0 = now; t = 0; current = -1; }
-      let idx = 0;
-      for (let k=0;k<scenes.length;k++){ if (t >= scenes[k].start) idx = k; }
-      setScene(idx);
-      fill.style.width = (t/TOTAL*100) + '%';
+    if(!paused){
+      let t=(now-t0)/1000;
+      if(t>=TOTAL){ t0=now; t=0; current=-1; }
+      let idx=0; for(let k=0;k<scenes.length;k++) if(t>=scenes[k].start) idx=k;
+      show(idx);
+      fill.style.width=(t/TOTAL*100)+'%';
     }
     requestAnimationFrame(loop);
   }
   requestAnimationFrame(loop);
 
-  document.getElementById('replay').addEventListener('click', ()=>{ t0=performance.now(); paused=false; frame.classList.remove('paused'); current=-1; });
-  function togglePause(){
-    if (paused){ t0 = performance.now() - pausedAt; paused=false; frame.classList.remove('paused'); }
-    else { pausedAt = performance.now() - t0; paused=true; frame.classList.add('paused'); }
-  }
-  frame.addEventListener('click', togglePause);
-  frame.addEventListener('keydown', e=>{ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); togglePause(); }});
+  document.getElementById('replay').addEventListener('click',()=>{ t0=performance.now(); paused=false; frame.classList.remove('paused'); current=-1; });
+  function togglePause(){ if(paused){ t0=performance.now()-pausedAt; paused=false; frame.classList.remove('paused'); } else { pausedAt=performance.now()-t0; paused=true; frame.classList.add('paused'); } }
+  frame.addEventListener('click',togglePause);
+  frame.addEventListener('keydown',e=>{ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); togglePause(); }});
 })();
 </script>
