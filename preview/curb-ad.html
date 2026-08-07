@@ -331,48 +331,36 @@ body{
     }
   }
 
-  const ASPH='#1D1A16', SAND='#F4EFE4', CURB_C='#D75F1F';
-  function swap(i){ scenes.forEach((s,idx)=>s.el.classList.toggle('on',idx===i)); enter(i); }
-  function baseTrans(bg){ trans.style.background=bg; trans.style.clipPath='none'; trans.style.opacity='1'; }
-
-  function txWipe(i,color,axis,o1,o2,done){
-    baseTrans(color); trans.style.transformOrigin=o1;
-    const zero=axis==='x'?'scaleX(0)':'scaleY(0)', full=axis==='x'?'scaleX(1)':'scaleY(1)';
-    trans.animate([{transform:zero},{transform:full}],{duration:210,easing:WIPE,fill:'both'}).onfinish=()=>{
-      swap(i); trans.style.transformOrigin=o2;
-      trans.animate([{transform:full},{transform:zero}],{duration:250,easing:WIPE,fill:'both'}).onfinish=()=>{ trans.style.transform='scaleX(0)'; done(); };
-    };
-  }
-  function txIris(i,color,done){
-    baseTrans(color); trans.style.transform='none';
-    trans.animate([{clipPath:'circle(0% at 50% 50%)'},{clipPath:'circle(72% at 50% 50%)'}],{duration:250,easing:OUT,fill:'both'}).onfinish=()=>{
-      swap(i);
-      trans.animate([{clipPath:'circle(72% at 50% 50%)'},{clipPath:'circle(0% at 50% 50%)'}],{duration:310,easing:OUT,fill:'both'}).onfinish=()=>{ trans.style.clipPath='circle(0% at 50% 50%)'; trans.style.transform='scaleX(0)'; done(); };
-    };
-  }
-  function txDissolve(i,done){
-    const oldEl=frame.querySelector('.scene.on'), nu=scenes[i].el;
-    nu.classList.add('on'); nu.style.opacity='0'; enter(i);
-    nu.animate([{opacity:0},{opacity:1}],{duration:380,easing:OUT,fill:'both'}).onfinish=()=>{ nu.style.opacity=''; };
-    if(oldEl&&oldEl!==nu){ oldEl.animate([{opacity:1},{opacity:0}],{duration:380,easing:OUT,fill:'both'}).onfinish=()=>{ oldEl.classList.remove('on'); done(); }; }
-    else done();
-  }
+  // Transitions animate the INCOMING scene element (guaranteed to paint).
+  // Each returns its duration in ms.
+  function clipIn(nu,from,to,dur){ nu.style.clipPath=from; nu.animate([{clipPath:from},{clipPath:to}],{duration:dur,easing:OUT,fill:'both'}); return dur; }
+  function slideIn(nu,from,dur){ nu.style.transform=from; nu.animate([{transform:from},{transform:'none'}],{duration:dur,easing:OUT,fill:'both'}); return dur; }
+  function fadeIn(nu,dur){ nu.style.opacity='0'; nu.animate([{opacity:0},{opacity:1}],{duration:dur,easing:OUT,fill:'both'}); return dur; }
 
   const TX={
-    0:(i,d)=>txIris(i,ASPH,d),
-    1:(i,d)=>txWipe(i,SAND,'y','bottom center','top center',d),
-    2:(i,d)=>txDissolve(i,d),
-    3:(i,d)=>txWipe(i,SAND,'x','left center','right center',d),
-    4:(i,d)=>txWipe(i,ASPH,'y','top center','bottom center',d),
-    5:(i,d)=>txIris(i,CURB_C,d),
+    0:nu=>fadeIn(nu,420),                                            // dissolve into hook (loop restart)
+    1:nu=>clipIn(nu,'inset(100% 0 0 0)','inset(0% 0 0 0)',480),      // wipe up
+    2:nu=>clipIn(nu,'circle(0% at 50% 50%)','circle(150% at 50% 50%)',520), // iris open
+    3:nu=>clipIn(nu,'inset(0 100% 0 0)','inset(0 0 0 0)',480),        // wipe across (L→R)
+    4:nu=>slideIn(nu,'translateY(100%)',520),                        // push up
+    5:nu=>clipIn(nu,'circle(0% at 50% 50%)','circle(150% at 50% 50%)',620), // slow iris into endcard
   };
 
-  let current=-1, busy=false;
+  let current=-1;
   function show(i){
-    if(i===current) return; current=i; reset();
-    if(reduce){ swap(i); return; }
-    busy=true;
-    (TX[i]||TX[0])(i,()=>{ busy=false; });
+    if(i===current) return; current=i;
+    const oldEl=frame.querySelector('.scene.on'), nu=scenes[i].el;
+    reset();
+    if(reduce){ if(oldEl&&oldEl!==nu) oldEl.classList.remove('on'); nu.classList.add('on'); enter(i); return; }
+    nu.style.zIndex='3'; nu.classList.add('on');
+    if(oldEl&&oldEl!==nu) oldEl.style.zIndex='2';
+    enter(i);
+    const dur=(TX[i]||TX[0])(nu);
+    T(()=>{
+      nu.getAnimations().forEach(a=>a.cancel());
+      if(oldEl&&oldEl!==nu){ oldEl.classList.remove('on'); oldEl.style.zIndex=''; }
+      nu.style.zIndex=''; nu.style.clipPath=''; nu.style.transform=''; nu.style.opacity='';
+    }, dur+80);
   }
 
   if(!reduce) frame.querySelectorAll('[data-count]').forEach(e=>e.textContent=(e.dataset.prefix||'')+'0');
