@@ -1,10 +1,6 @@
 import React from 'react';
 import {Composition} from 'remotion';
-import {CurbAd} from './CurbAd';
-import {timeline, totalSeconds} from './brand';
-
-const fps = timeline.fps;
-const durationInFrames = Math.round(totalSeconds * fps);
+import {CurbAd, FPS, DURATION} from './CurbAd';
 
 // Each format your platforms need. Render any of them by id.
 const FORMATS = [
@@ -20,8 +16,8 @@ export const RemotionRoot: React.FC = () => (
         key={f.id}
         id={f.id}
         component={CurbAd}
-        durationInFrames={durationInFrames}
-        fps={fps}
+        durationInFrames={DURATION}
+        fps={FPS}
         width={f.width}
         height={f.height}
       />
