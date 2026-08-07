@@ -1,8 +1,11 @@
 import React from 'react';
 import {
   AbsoluteFill,
+  continueRender,
+  delayRender,
   interpolate,
   spring,
+  staticFile,
   useCurrentFrame,
   useVideoConfig,
 } from 'remotion';
@@ -11,12 +14,21 @@ import {fade} from '@remotion/transitions/fade';
 import {wipe} from '@remotion/transitions/wipe';
 import {slide} from '@remotion/transitions/slide';
 import {clockWipe} from '@remotion/transitions/clock-wipe';
-import {loadFont as loadBricolage} from '@remotion/google-fonts/BricolageGrotesque';
-import {loadFont as loadHanken} from '@remotion/google-fonts/HankenGrotesk';
+import {loadFont} from '@remotion/fonts';
 import {brand} from './brand';
 
-const {fontFamily: BRIC} = loadBricolage();
-const {fontFamily: HANK} = loadHanken();
+// Load Curb's real fonts from public/fonts (no network needed at render time).
+const BRIC = 'Bricolage Grotesque';
+const HANK = 'Hanken Grotesk';
+const fontHandle = delayRender('load-fonts');
+Promise.all([
+  loadFont({family: BRIC, url: staticFile('fonts/bricolage-grotesque-latin-wght-normal.woff2'), weight: '400 800'}),
+  loadFont({family: HANK, url: staticFile('fonts/hanken-grotesk-latin-400-normal.woff2'), weight: '400'}),
+  loadFont({family: HANK, url: staticFile('fonts/hanken-grotesk-latin-500-normal.woff2'), weight: '500'}),
+  loadFont({family: HANK, url: staticFile('fonts/hanken-grotesk-latin-700-normal.woff2'), weight: '700'}),
+])
+  .then(() => continueRender(fontHandle))
+  .catch(() => continueRender(fontHandle));
 
 /* palette (from the Curb Design Bible) */
 const C = {
