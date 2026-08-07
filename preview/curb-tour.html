@@ -23,13 +23,43 @@ body{ margin:0; min-height:100vh; background:var(--stage); color:var(--sand); fo
 .tour{ position:absolute; inset:0; background:var(--asphalt); display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
   padding:calc(var(--u)*9) calc(var(--u)*6) calc(var(--u)*3); opacity:0; transition:opacity .4s ease; z-index:1; }
 .tour.on{ opacity:1; }
-.labeldeck{ min-height:calc(var(--u)*26); display:flex; flex-direction:column; gap:calc(var(--u)*1.4); align-items:center; text-align:center; }
+.labeldeck{ min-height:calc(var(--u)*26); display:flex; flex-direction:column; gap:calc(var(--u)*1.4); align-items:center; text-align:center; position:relative; z-index:2; }
 .tl-title{ font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*6.8); line-height:.98; letter-spacing:-.03em; }
 .tl-desc{ font-family:var(--body); font-weight:500; font-size:calc(var(--u)*3.1); color:var(--gravel-dk); max-width:88%; }
 .accent{ color:var(--curb-dk); }
 .ln{ display:block; overflow:hidden; padding-bottom:.05em; } .ln .rise{ display:block; transform:translateY(110%); }
 
-.stagewrap{ flex:1; display:flex; align-items:center; justify-content:center; width:100%; }
+.stagewrap{ flex:1; display:flex; align-items:center; justify-content:center; width:100%; position:relative; z-index:2; }
+
+/* per-beat background motifs (behind the phone) */
+.bgfx{ position:absolute; inset:0; overflow:hidden; z-index:0; pointer-events:none; }
+.mot{ position:absolute; inset:0; opacity:0; transition:opacity .5s ease; }
+.mot.on{ opacity:1; }
+.dot{ position:absolute; border-radius:50%; }
+.home .d1{ width:calc(var(--u)*16); height:calc(var(--u)*16); left:6%; top:16%; background:var(--marigold); opacity:.12; animation:fl 8s ease-in-out infinite; }
+.home .d2{ width:calc(var(--u)*10); height:calc(var(--u)*10); right:10%; top:26%; background:var(--curb); opacity:.14; animation:fl 6.5s ease-in-out infinite .6s; }
+.home .d3{ width:calc(var(--u)*22); height:calc(var(--u)*22); right:-4%; bottom:20%; background:var(--curb); opacity:.08; animation:fl 9s ease-in-out infinite .3s; }
+.home .d4{ width:calc(var(--u)*8); height:calc(var(--u)*8); left:14%; bottom:22%; background:var(--marigold); opacity:.16; animation:fl 7s ease-in-out infinite 1s; }
+.home .d5{ width:calc(var(--u)*6); height:calc(var(--u)*6); left:44%; top:8%; background:var(--curb); opacity:.16; animation:fl 5.5s ease-in-out infinite .2s; }
+@keyframes fl{ 0%,100%{ transform:translateY(-6%);} 50%{ transform:translateY(6%);} }
+.coin{ position:absolute; font-family:var(--disp); font-weight:800; opacity:0; }
+.money .coin{ animation:rise 5.5s linear infinite; }
+.money .c1{ left:12%; font-size:calc(var(--u)*9); color:var(--lawn); animation-delay:0s; }
+.money .c2{ left:30%; font-size:calc(var(--u)*6); color:var(--curb); animation-delay:1.4s; }
+.money .c3{ left:52%; font-size:calc(var(--u)*11); color:var(--lawn); animation-delay:2.6s; }
+.money .c4{ left:70%; font-size:calc(var(--u)*7); color:var(--curb); animation-delay:.8s; }
+.money .c5{ left:84%; font-size:calc(var(--u)*8); color:var(--lawn); animation-delay:3.4s; }
+.money .c6{ left:40%; font-size:calc(var(--u)*6); color:var(--marigold); animation-delay:4.2s; }
+@keyframes rise{ 0%{ opacity:0; transform:translateY(60%);} 12%{ opacity:.18;} 85%{ opacity:.18;} 100%{ opacity:0; transform:translateY(-70%);} }
+.routesvg{ position:absolute; inset:0; width:100%; height:100%; animation:driftY 10s ease-in-out infinite; }
+@keyframes driftY{ 0%,100%{ transform:translateY(-1.5%);} 50%{ transform:translateY(1.5%);} }
+.rpath{ stroke-dasharray:1; stroke-dashoffset:1; }
+.mot.route.on .rpath{ animation:draw 1.5s ease forwards; }
+@keyframes draw{ to{ stroke-dashoffset:0; } }
+.pin{ fill:var(--curb); opacity:0; transform-box:fill-box; transform-origin:center; }
+.mot.route.on .pin{ animation:pop .45s cubic-bezier(.34,1.4,.5,1) forwards; }
+.mot.route.on .p1{ animation-delay:.35s } .mot.route.on .p2{ animation-delay:.75s } .mot.route.on .p3{ animation-delay:1.15s } .mot.route.on .p4{ animation-delay:.95s }
+@keyframes pop{ 0%{ opacity:0; transform:scale(0);} 100%{ opacity:.75; transform:scale(1);} }
 .pstage{ perspective:1700px; display:flex; align-items:center; justify-content:center; width:100%; }
 .phscale{ transform:scale(1.32); transform-origin:center; transform-style:preserve-3d; }
 .phone-in{ opacity:0; transform-style:preserve-3d; }
@@ -111,7 +141,7 @@ body{ margin:0; min-height:100vh; background:var(--stage); color:var(--sand); fo
 .rs-sum div{ flex:1; text-align:center; } .rs-sum b{ display:block; font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*3.2); letter-spacing:-.03em; } .rs-sum span{ font-size:calc(var(--u)*1.4); color:var(--gravel); }
 .rs-note{ text-align:center; font-size:calc(var(--u)*1.4); color:var(--gravel); }
 .stop{ background:var(--concrete); border-radius:calc(var(--u)*1.5); padding:calc(var(--u)*1.4) calc(var(--u)*1.5); display:flex; align-items:center; gap:calc(var(--u)*1.4); }
-.stop .n{ flex:0 0 auto; width:calc(var(--u)*3.6); height:calc(var(--u)*3.6); border-radius:50%; background:var(--curb); color:#fff; font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*1.9); display:grid; place-items:center; }
+.stop .n{ flex:0 0 auto; width:calc(var(--u)*3.6); height:calc(var(--u)*3.6); border-radius:50%; background:var(--curb); color:#fff; font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*1.9); display:grid; place-items:center; box-shadow:0 calc(var(--u)*.7) calc(var(--u)*1.4) rgba(215,95,31,.5); }
 .stop .nm{ font-family:var(--body); font-weight:800; font-size:calc(var(--u)*1.95); } .stop .nm b{ color:var(--curb); } .stop .ad{ font-size:calc(var(--u)*1.4); color:var(--gravel); }
 .grip{ margin-left:auto; color:var(--gravel-dk); font-size:calc(var(--u)*2.4); }
 
@@ -132,6 +162,11 @@ body{ margin:0; min-height:100vh; background:var(--stage); color:var(--sand); fo
 
   <!-- persistent tour: label + spinning phone -->
   <div class="tour" id="tour">
+    <div class="bgfx">
+      <div class="mot home"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span><span class="dot d4"></span><span class="dot d5"></span></div>
+      <div class="mot money"><span class="coin c1">$</span><span class="coin c2">$</span><span class="coin c3">$</span><span class="coin c4">$</span><span class="coin c5">$</span><span class="coin c6">$</span></div>
+      <div class="mot route"><svg class="routesvg" viewBox="0 0 100 178" preserveAspectRatio="none"><path class="rpath" pathLength="1" d="M12 22 C 46 32, 22 68, 58 86 C 86 100, 38 118, 66 150" stroke="#D75F1F" stroke-width="1.6" fill="none" opacity=".55"/><circle class="pin p1" cx="12" cy="22" r="2.6"/><circle class="pin p2" cx="58" cy="86" r="2.6"/><circle class="pin p3" cx="66" cy="150" r="2.6"/><circle class="pin p4" cx="40" cy="112" r="2.6"/></svg></div>
+    </div>
     <div class="labeldeck" id="labeldeck"></div>
     <div class="stagewrap"><div class="pstage"><div class="phscale"><div class="phone-in" id="phoneIn"><div class="phone-3d" id="phone3d">
       <div class="device">
@@ -231,13 +266,15 @@ body{ margin:0; min-height:100vh; background:var(--stage); color:var(--sand); fo
   let spin={active:false,t0:0,from:BASE,next:'home',swapped:false};
 
   function activate(name){ tour.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on', s.dataset.scr===name)); }
+  function motif(name){ tour.querySelectorAll('.mot').forEach(m=>m.classList.toggle('on', m.classList.contains(name))); }
+  function animateStops(){ if(reduce) return; tour.querySelectorAll('.scr[data-scr="route"] .stop').forEach((s,k)=>A(s,[{opacity:0,transform:'translateY(-22%) scale(.92)'},{opacity:1,transform:'none'}],{duration:520,delay:k*110,easing:BACK})); }
   function startSpin(next){ spin={active:true,t0:cur,from:BASE,next,swapped:false}; }
   function updatePhone(t){
     let ry, ty;
     if(spin.active){
       const p=Math.min(1,(t-spin.t0)/SPIN), e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
       ry=spin.from + e*360;
-      if(!spin.swapped && p>=0.5){ activate(spin.next); spin.swapped=true; }
+      if(!spin.swapped && p>=0.5){ activate(spin.next); spin.swapped=true; if(spin.next==='route') animateStops(); }
       ty=Math.sin(t*5)*0.5;
       if(p>=1) spin.active=false;
     } else { ry=BASE + Math.sin(t*0.9)*2.2; ty=Math.sin(t*1.3)*1.2; }
@@ -268,12 +305,12 @@ body{ margin:0; min-height:100vh; background:var(--stage); color:var(--sand); fo
   let beat=-1;
   function setBeat(i){
     if(i===beat) return; beat=i;
-    if(i===0){ tour.classList.remove('on'); endcard.classList.remove('on'); intro.classList.add('on');
+    if(i===0){ tour.classList.remove('on'); endcard.classList.remove('on'); intro.classList.add('on'); motif('none');
       labeldeck.innerHTML=''; phoneIn.getAnimations().forEach(a=>a.cancel()); phoneIn.style.opacity=0; spin.active=false; activate('home'); animateIntro(); }
-    else if(i===1){ intro.classList.remove('on'); endcard.classList.remove('on'); tour.classList.add('on'); activate('home'); phoneIn.style.opacity=''; enterPhone(); setLabel(L[0]); }
-    else if(i===2){ setLabel(L[1]); startSpin('money'); }
-    else if(i===3){ setLabel(L[2]); startSpin('route'); }
-    else if(i===4){ exitPhone(); labeldeck.innerHTML=''; endcard.classList.add('on'); animateEndcard(); }
+    else if(i===1){ intro.classList.remove('on'); endcard.classList.remove('on'); tour.classList.add('on'); motif('home'); activate('home'); phoneIn.style.opacity=''; enterPhone(); setLabel(L[0]); }
+    else if(i===2){ setLabel(L[1]); motif('money'); startSpin('money'); }
+    else if(i===3){ setLabel(L[2]); motif('route'); startSpin('route'); }
+    else if(i===4){ exitPhone(); labeldeck.innerHTML=''; motif('none'); endcard.classList.add('on'); animateEndcard(); }
   }
 
   let cur=0, t0=performance.now(), paused=false, pausedAt=0;
