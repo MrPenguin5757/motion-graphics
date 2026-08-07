@@ -38,13 +38,13 @@ export const brand = {
 
   // Voice: Direct · Field-ready · No subscription bullshit.
   copy: {
-    kicker: 'Lawncare · detailing · pressure washing',
-    hook: ['Running the day off', 'texts, notes', 'and memory?'],
-    turn: ['One app runs', 'the whole job.'],
+    kicker: 'Still running your business on',
+    hook: ['Sticky notes.', 'Group texts.', 'Your memory?'],
+    turn: ['One app runs', 'the whole day.'],
     wordmark: 'CURB',
     tagline: 'Field service, handled.',
     feature1Heading: 'Every job in one place',
-    feature1Chip: 'Jobs, clients, routes & money — one app',
+    feature1Chip: 'Jobs, clients, routes & money in one app',
     feature2Heading: 'Get paid, skip the busywork',
     feature2Chips: [
       'PDF estimates & invoices in seconds',
@@ -53,7 +53,7 @@ export const brand = {
     ],
     ctaLine1: 'Get',
     ctaLine2: 'Curb',
-    ctaSub: 'Just $5/month — or $89 once, yours forever. Run your whole operation from your pocket.',
+    ctaSub: 'Just $4.99/mo or $89 once. Yours forever.',
   },
 } as const;
 

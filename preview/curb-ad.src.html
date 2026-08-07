@@ -61,20 +61,18 @@ body{
 .anim,.pop,.a2,.punch{ opacity:0; }
 .ln2{ display:block; }
 
-/* comparison table */
-.cmp{ width:100%; background:var(--asphalt-2); border-radius:calc(var(--u)*2.6); padding:calc(var(--u)*0.6) calc(var(--u)*2.6) calc(var(--u)*1.8); }
-.cmp-row{ display:grid; grid-template-columns:1fr calc(var(--u)*22) calc(var(--u)*17); align-items:center; gap:calc(var(--u)*1); padding:calc(var(--u)*1.7) 0; border-top:1px solid rgba(244,239,228,.10); font-family:var(--body); font-size:calc(var(--u)*2.3); text-align:left; }
-.cmp-row:first-child{ border-top:0; padding-top:calc(var(--u)*1.8); }
-.cmp-l{ color:var(--sand); font-weight:600; }
-.cmp-head .cmp-l{ color:var(--gravel-dk); font-weight:700; }
-.c-curb,.c-oth{ justify-self:center; display:flex; align-items:center; justify-content:center; text-align:center; }
-.c-curb{ color:var(--curb-dk); }
-.c-oth{ color:var(--gravel-dk); }
-.c-curb.val,.c-oth.val{ font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*1.95); letter-spacing:-.02em; }
-.cmp-head .c-curb{ background:var(--curb); color:#fff; border-radius:99px; padding:calc(var(--u)*.5) calc(var(--u)*2); font-family:var(--disp); font-weight:800; }
-.cmp-head .c-oth{ font-weight:700; }
-.cmp .ck{ width:calc(var(--u)*3.4); height:calc(var(--u)*3.4); color:var(--lawn-dk); }
-.cmp .xx{ width:calc(var(--u)*3); height:calc(var(--u)*3); color:var(--gravel); }
+/* comparison table (Curb vs Jobber / HCP / Yardbook) */
+.cmp{ width:100%; background:var(--asphalt-2); border-radius:calc(var(--u)*2.6); padding:calc(var(--u)*0.4) calc(var(--u)*2.4) calc(var(--u)*1.6); }
+.cmp-row{ display:grid; grid-template-columns:1.15fr .96fr .82fr .78fr .92fr; align-items:center; gap:calc(var(--u)*0.6); padding:calc(var(--u)*1.75) 0; border-top:1px solid rgba(244,239,228,.10); font-family:var(--body); font-size:calc(var(--u)*2.2); }
+.cmp-row:first-child{ border-top:0; }
+.cmp-row>span{ display:flex; align-items:center; justify-content:center; text-align:center; color:var(--gravel-dk); }
+.cmp-row>span:first-child{ justify-content:flex-start; text-align:left; color:var(--sand); font-weight:600; }
+.cmp-row>span:nth-child(2){ color:var(--curb-dk); font-weight:700; }
+.cmp-head>span{ color:var(--gravel-dk); font-weight:700; font-size:calc(var(--u)*1.9); }
+.cmp-head>span:nth-child(2){ background:var(--curb); color:#fff; font-family:var(--disp); font-weight:800; border-radius:99px; padding:calc(var(--u)*.5) calc(var(--u)*1.6); }
+.cmp .val{ font-family:var(--disp); font-weight:800; letter-spacing:-.02em; font-size:calc(var(--u)*1.8); }
+.cmp .ck{ width:calc(var(--u)*3.2); height:calc(var(--u)*3.2); color:var(--lawn-dk); }
+.cmp .nn{ width:calc(var(--u)*2.8); height:calc(var(--u)*2.8); color:var(--gravel); }
 .cmp-url{ font-family:var(--body); font-weight:700; letter-spacing:.06em; color:var(--curb-dk); font-size:calc(var(--u)*2.9); }
 .s-light .cmp-url{ color:var(--curb); }
 
@@ -171,10 +169,11 @@ body{
   <!-- 1 · HOOK -->
   <section class="scene s-dark" data-scene="0">
     <div class="tag"><span>0:00</span><span>Curb</span></div>
-    <div class="label punch">Lawn crews · detailers · washers</div>
-    <h1 class="h1" id="hookh1">
-      <span class="ln2 punch">Still running it all</span>
-      <span class="ln2 punch accent">in your head?</span>
+    <div class="label punch">Still running your business on</div>
+    <h1 class="h1" id="hookh1" style="font-size:calc(var(--u)*12); line-height:.96">
+      <span class="ln2 punch">Sticky notes.</span>
+      <span class="ln2 punch">Group texts.</span>
+      <span class="ln2 punch accent">Your memory?</span>
     </h1>
   </section>
 
@@ -183,8 +182,8 @@ body{
     <div class="tag"><span>0:03</span><span>Curb</span></div>
     <div class="rule"></div>
     <h2 class="h1">
-      <span class="ln"><span class="rise">Curb runs</span></span>
-      <span class="ln"><span class="rise accent">the whole job.</span></span>
+      <span class="ln"><span class="rise">One app runs</span></span>
+      <span class="ln"><span class="rise accent">the whole day.</span></span>
     </h2>
   </section>
 
@@ -234,7 +233,7 @@ body{
           </div>
         </div>
       </div>
-      <div class="chip pop"><span class="ic curb"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z" fill="currentColor"/></svg></span>Jobs, clients, routes &amp; money — one app</div>
+      <div class="chip pop"><span class="ic curb"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z" fill="currentColor"/></svg></span>Jobs, clients, routes &amp; money in one app</div>
     </div>
   </section>
 
@@ -260,11 +259,11 @@ body{
         <span class="ln"><span class="rise accent">Without the bloat.</span></span>
       </h2>
       <div class="cmp pop">
-        <div class="cmp-row cmp-head"><span class="cmp-l"></span><span class="c-curb">Curb</span><span class="c-oth">Others</span></div>
-        <div class="cmp-row a2"><span class="cmp-l">Price</span><span class="c-curb val">$5/mo · $89 once</span><span class="c-oth val">$40–600/mo</span></div>
-        <div class="cmp-row a2"><span class="cmp-l">No subscription required</span><span class="c-curb"><svg class="ck" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-11" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="c-oth"><svg class="xx" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span></div>
-        <div class="cmp-row a2"><span class="cmp-l">Made for your trade, not enterprise</span><span class="c-curb"><svg class="ck" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-11" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="c-oth"><svg class="xx" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span></div>
-        <div class="cmp-row a2"><span class="cmp-l">Everything you need, none you don't</span><span class="c-curb"><svg class="ck" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-11" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="c-oth"><svg class="xx" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span></div>
+        <div class="cmp-row cmp-head"><span></span><span>Curb</span><span>Jobber</span><span>HCP</span><span>Yardbook</span></div>
+        <div class="cmp-row a2"><span>Price</span><span class="val">$89 · $4.99mo</span><span class="val">$39–599</span><span class="val">$69–349</span><span class="val">$0–49</span></div>
+        <div class="cmp-row a2"><span>Built for your phone</span><span><svg class="ck" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-11" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><svg class="nn" viewBox="0 0 24 24" fill="none"><path d="M6 12h12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span><svg class="nn" viewBox="0 0 24 24" fill="none"><path d="M6 12h12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span><svg class="nn" viewBox="0 0 24 24" fill="none"><path d="M6 12h12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span></div>
+        <div class="cmp-row a2"><span>Every trade in one app</span><span><svg class="ck" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-11" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><svg class="nn" viewBox="0 0 24 24" fill="none"><path d="M6 12h12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span><svg class="nn" viewBox="0 0 24 24" fill="none"><path d="M6 12h12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span><svg class="nn" viewBox="0 0 24 24" fill="none"><path d="M6 12h12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span></div>
+        <div class="cmp-row a2"><span>No monthly fee, ever</span><span><svg class="ck" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-11" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><svg class="nn" viewBox="0 0 24 24" fill="none"><path d="M6 12h12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span><svg class="nn" viewBox="0 0 24 24" fill="none"><path d="M6 12h12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span><svg class="nn" viewBox="0 0 24 24" fill="none"><path d="M6 12h12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span></div>
       </div>
       <div class="cmp-url anim">getcurb.net</div>
     </div>
@@ -276,7 +275,7 @@ body{
     <svg class="curb-mark draw-mark" style="width:calc(var(--u)*26);height:calc(var(--u)*26)" viewBox="0 0 56 56" aria-hidden="true"><rect width="56" height="56" rx="14" fill="#D75F1F"/><path class="mk-p" d="M38 15 C29 15 21 20 21 26 L21 33" stroke="#F4EFE4" stroke-width="7" fill="none"/><path class="mk-p" d="M21 33 L40 33" stroke="#F4EFE4" stroke-width="7"/><circle class="mk-ring" cx="40" cy="33" r="3.5" fill="none" stroke="#D75F1F" stroke-width="2" opacity="0"/><circle class="mk-dot" cx="40" cy="33" r="3.5" fill="#F4EFE4"/></svg>
     <span class="wordmark anim" style="font-size:calc(var(--u)*17)">Curb</span>
     <div class="under"></div>
-    <div class="sub2 anim">Just $5/month — or $89 once, yours forever.</div>
+    <div class="sub2 anim">Just $4.99/mo or $89 once. Yours forever.</div>
     <div class="anim">
       <span class="badge">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.7c0-2 1.6-3 1.7-3-.9-1.4-2.4-1.5-2.9-1.6-1.2-.1-2.4.7-3 .7-.6 0-1.6-.7-2.6-.7-1.3 0-2.6.8-3.3 2-1.4 2.4-.4 6 1 8 .7 1 1.4 2 2.4 2 .9 0 1.3-.6 2.4-.6 1.1 0 1.4.6 2.4.6 1 0 1.6-.9 2.3-1.9.7-1.1 1-2.1 1-2.2 0 0-1.9-.7-1.9-3zM14.6 6.3c.5-.6.9-1.5.8-2.3-.8 0-1.7.5-2.2 1.1-.5.5-.9 1.4-.8 2.2.9.1 1.7-.4 2.2-1z"/></svg>
