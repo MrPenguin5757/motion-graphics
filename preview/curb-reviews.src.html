@@ -17,22 +17,22 @@ body{ margin:0; min-height:100vh; background:var(--stage); color:var(--sand); fo
 .studio-tag .dot{ width:6px;height:6px;border-radius:50%;background:var(--curb); }
 .frame{ position:relative; height:min(80vh,760px); max-width:94vw; aspect-ratio:var(--arw)/var(--arh);
   border-radius:calc(var(--u)*4); overflow:hidden; background:var(--asphalt);
-  box-shadow:0 0 0 calc(var(--u)*0.7) #2a2620, 0 30px 70px -24px rgba(0,0,0,.75); cursor:pointer; isolation:isolate; --u:6px; --arw:4; --arh:5; }
+  box-shadow:0 0 0 calc(var(--u)*0.7) #2a2620, 0 30px 70px -24px rgba(0,0,0,.75); cursor:pointer; isolation:isolate; --u:6px; --arw:4; --arh:5; --safe:14; }
 .scene{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:flex-start; justify-content:center; text-align:left;
-  padding:calc(var(--u)*9) calc(var(--u)*8); opacity:0; pointer-events:none; gap:calc(var(--u)*2.6); }
+  padding:calc(var(--u)*8) calc(var(--u)*8) calc(var(--u)*var(--safe)); opacity:0; pointer-events:none; gap:calc(var(--u)*2.9); }
 .scene.on{ opacity:1; }
 .scene.center{ align-items:center; justify-content:center; text-align:center; }
 .s-dark{ background:var(--asphalt); color:var(--sand); } .s-light{ background:var(--sand); color:var(--ink); }
 .accent{ color:var(--curb); } .s-dark .accent{ color:var(--curb-dk); }
 
-.num{ font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*3.4); letter-spacing:-.02em; color:var(--curb); }
+.num{ font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*4.2); letter-spacing:-.02em; color:var(--curb); }
 .s-dark .num{ color:var(--curb-dk); }
-.head{ font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*9.6); line-height:.98; letter-spacing:-.02em; text-transform:uppercase; margin:0; }
-.head.sm{ font-size:calc(var(--u)*8.4); }
+.head{ font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*10.8); line-height:.96; letter-spacing:-.02em; text-transform:uppercase; margin:0; }
+.head.sm{ font-size:calc(var(--u)*9.4); }
 .ln{ display:block; overflow:hidden; padding-bottom:.03em; } .ln .rise{ display:block; transform:translateY(110%); }
 .rule{ height:calc(var(--u)*0.9); width:calc(var(--u)*16); background:var(--curb); border-radius:99px; transform:scaleX(0); transform-origin:left center; margin:calc(var(--u)*0.6) 0; }
 .s-dark .rule{ background:var(--curb-dk); }
-.body{ font-family:var(--body); font-weight:500; font-size:calc(var(--u)*3.7); line-height:1.4; max-width:94%; color:var(--gravel); }
+.body{ font-family:var(--body); font-weight:500; font-size:calc(var(--u)*4.2); line-height:1.38; max-width:96%; color:var(--gravel); }
 .s-dark .body{ color:var(--gravel-dk); }
 .anim,.pop{ opacity:0; }
 
@@ -41,24 +41,24 @@ body{ margin:0; min-height:100vh; background:var(--stage); color:var(--sand); fo
 .card{ border:calc(var(--u)*.35) solid rgba(244,239,228,.18); border-radius:calc(var(--u)*3); padding:calc(var(--u)*3) calc(var(--u)*3.4); display:flex; align-items:center; gap:calc(var(--u)*2.4); width:100%; }
 .s-light .card{ border-color:rgba(33,30,26,.14); }
 .card .star{ flex:0 0 auto; width:calc(var(--u)*6); height:calc(var(--u)*6); }
-.card .ct{ font-family:var(--body); font-weight:700; font-size:calc(var(--u)*2.9); letter-spacing:.04em; text-transform:uppercase; line-height:1.25; }
+.card .ct{ font-family:var(--body); font-weight:700; font-size:calc(var(--u)*3.2); letter-spacing:.04em; text-transform:uppercase; line-height:1.25; }
 
 /* callout (5 MIN) */
 .callout{ background:var(--asphalt-2); border-radius:calc(var(--u)*3); padding:calc(var(--u)*3) calc(var(--u)*3.4); width:100%; }
-.callout b{ display:block; font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*8); letter-spacing:-.03em; color:var(--marigold); line-height:1; margin-bottom:calc(var(--u)*1); }
-.callout span{ font-family:var(--body); font-weight:500; font-size:calc(var(--u)*2.9); color:var(--gravel-dk); line-height:1.35; }
+.callout b{ display:block; font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*8.8); letter-spacing:-.03em; color:var(--marigold); line-height:1; margin-bottom:calc(var(--u)*1); }
+.callout span{ font-family:var(--body); font-weight:500; font-size:calc(var(--u)*3.2); color:var(--gravel-dk); line-height:1.35; }
 
 /* checklist */
 .checks{ display:flex; flex-direction:column; gap:calc(var(--u)*2.4); width:100%; }
-.crow{ display:flex; align-items:center; gap:calc(var(--u)*2.4); font-family:var(--body); font-weight:700; font-size:calc(var(--u)*4); }
+.crow{ display:flex; align-items:center; gap:calc(var(--u)*2.4); font-family:var(--body); font-weight:700; font-size:calc(var(--u)*4.4); }
 .crow .ic{ flex:0 0 auto; width:calc(var(--u)*6); height:calc(var(--u)*6); border-radius:calc(var(--u)*1.6); display:grid; place-items:center; }
 .crow .ic.yes{ background:var(--lawn); } .crow .ic.no{ background:var(--red); }
 .crow .ic svg{ width:60%; height:60%; }
 .crow.divide{ border-top:1px solid rgba(33,30,26,.10); padding-top:calc(var(--u)*2.4); }
 
 /* quote (#4) */
-.tryl{ font-family:var(--body); font-weight:800; font-size:calc(var(--u)*2.9); letter-spacing:.06em; text-transform:uppercase; color:var(--curb-dk); }
-.quote{ font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*5.4); line-height:1.06; letter-spacing:-.02em; color:var(--sand); max-width:96%; }
+.tryl{ font-family:var(--body); font-weight:800; font-size:calc(var(--u)*3.2); letter-spacing:.06em; text-transform:uppercase; color:var(--curb-dk); }
+.quote{ font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*6); line-height:1.05; letter-spacing:-.02em; color:var(--sand); max-width:98%; }
 .s-light .quote{ color:var(--ink); }
 
 /* outro logo */
@@ -67,9 +67,9 @@ body{ margin:0; min-height:100vh; background:var(--stage); color:var(--sand); fo
 .lockup .wm{ font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*8); letter-spacing:-.03em; color:var(--sand); }
 .mk-p{ stroke-linecap:round; } .mk-dot{ transform-box:fill-box; transform-origin:center; }
 
-.tracker{ position:absolute; top:calc(var(--u)*4.5); left:calc(var(--u)*8); right:calc(var(--u)*8); display:flex; gap:calc(var(--u)*1.1); z-index:5; opacity:0; transition:opacity .3s ease; }
+.tracker{ position:absolute; top:calc(var(--u)*5); left:calc(var(--u)*8); right:calc(var(--u)*8); display:flex; gap:calc(var(--u)*1.1); z-index:5; opacity:0; transition:opacity .3s ease; }
 .tracker.on{ opacity:1; }
-.tracker .seg{ flex:1; height:calc(var(--u)*0.85); border-radius:99px; background:rgba(122,114,100,.3); overflow:hidden; }
+.tracker .seg{ flex:1; height:calc(var(--u)*1.1); border-radius:99px; background:rgba(122,114,100,.42); overflow:hidden; }
 .tracker .seg .f{ display:block; height:100%; width:0%; background:var(--curb); border-radius:99px; }
 .progress{ position:absolute; left:0; right:0; bottom:0; height:calc(var(--u)*0.9); background:rgba(244,239,228,.14); z-index:6; }
 .progress .fill{ height:100%; width:0%; background:var(--curb); }
@@ -89,7 +89,7 @@ body{ margin:0; min-height:100vh; background:var(--stage); color:var(--sand); fo
   <!-- 0 COVER -->
   <section class="scene s-dark" data-scene="0">
     <div class="big5 pop">5</div>
-    <h1 class="head" style="font-size:calc(var(--u)*8.6)">
+    <h1 class="head" style="font-size:calc(var(--u)*9.4)">
       <span class="ln"><span class="rise">Ways to get</span></span>
       <span class="ln"><span class="rise">more Google</span></span>
       <span class="ln"><span class="rise accent">reviews</span></span>
@@ -149,7 +149,7 @@ body{ margin:0; min-height:100vh; background:var(--stage); color:var(--sand); fo
 
   <!-- 6 OUTRO -->
   <section class="scene s-dark" data-scene="6">
-    <h2 class="head" style="font-size:calc(var(--u)*10)"><span class="ln"><span class="rise">Try Curb</span></span><span class="ln"><span class="rise accent">for free.</span></span></h2>
+    <h2 class="head" style="font-size:calc(var(--u)*11.2)"><span class="ln"><span class="rise">Try Curb</span></span><span class="ln"><span class="rise accent">for free.</span></span></h2>
     <div class="rule"></div>
     <div class="body anim">Quotes, jobs, routes, invoices. All in one app. Link in bio.</div>
     <div class="lockup">
@@ -182,9 +182,11 @@ body{ margin:0; min-height:100vh; background:var(--stage); color:var(--sand); fo
   const OUT='cubic-bezier(.2,.8,.2,1)', BACK='cubic-bezier(.34,1.4,.5,1)';
   const setUnit=()=>{ const r=frame.getBoundingClientRect(); frame.style.setProperty('--u',(Math.min(r.width,r.height)/100)+'px'); };
   new ResizeObserver(setUnit).observe(frame); setUnit();
+  const SAFE={'4:5':14,'1:1':10,'9:16':28};
   document.querySelectorAll('.segd button').forEach(b=>b.addEventListener('click',()=>{
     document.querySelectorAll('.segd button').forEach(x=>x.setAttribute('aria-pressed','false')); b.setAttribute('aria-pressed','true');
-    const [w,h]=b.dataset.ar.split(':'); frame.style.setProperty('--arw',w); frame.style.setProperty('--arh',h); requestAnimationFrame(setUnit);
+    const [w,h]=b.dataset.ar.split(':'); frame.style.setProperty('--arw',w); frame.style.setProperty('--arh',h);
+    frame.style.setProperty('--safe',SAFE[b.dataset.ar]); requestAnimationFrame(setUnit);
   }));
 
   const scenes=[0,3.6,6.8,10.4,13.8,17.4,20.6].map((start,i)=>({start,el:frame.querySelector('[data-scene="'+i+'"]')}));
