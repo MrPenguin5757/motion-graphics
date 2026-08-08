@@ -67,6 +67,10 @@ body{ margin:0; min-height:100vh; background:var(--stage); color:var(--sand); fo
 .lockup .wm{ font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*8); letter-spacing:-.03em; color:var(--sand); }
 .mk-p{ stroke-linecap:round; } .mk-dot{ transform-box:fill-box; transform-origin:center; }
 
+.tracker{ position:absolute; top:calc(var(--u)*4.5); left:calc(var(--u)*8); right:calc(var(--u)*8); display:flex; gap:calc(var(--u)*1.1); z-index:5; opacity:0; transition:opacity .3s ease; }
+.tracker.on{ opacity:1; }
+.tracker .seg{ flex:1; height:calc(var(--u)*0.85); border-radius:99px; background:rgba(122,114,100,.3); overflow:hidden; }
+.tracker .seg .f{ display:block; height:100%; width:0%; background:var(--curb); border-radius:99px; }
 .progress{ position:absolute; left:0; right:0; bottom:0; height:calc(var(--u)*0.9); background:rgba(244,239,228,.14); z-index:6; }
 .progress .fill{ height:100%; width:0%; background:var(--curb); }
 .pausebadge{ position:absolute; inset:0; display:grid; place-items:center; z-index:7; background:rgba(20,18,16,.35); opacity:0; transition:opacity .2s; pointer-events:none; }
@@ -101,7 +105,7 @@ body{ margin:0; min-height:100vh; background:var(--stage); color:var(--sand); fo
     <div class="num anim">#1</div>
     <h2 class="head"><span class="ln"><span class="rise">Ask in person,</span></span><span class="ln"><span class="rise">not by text</span></span></h2>
     <div class="rule"></div>
-    <div class="body anim">A face-to-face ask lands far better than a text they'll swipe away. Ask while you're still standing in the driveway.</div>
+    <div class="body anim">A face-to-face ask beats a text they'll swipe past. Ask right there in the driveway.</div>
   </section>
 
   <!-- 2 -->
@@ -109,8 +113,8 @@ body{ margin:0; min-height:100vh; background:var(--stage); color:var(--sand); fo
     <div class="num anim">#2</div>
     <h2 class="head sm"><span class="ln"><span class="rise">Ask when</span></span><span class="ln"><span class="rise">they're</span></span><span class="ln"><span class="rise">happiest</span></span></h2>
     <div class="rule"></div>
-    <div class="callout pop"><b>5 min</b><span>the window right after you finish, while the work still looks brand new</span></div>
-    <div class="body anim">Wait until tomorrow and that feeling is already gone.</div>
+    <div class="callout pop"><b>5 min</b><span>right after you finish, while the work still looks brand new</span></div>
+    <div class="body anim">Wait till tomorrow and that feeling's gone.</div>
   </section>
 
   <!-- 3 -->
@@ -119,7 +123,7 @@ body{ margin:0; min-height:100vh; background:var(--stage); color:var(--sand); fo
     <h2 class="head"><span class="ln"><span class="rise">Make it one</span></span><span class="ln"><span class="rise">tap</span></span></h2>
     <div class="rule"></div>
     <div class="checks">
-      <div class="crow pop"><span class="ic yes"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-11" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Text them your direct review link</div>
+      <div class="crow pop"><span class="ic yes"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-11" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Text your direct review link</div>
       <div class="crow pop divide"><span class="ic yes"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-11" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Keep a QR code in the truck</div>
       <div class="crow pop divide"><span class="ic no"><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg></span>Telling them to &ldquo;look us up&rdquo;</div>
     </div>
@@ -131,8 +135,8 @@ body{ margin:0; min-height:100vh; background:var(--stage); color:var(--sand); fo
     <h2 class="head sm"><span class="ln"><span class="rise">Tell them</span></span><span class="ln"><span class="rise">what to</span></span><span class="ln"><span class="rise">mention</span></span></h2>
     <div class="rule"></div>
     <div class="body anim">A vague ask gets a vague review.</div>
-    <div class="tryl anim" style="margin-top:calc(var(--u)*1.4)">Try this instead:</div>
-    <div class="quote anim">&ldquo;If you mention the driveway in it, that helps me a ton.&rdquo;</div>
+    <div class="tryl anim" style="margin-top:calc(var(--u)*1.4)">Say this instead:</div>
+    <div class="quote anim">&ldquo;Mention the driveway and it helps me a ton.&rdquo;</div>
   </section>
 
   <!-- 5 -->
@@ -140,20 +144,27 @@ body{ margin:0; min-height:100vh; background:var(--stage); color:var(--sand); fo
     <div class="num anim">#5</div>
     <h2 class="head"><span class="ln"><span class="rise">Ask every</span></span><span class="ln"><span class="rise">single time</span></span></h2>
     <div class="rule"></div>
-    <div class="body anim">Most guys ask once in a while and wonder why they have six reviews. Make it the last step of every job, not a special occasion.</div>
+    <div class="body anim">Ask once in a while, get six reviews. Make it the last step of every job, every time.</div>
   </section>
 
   <!-- 6 OUTRO -->
   <section class="scene s-dark" data-scene="6">
     <h2 class="head" style="font-size:calc(var(--u)*10)"><span class="ln"><span class="rise">Try Curb</span></span><span class="ln"><span class="rise accent">for free.</span></span></h2>
     <div class="rule"></div>
-    <div class="body anim">Quotes, jobs, routes, and invoices, all in one app. Link in bio.</div>
+    <div class="body anim">Quotes, jobs, routes, invoices. All in one app. Link in bio.</div>
     <div class="lockup">
       <svg class="curb-mark draw-mark" viewBox="0 0 56 56" aria-hidden="true"><rect width="56" height="56" rx="14" fill="#D75F1F"/><path class="mk-p" d="M38 15 C29 15 21 20 21 26 L21 33" stroke="#F4EFE4" stroke-width="7" fill="none"/><path class="mk-p" d="M21 33 L40 33" stroke="#F4EFE4" stroke-width="7"/><circle class="mk-dot" cx="40" cy="33" r="3.5" fill="#F4EFE4"/></svg>
       <span class="wm anim">Curb</span>
     </div>
   </section>
 
+  <div class="tracker" id="tracker">
+    <span class="seg"><span class="f"></span></span>
+    <span class="seg"><span class="f"></span></span>
+    <span class="seg"><span class="f"></span></span>
+    <span class="seg"><span class="f"></span></span>
+    <span class="seg"><span class="f"></span></span>
+  </div>
   <div class="pausebadge"><svg viewBox="0 0 24 24" fill="var(--sand)"><path d="M8 5v14l11-7z"/></svg></div>
   <div class="progress"><div class="fill" id="fill"></div></div>
 </div>
@@ -178,6 +189,17 @@ body{ margin:0; min-height:100vh; background:var(--stage); color:var(--sand); fo
 
   const scenes=[0,3.6,6.8,10.4,13.8,17.4,20.6].map((start,i)=>({start,el:frame.querySelector('[data-scene="'+i+'"]')}));
   const TOTAL=24.6;
+  const tracker=document.getElementById('tracker'), segs=[...tracker.querySelectorAll('.seg .f')];
+  function updateTracker(t){
+    // tips are scenes 1..5, mapped onto the five tracker segments
+    if(t<scenes[1].start || t>=scenes[6].start){ tracker.classList.remove('on'); return; }
+    tracker.classList.add('on');
+    for(let k=1;k<=5;k++){
+      const start=scenes[k].start, end=scenes[k+1].start;
+      let p=(t-start)/(end-start); p=p<0?0:(p>1?1:p);
+      segs[k-1].style.width=(p*100)+'%';
+    }
+  }
   let anims=[];
   const A=(el,f,o)=>{ const a=el.animate(f,Object.assign({fill:'both'},o)); anims.push(a); return a; };
   function reset(){ anims.forEach(a=>{try{a.cancel()}catch(e){}}); anims=[]; }
@@ -226,7 +248,7 @@ body{ margin:0; min-height:100vh; background:var(--stage); color:var(--sand); fo
   }
 
   let t0=performance.now(), paused=false, pausedAt=0;
-  function loop(now){ if(!paused){ let t=(now-t0)/1000; if(t>=TOTAL){ t0=now; t=0; current=-1; } let idx=0; for(let k=0;k<scenes.length;k++) if(t>=scenes[k].start) idx=k; show(idx); fill.style.width=(t/TOTAL*100)+'%'; } requestAnimationFrame(loop); }
+  function loop(now){ if(!paused){ let t=(now-t0)/1000; if(t>=TOTAL){ t0=now; t=0; current=-1; } let idx=0; for(let k=0;k<scenes.length;k++) if(t>=scenes[k].start) idx=k; show(idx); updateTracker(t); fill.style.width=(t/TOTAL*100)+'%'; } requestAnimationFrame(loop); }
   requestAnimationFrame(loop);
   document.getElementById('replay').addEventListener('click',()=>{ t0=performance.now(); paused=false; frame.classList.remove('paused'); current=-1; });
   function tp(){ if(paused){ t0=performance.now()-pausedAt; paused=false; frame.classList.remove('paused'); } else { pausedAt=performance.now()-t0; paused=true; frame.classList.add('paused'); } }
