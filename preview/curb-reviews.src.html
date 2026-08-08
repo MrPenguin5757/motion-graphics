@@ -1,0 +1,235 @@
+<title>Curb — 5 Ways to Get More Google Reviews</title>
+<style>
+@font-face{font-family:'Bricolage Grotesque';font-weight:400 800;font-style:normal;font-display:block;src:url(FONT_BRICOLAGE) format('woff2');}
+@font-face{font-family:'Hanken Grotesk';font-weight:400;font-style:normal;font-display:block;src:url(FONT_HANKEN_400) format('woff2');}
+@font-face{font-family:'Hanken Grotesk';font-weight:500;font-style:normal;font-display:block;src:url(FONT_HANKEN_500) format('woff2');}
+@font-face{font-family:'Hanken Grotesk';font-weight:700;font-style:normal;font-display:block;src:url(FONT_HANKEN_700) format('woff2');}
+:root{
+  --sand:#F4EFE4; --concrete:#FBF8F1; --pebble:#ECE6D8; --gravel:#7A7264; --gravel-dk:#BDB4A4;
+  --ink:#211E1A; --asphalt:#1D1A16; --asphalt-2:#26221C; --curb:#D75F1F; --curb-dk:#E56A25;
+  --marigold:#F3A847; --lawn:#3C7A59; --lawn-dk:#4E9670; --red:#D64B2E; --stage:#141210;
+  --disp:'Bricolage Grotesque', Georgia, serif; --body:'Hanken Grotesk', Inter, system-ui, sans-serif;
+}
+*{ box-sizing:border-box; }
+body{ margin:0; min-height:100vh; background:var(--stage); color:var(--sand); font-family:var(--body);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:clamp(16px,3vh,28px); padding:24px 16px 32px; -webkit-font-smoothing:antialiased; }
+.studio-tag{ font-size:11px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--gravel); display:flex; align-items:center; gap:10px; }
+.studio-tag .dot{ width:6px;height:6px;border-radius:50%;background:var(--curb); }
+.frame{ position:relative; height:min(80vh,760px); max-width:94vw; aspect-ratio:var(--arw)/var(--arh);
+  border-radius:calc(var(--u)*4); overflow:hidden; background:var(--asphalt);
+  box-shadow:0 0 0 calc(var(--u)*0.7) #2a2620, 0 30px 70px -24px rgba(0,0,0,.75); cursor:pointer; isolation:isolate; --u:6px; --arw:4; --arh:5; }
+.scene{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:flex-start; justify-content:flex-start; text-align:left;
+  padding:calc(var(--u)*9) calc(var(--u)*8); opacity:0; pointer-events:none; gap:calc(var(--u)*2.6); }
+.scene.on{ opacity:1; }
+.scene.center{ align-items:center; justify-content:center; text-align:center; }
+.s-dark{ background:var(--asphalt); color:var(--sand); } .s-light{ background:var(--sand); color:var(--ink); }
+.accent{ color:var(--curb); } .s-dark .accent{ color:var(--curb-dk); }
+
+.num{ font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*3.4); letter-spacing:-.02em; color:var(--curb); }
+.s-dark .num{ color:var(--curb-dk); }
+.head{ font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*9.6); line-height:.98; letter-spacing:-.02em; text-transform:uppercase; margin:0; }
+.head.sm{ font-size:calc(var(--u)*8.4); }
+.ln{ display:block; overflow:hidden; padding-bottom:.03em; } .ln .rise{ display:block; transform:translateY(110%); }
+.rule{ height:calc(var(--u)*0.9); width:calc(var(--u)*16); background:var(--curb); border-radius:99px; transform:scaleX(0); transform-origin:left center; margin:calc(var(--u)*0.6) 0; }
+.s-dark .rule{ background:var(--curb-dk); }
+.body{ font-family:var(--body); font-weight:500; font-size:calc(var(--u)*3.7); line-height:1.4; max-width:94%; color:var(--gravel); }
+.s-dark .body{ color:var(--gravel-dk); }
+.anim,.pop{ opacity:0; }
+
+/* cover */
+.big5{ font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*26); line-height:.8; letter-spacing:-.04em; }
+.card{ border:calc(var(--u)*.35) solid rgba(244,239,228,.18); border-radius:calc(var(--u)*3); padding:calc(var(--u)*3) calc(var(--u)*3.4); display:flex; align-items:center; gap:calc(var(--u)*2.4); width:100%; }
+.s-light .card{ border-color:rgba(33,30,26,.14); }
+.card .star{ flex:0 0 auto; width:calc(var(--u)*6); height:calc(var(--u)*6); }
+.card .ct{ font-family:var(--body); font-weight:700; font-size:calc(var(--u)*2.9); letter-spacing:.04em; text-transform:uppercase; line-height:1.25; }
+
+/* callout (5 MIN) */
+.callout{ background:var(--asphalt-2); border-radius:calc(var(--u)*3); padding:calc(var(--u)*3) calc(var(--u)*3.4); width:100%; }
+.callout b{ display:block; font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*8); letter-spacing:-.03em; color:var(--marigold); line-height:1; margin-bottom:calc(var(--u)*1); }
+.callout span{ font-family:var(--body); font-weight:500; font-size:calc(var(--u)*2.9); color:var(--gravel-dk); line-height:1.35; }
+
+/* checklist */
+.checks{ display:flex; flex-direction:column; gap:calc(var(--u)*2.4); width:100%; }
+.crow{ display:flex; align-items:center; gap:calc(var(--u)*2.4); font-family:var(--body); font-weight:700; font-size:calc(var(--u)*4); }
+.crow .ic{ flex:0 0 auto; width:calc(var(--u)*6); height:calc(var(--u)*6); border-radius:calc(var(--u)*1.6); display:grid; place-items:center; }
+.crow .ic.yes{ background:var(--lawn); } .crow .ic.no{ background:var(--red); }
+.crow .ic svg{ width:60%; height:60%; }
+.crow.divide{ border-top:1px solid rgba(33,30,26,.10); padding-top:calc(var(--u)*2.4); }
+
+/* quote (#4) */
+.tryl{ font-family:var(--body); font-weight:800; font-size:calc(var(--u)*2.9); letter-spacing:.06em; text-transform:uppercase; color:var(--curb-dk); }
+.quote{ font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*5.4); line-height:1.06; letter-spacing:-.02em; color:var(--sand); max-width:96%; }
+.s-light .quote{ color:var(--ink); }
+
+/* outro logo */
+.lockup{ display:flex; align-items:center; gap:calc(var(--u)*2.2); margin-top:calc(var(--u)*2); }
+.lockup .curb-mark{ width:calc(var(--u)*9); height:calc(var(--u)*9); }
+.lockup .wm{ font-family:var(--disp); font-weight:800; font-size:calc(var(--u)*8); letter-spacing:-.03em; color:var(--sand); }
+.mk-p{ stroke-linecap:round; } .mk-dot{ transform-box:fill-box; transform-origin:center; }
+
+.progress{ position:absolute; left:0; right:0; bottom:0; height:calc(var(--u)*0.9); background:rgba(244,239,228,.14); z-index:6; }
+.progress .fill{ height:100%; width:0%; background:var(--curb); }
+.pausebadge{ position:absolute; inset:0; display:grid; place-items:center; z-index:7; background:rgba(20,18,16,.35); opacity:0; transition:opacity .2s; pointer-events:none; }
+.frame.paused .pausebadge{ opacity:1; } .pausebadge svg{ width:calc(var(--u)*12); height:calc(var(--u)*12); }
+.controls{ display:flex; gap:14px; flex-wrap:wrap; justify-content:center; }
+.btn{ font-family:var(--body); font-weight:700; font-size:13px; color:var(--sand); background:#241f19; border:1px solid #3a3229; padding:10px 16px; border-radius:10px; cursor:pointer; display:inline-flex; align-items:center; gap:8px; } .btn svg{ width:15px; height:15px; }
+.segd{ display:flex; background:#1e1a15; border:1px solid #3a3229; border-radius:10px; padding:3px; gap:2px; }
+.segd button{ font-family:var(--body); font-weight:600; font-size:12px; color:var(--gravel-dk); background:transparent; border:0; cursor:pointer; padding:7px 12px; border-radius:7px; } .segd button[aria-pressed="true"]{ color:#fff; background:var(--curb); }
+.note{ font-size:12px; color:var(--gravel); text-align:center; max-width:52ch; line-height:1.6; }
+</style>
+
+<div class="studio-tag"><span class="dot"></span> Curb · 5 Ways to Get More Google Reviews</div>
+
+<div class="frame" id="frame" role="button" tabindex="0" aria-label="Play or pause">
+
+  <!-- 0 COVER -->
+  <section class="scene s-dark" data-scene="0">
+    <div class="big5 pop">5</div>
+    <h1 class="head" style="font-size:calc(var(--u)*8.6)">
+      <span class="ln"><span class="rise">Ways to get</span></span>
+      <span class="ln"><span class="rise">more Google</span></span>
+      <span class="ln"><span class="rise accent">reviews</span></span>
+    </h1>
+    <div class="card pop">
+      <svg class="star" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.8 6.1 20.7l1.3-6.6L2.5 9.5l6.6-.8z" fill="#F3A847"/></svg>
+      <span class="ct">Reviews are why they call you first.</span>
+    </div>
+  </section>
+
+  <!-- 1 -->
+  <section class="scene s-light" data-scene="1">
+    <div class="num anim">#1</div>
+    <h2 class="head"><span class="ln"><span class="rise">Ask in person,</span></span><span class="ln"><span class="rise">not by text</span></span></h2>
+    <div class="rule"></div>
+    <div class="body anim">A face-to-face ask lands far better than a text they'll swipe away. Ask while you're still standing in the driveway.</div>
+  </section>
+
+  <!-- 2 -->
+  <section class="scene s-dark" data-scene="2">
+    <div class="num anim">#2</div>
+    <h2 class="head sm"><span class="ln"><span class="rise">Ask when</span></span><span class="ln"><span class="rise">they're</span></span><span class="ln"><span class="rise">happiest</span></span></h2>
+    <div class="rule"></div>
+    <div class="callout pop"><b>5 min</b><span>the window right after you finish, while the work still looks brand new</span></div>
+    <div class="body anim">Wait until tomorrow and that feeling is already gone.</div>
+  </section>
+
+  <!-- 3 -->
+  <section class="scene s-light" data-scene="3">
+    <div class="num anim">#3</div>
+    <h2 class="head"><span class="ln"><span class="rise">Make it one</span></span><span class="ln"><span class="rise">tap</span></span></h2>
+    <div class="rule"></div>
+    <div class="checks">
+      <div class="crow pop"><span class="ic yes"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-11" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Text them your direct review link</div>
+      <div class="crow pop divide"><span class="ic yes"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-11" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Keep a QR code in the truck</div>
+      <div class="crow pop divide"><span class="ic no"><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg></span>Telling them to &ldquo;look us up&rdquo;</div>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="scene s-dark" data-scene="4">
+    <div class="num anim">#4</div>
+    <h2 class="head sm"><span class="ln"><span class="rise">Tell them</span></span><span class="ln"><span class="rise">what to</span></span><span class="ln"><span class="rise">mention</span></span></h2>
+    <div class="rule"></div>
+    <div class="body anim">A vague ask gets a vague review.</div>
+    <div class="tryl anim" style="margin-top:calc(var(--u)*1.4)">Try this instead:</div>
+    <div class="quote anim">&ldquo;If you mention the driveway in it, that helps me a ton.&rdquo;</div>
+  </section>
+
+  <!-- 5 -->
+  <section class="scene s-light" data-scene="5">
+    <div class="num anim">#5</div>
+    <h2 class="head"><span class="ln"><span class="rise">Ask every</span></span><span class="ln"><span class="rise">single time</span></span></h2>
+    <div class="rule"></div>
+    <div class="body anim">Most guys ask once in a while and wonder why they have six reviews. Make it the last step of every job, not a special occasion.</div>
+  </section>
+
+  <!-- 6 OUTRO -->
+  <section class="scene s-dark" data-scene="6">
+    <h2 class="head" style="font-size:calc(var(--u)*10)"><span class="ln"><span class="rise">Try Curb</span></span><span class="ln"><span class="rise accent">for free.</span></span></h2>
+    <div class="rule"></div>
+    <div class="body anim">Quotes, jobs, routes, and invoices, all in one app. Link in bio.</div>
+    <div class="lockup">
+      <svg class="curb-mark draw-mark" viewBox="0 0 56 56" aria-hidden="true"><rect width="56" height="56" rx="14" fill="#D75F1F"/><path class="mk-p" d="M38 15 C29 15 21 20 21 26 L21 33" stroke="#F4EFE4" stroke-width="7" fill="none"/><path class="mk-p" d="M21 33 L40 33" stroke="#F4EFE4" stroke-width="7"/><circle class="mk-dot" cx="40" cy="33" r="3.5" fill="#F4EFE4"/></svg>
+      <span class="wm anim">Curb</span>
+    </div>
+  </section>
+
+  <div class="pausebadge"><svg viewBox="0 0 24 24" fill="var(--sand)"><path d="M8 5v14l11-7z"/></svg></div>
+  <div class="progress"><div class="fill" id="fill"></div></div>
+</div>
+
+<div class="controls">
+  <button class="btn" id="replay"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Replay</button>
+  <div class="segd" role="group" aria-label="Aspect ratio"><button data-ar="4:5" aria-pressed="true">4:5</button><button data-ar="1:1" aria-pressed="false">1:1</button><button data-ar="9:16" aria-pressed="false">9:16</button></div>
+</div>
+<p class="note">Tap to pause · <b>IG/FB video from your carousel</b> — 4:5 feed by default; toggle 1:1 and 9:16.</p>
+
+<script>
+(function(){
+  const frame=document.getElementById('frame'), fill=document.getElementById('fill');
+  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const OUT='cubic-bezier(.2,.8,.2,1)', BACK='cubic-bezier(.34,1.4,.5,1)';
+  const setUnit=()=>{ const r=frame.getBoundingClientRect(); frame.style.setProperty('--u',(Math.min(r.width,r.height)/100)+'px'); };
+  new ResizeObserver(setUnit).observe(frame); setUnit();
+  document.querySelectorAll('.segd button').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('.segd button').forEach(x=>x.setAttribute('aria-pressed','false')); b.setAttribute('aria-pressed','true');
+    const [w,h]=b.dataset.ar.split(':'); frame.style.setProperty('--arw',w); frame.style.setProperty('--arh',h); requestAnimationFrame(setUnit);
+  }));
+
+  const scenes=[0,3.6,6.8,10.4,13.8,17.4,20.6].map((start,i)=>({start,el:frame.querySelector('[data-scene="'+i+'"]')}));
+  const TOTAL=24.6;
+  let anims=[];
+  const A=(el,f,o)=>{ const a=el.animate(f,Object.assign({fill:'both'},o)); anims.push(a); return a; };
+  function reset(){ anims.forEach(a=>{try{a.cancel()}catch(e){}}); anims=[]; }
+  const rise=(el,d=0,dur=620)=>A(el,[{transform:'translateY(110%)'},{transform:'translateY(0)'}],{duration:dur,delay:d,easing:BACK});
+  const fadeUp=(el,d=0,dur=560,dy='26%')=>A(el,[{opacity:0,transform:'translateY('+dy+') scale(.96)'},{opacity:1,transform:'none'}],{duration:dur,delay:d,easing:OUT});
+  const pop=(el,d=0,dur=560)=>A(el,[{opacity:0,transform:'translateY(20%) scale(.86)'},{opacity:1,transform:'none'}],{duration:dur,delay:d,easing:BACK});
+  const sweep=(el,d=0,dur=560)=>A(el,[{transform:'scaleX(0)'},{transform:'scaleX(1)'}],{duration:dur,delay:d,easing:OUT});
+  function drawMark(svg,d=0){ const ps=svg.querySelectorAll('.mk-p'), dot=svg.querySelector('.mk-dot'); let acc=d;
+    ps.forEach(p=>{ const L=p.getTotalLength(); p.style.strokeDasharray=L; A(p,[{strokeDashoffset:L},{strokeDashoffset:0}],{duration:380,delay:acc,easing:OUT}); acc+=340; });
+    if(dot) A(dot,[{opacity:0,transform:'scale(0)'},{opacity:1,transform:'scale(1)'}],{duration:320,delay:acc,easing:BACK}); return acc+320; }
+  const heads=(s,d0=180)=>s.querySelectorAll('.rise').forEach((e,k)=>rise(e,d0+k*130));
+  const setFinal=el=>el.querySelectorAll('.anim,.pop,.rise,.rule').forEach(e=>{e.style.opacity=1;e.style.transform='none';});
+
+  function enter(i){
+    const s=scenes[i].el;
+    if(reduce){ setFinal(s); return; }
+    if(i===0){ pop(s.querySelector('.big5'),0,600); heads(s,260); pop(s.querySelector('.card'),640,600); }
+    else if(i===2){ fadeUp(s.querySelector('.num'),0); heads(s,160); sweep(s.querySelector('.rule'),150); pop(s.querySelector('.callout'),620,600); fadeUp(s.querySelector('.body'),980); }
+    else if(i===3){ fadeUp(s.querySelector('.num'),0); heads(s,160); sweep(s.querySelector('.rule'),150); s.querySelectorAll('.crow').forEach((e,k)=>pop(e,560+k*180,560)); }
+    else if(i===4){ fadeUp(s.querySelector('.num'),0); heads(s,160); sweep(s.querySelector('.rule'),150); fadeUp(s.querySelector('.body'),560); fadeUp(s.querySelector('.tryl'),820); fadeUp(s.querySelector('.quote'),980,600,'18%'); }
+    else if(i===6){ heads(s,120); sweep(s.querySelector('.rule'),120); fadeUp(s.querySelector('.body'),420); const end=drawMark(s.querySelector('.draw-mark'),620); fadeUp(s.querySelector('.wm'),end,560,'0%'); }
+    else { fadeUp(s.querySelector('.num'),0); heads(s,160); sweep(s.querySelector('.rule'),150); fadeUp(s.querySelector('.body'),560); }
+  }
+
+  function clipIn(nu,from,to,dur){ nu.style.clipPath=from; nu.animate([{clipPath:from},{clipPath:to}],{duration:dur,easing:OUT,fill:'both'}); return dur; }
+  function slideIn(nu,from,dur){ nu.style.transform=from; nu.animate([{transform:from},{transform:'none'}],{duration:dur,easing:OUT,fill:'both'}); return dur; }
+  function zoomIn(nu,dur){ nu.style.transform='scale(1.1)'; nu.style.opacity='0'; nu.animate([{opacity:0,transform:'scale(1.1)'},{opacity:1,transform:'none'}],{duration:dur,easing:OUT,fill:'both'}); return dur; }
+  const TX={
+    0:nu=>zoomIn(nu,360),
+    1:nu=>clipIn(nu,'inset(100% 0 0 0)','inset(0 0 0 0)',480),
+    2:nu=>clipIn(nu,'circle(0% at 50% 50%)','circle(150% at 50% 50%)',520),
+    3:nu=>clipIn(nu,'inset(0 100% 0 0)','inset(0 0 0 0)',480),
+    4:nu=>slideIn(nu,'translateY(100%)',520),
+    5:nu=>clipIn(nu,'inset(0 0 100% 0)','inset(0 0 0 0)',480),
+    6:nu=>clipIn(nu,'circle(0% at 50% 50%)','circle(150% at 50% 50%)',600),
+  };
+
+  let current=-1;
+  function show(i){
+    if(i===current) return; current=i;
+    const oldEl=frame.querySelector('.scene.on'), nu=scenes[i].el; reset();
+    if(reduce){ if(oldEl&&oldEl!==nu) oldEl.classList.remove('on'); nu.classList.add('on'); enter(i); return; }
+    nu.style.zIndex='3'; nu.classList.add('on'); if(oldEl&&oldEl!==nu) oldEl.style.zIndex='2';
+    enter(i); const dur=(TX[i]||TX[0])(nu);
+    setTimeout(()=>{ nu.getAnimations().forEach(a=>a.cancel()); if(oldEl&&oldEl!==nu){ oldEl.classList.remove('on'); oldEl.style.zIndex=''; } nu.style.zIndex=''; nu.style.clipPath=''; nu.style.transform=''; nu.style.opacity=''; }, dur+80);
+  }
+
+  let t0=performance.now(), paused=false, pausedAt=0;
+  function loop(now){ if(!paused){ let t=(now-t0)/1000; if(t>=TOTAL){ t0=now; t=0; current=-1; } let idx=0; for(let k=0;k<scenes.length;k++) if(t>=scenes[k].start) idx=k; show(idx); fill.style.width=(t/TOTAL*100)+'%'; } requestAnimationFrame(loop); }
+  requestAnimationFrame(loop);
+  document.getElementById('replay').addEventListener('click',()=>{ t0=performance.now(); paused=false; frame.classList.remove('paused'); current=-1; });
+  function tp(){ if(paused){ t0=performance.now()-pausedAt; paused=false; frame.classList.remove('paused'); } else { pausedAt=performance.now()-t0; paused=true; frame.classList.add('paused'); } }
+  frame.addEventListener('click',tp); frame.addEventListener('keydown',e=>{ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); tp(); }});
+})();
+</script>
