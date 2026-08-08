@@ -2,6 +2,7 @@ import React from 'react';
 import {Composition} from 'remotion';
 import {CurbAd, FPS, DURATION} from './CurbAd';
 import {CurbTour, FPS as TOUR_FPS, DURATION as TOUR_DURATION} from './CurbTour';
+import {CurbReviews, FPS as REV_FPS, DURATION as REV_DURATION} from './CurbReviews';
 
 // Each format your platforms need. Render any of them by id.
 const SIZES = [
@@ -30,6 +31,17 @@ export const RemotionRoot: React.FC = () => (
         component={CurbTour}
         durationInFrames={TOUR_DURATION}
         fps={TOUR_FPS}
+        width={f.width}
+        height={f.height}
+      />
+    ))}
+    {SIZES.map((f) => (
+      <Composition
+        key={`reviews-${f.suffix}`}
+        id={`CurbReviews-${f.suffix}`}
+        component={CurbReviews}
+        durationInFrames={REV_DURATION}
+        fps={REV_FPS}
         width={f.width}
         height={f.height}
       />
