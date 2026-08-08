@@ -8,7 +8,11 @@
     "render:9x16": "remotion render CurbAd-9x16 out/curb-9x16.mp4",
     "render:4x5": "remotion render CurbAd-4x5 out/curb-4x5.mp4",
     "render:1x1": "remotion render CurbAd-1x1 out/curb-1x1.mp4",
-    "render:all": "npm run render:9x16 && npm run render:4x5 && npm run render:1x1"
+    "render:all": "npm run render:9x16 && npm run render:4x5 && npm run render:1x1",
+    "tour:9x16": "remotion render CurbTour-9x16 out/curb-tour-9x16.mp4",
+    "tour:4x5": "remotion render CurbTour-4x5 out/curb-tour-4x5.mp4",
+    "tour:1x1": "remotion render CurbTour-1x1 out/curb-tour-1x1.mp4",
+    "tour:all": "npm run tour:9x16 && npm run tour:4x5 && npm run tour:1x1"
   },
   "dependencies": {
     "@remotion/cli": "4.0.192",
