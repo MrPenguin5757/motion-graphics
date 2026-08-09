@@ -22,6 +22,7 @@ const C = {
 export const FPS = 30;
 const CL = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 const easeInOut = (p: number) => (p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2);
+const easeOut = (p: number) => 1 - Math.pow(1 - p, 3);
 const win = (f: number, a: number, b: number, c: number, d: number) =>
   Math.max(0, Math.min(interpolate(f, [a, b], [0, 1], CL), interpolate(f, [c, d], [1, 0], CL)));
 
@@ -29,7 +30,7 @@ const win = (f: number, a: number, b: number, c: number, d: number) =>
 const INTRO_OUT = 84;
 const S = [78, 228, 378, 528, 678]; // home, jobs, route, clients, money
 const SPIN = 28; // 3D flip duration
-const SW = 22;   // in-app swipe duration
+const SW = 15;   // in-app swipe duration (snappy)
 // transition INTO each screen: entrance, then a mix of app swipes and one 3D flip
 const TT: ('enter' | 'swipe' | 'spin')[] = ['enter', 'swipe', 'spin', 'swipe', 'swipe'];
 const END = 828;
@@ -349,7 +350,7 @@ const Phone: React.FC<{u: number; f: number; fps: number}> = ({u, f, fps}) => {
   let swipe: {i: number; p: number} | null = null;
   for (let i = 1; i < S.length; i++) {
     if (TT[i] === 'swipe' && f >= S[i] && f < S[i] + SW) {
-      swipe = {i, p: easeInOut((f - S[i]) / SW)};
+      swipe = {i, p: easeOut((f - S[i]) / SW)};
       break;
     }
   }
@@ -556,17 +557,41 @@ const Caption: React.FC<{u: number; f: number; fps: number}> = ({u, f, fps}) => 
 
 /* ---------- intro / endcard ---------- */
 const Intro: React.FC<{u: number; f: number; fps: number}> = ({u, f, fps}) => {
-  const op = f < 66 ? 1 : interpolate(f, [66, INTRO_OUT], [1, 0], CL);
-  if (op <= 0) return null;
-  const lab = spring({frame: f - 4, fps, config: {damping: 200}});
+  if (f > INTRO_OUT + 4) return null;
+  const op = interpolate(f, [INTRO_OUT - 4, INTRO_OUT + 4], [1, 0], CL);
+  const outP = interpolate(f, [58, INTRO_OUT], [0, 1], CL); // lift + shrink on the way out
+  const pop = (d: number) => spring({frame: f - d, fps, config: {damping: 11, mass: 0.6}});
+  const mark = pop(0);
+  const kick = pop(6);
+  const sweep = spring({frame: f - 40, fps, config: {damping: 200}});
+  const lines = ['Everything', 'you run,', 'in one app.'];
+  // subtle energy: a few brand dots drifting behind the type
+  const dots = [
+    {x: 12, y: 22, s: 9, c: C.marigold, o: 0.14, ph: 0}, {x: 82, y: 30, s: 12, c: C.curb, o: 0.12, ph: 20},
+    {x: 78, y: 74, s: 8, c: C.marigold, o: 0.16, ph: 40}, {x: 16, y: 72, s: 14, c: C.curb, o: 0.08, ph: 12},
+  ];
   return (
-    <AbsoluteFill style={{opacity: op, background: C.asphalt, alignItems: 'center', justifyContent: 'center', textAlign: 'center', gap: 3.2 * u, zIndex: 4}}>
-      <div style={{opacity: lab, transform: `translateY(${(1 - lab) * 24}%)`, fontWeight: 700, fontSize: 2.9 * u, letterSpacing: '0.13em', textTransform: 'uppercase', color: C.gravelDk}}>A quick tour</div>
-      <div style={{fontFamily: BRIC, fontWeight: 800, fontSize: 10.6 * u, lineHeight: 0.98, letterSpacing: '-0.03em'}}>
-        {['Everything you run', 'in a day.'].map((line, k) => {
-          const p = spring({frame: f - 6 - k * 5, fps, config: {damping: 200}});
-          return <span key={k} style={{display: 'block', overflow: 'hidden'}}><span style={{display: 'block', transform: `translateY(${(1 - p) * 110}%)`, color: k === 1 ? C.curbDk : C.sand}}>{line}</span></span>;
-        })}
+    <AbsoluteFill style={{opacity: op, background: C.asphalt, alignItems: 'center', justifyContent: 'center', textAlign: 'center', zIndex: 4, overflow: 'hidden'}}>
+      {dots.map((d, i) => (
+        <div key={i} style={{position: 'absolute', left: `${d.x}%`, top: `${d.y}%`, width: d.s * u, height: d.s * u, borderRadius: '50%', background: d.c, opacity: d.o * (1 - outP), transform: `translateY(${Math.sin((f + d.ph) * 0.07) * 8}%)`}} />
+      ))}
+      <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2.6 * u, transform: `translateY(${-outP * 7}%) scale(${1 - outP * 0.1})`, opacity: 1 - outP * 0.5}}>
+        <div style={{opacity: Math.min(mark, 1), transform: `scale(${0.5 + mark * 0.5})`}}><Mark size={12 * u} draw delay={2} /></div>
+        <div style={{opacity: Math.min(kick, 1), transform: `translateY(${(1 - Math.min(kick, 1)) * 60}%)`, fontFamily: HANK, fontWeight: 700, fontSize: 2.9 * u, letterSpacing: '0.18em', textTransform: 'uppercase', color: C.gravelDk}}>The quick tour</div>
+        <div style={{fontFamily: BRIC, fontWeight: 800, fontSize: 12 * u, lineHeight: 0.96, letterSpacing: '-0.03em'}}>
+          {lines.map((line, k) => {
+            const p = pop(12 + k * 6);
+            const pc = Math.min(p, 1);
+            const acc = 12 + 2 * 6;
+            const shake = k === 2 && f > acc ? Math.sin((f - acc) * 1.5) * Math.max(0, 1 - (f - acc) / 9) * u * 0.6 : 0;
+            return (
+              <div key={k} style={{overflow: 'hidden', paddingBottom: '0.04em'}}>
+                <span style={{display: 'inline-block', opacity: pc, transform: `translateY(${(1 - pc) * 70}%) scale(${0.82 + p * 0.18}) translateX(${shake}px)`, color: k === 2 ? C.curbDk : C.sand}}>{line}</span>
+              </div>
+            );
+          })}
+        </div>
+        <div style={{height: 1.2 * u, width: 26 * u, background: C.curb, borderRadius: 99, transform: `scaleX(${sweep})`}} />
       </div>
     </AbsoluteFill>
   );
