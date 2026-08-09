@@ -16,7 +16,11 @@
     "reviews:9x16": "remotion render CurbReviews-9x16 out/curb-reviews-9x16.mp4",
     "reviews:4x5": "remotion render CurbReviews-4x5 out/curb-reviews-4x5.mp4",
     "reviews:1x1": "remotion render CurbReviews-1x1 out/curb-reviews-1x1.mp4",
-    "reviews:all": "npm run reviews:9x16 && npm run reviews:4x5 && npm run reviews:1x1"
+    "reviews:all": "npm run reviews:9x16 && npm run reviews:4x5 && npm run reviews:1x1",
+    "tourfull:9x16": "remotion render CurbTourFull-9x16 out/curb-tourfull-9x16.mp4",
+    "tourfull:4x5": "remotion render CurbTourFull-4x5 out/curb-tourfull-4x5.mp4",
+    "tourfull:1x1": "remotion render CurbTourFull-1x1 out/curb-tourfull-1x1.mp4",
+    "tourfull:all": "npm run tourfull:9x16 && npm run tourfull:4x5 && npm run tourfull:1x1"
   },
   "dependencies": {
     "@remotion/cli": "4.0.192",

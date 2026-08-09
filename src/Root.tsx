@@ -3,6 +3,7 @@ import {Composition} from 'remotion';
 import {CurbAd, FPS, DURATION} from './CurbAd';
 import {CurbTour, FPS as TOUR_FPS, DURATION as TOUR_DURATION} from './CurbTour';
 import {CurbReviews, FPS as REV_FPS, DURATION as REV_DURATION} from './CurbReviews';
+import {CurbTourFull, FPS as TF_FPS, DURATION as TF_DURATION} from './CurbTourFull';
 
 // Each format your platforms need. Render any of them by id.
 const SIZES = [
@@ -42,6 +43,17 @@ export const RemotionRoot: React.FC = () => (
         component={CurbReviews}
         durationInFrames={REV_DURATION}
         fps={REV_FPS}
+        width={f.width}
+        height={f.height}
+      />
+    ))}
+    {SIZES.map((f) => (
+      <Composition
+        key={`tourfull-${f.suffix}`}
+        id={`CurbTourFull-${f.suffix}`}
+        component={CurbTourFull}
+        durationInFrames={TF_DURATION}
+        fps={TF_FPS}
         width={f.width}
         height={f.height}
       />
