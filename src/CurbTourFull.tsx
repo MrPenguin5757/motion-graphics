@@ -300,11 +300,11 @@ const activeIndex = (f: number) => {
 
 const Phone: React.FC<{u: number; f: number; fps: number}> = ({u, f, fps}) => {
   // spin into every screen after the first
-  let ry = BASE + Math.sin(f * 0.05) * 2.2;
+  let ry = BASE + Math.sin(f * 0.045) * 1.3;
   for (let i = 1; i < S.length; i++) {
     if (f >= S[i] && f < S[i] + SPIN) ry = BASE + easeInOut((f - S[i]) / SPIN) * 360;
   }
-  const ty = Math.sin(f * 0.07) * 1.2;
+  const ty = Math.sin(f * 0.045) * 0.4;
   const idx = activeIndex(f);
   const enter = spring({frame: f - S[0], fps, config: {damping: 200}});
   const exit = spring({frame: f - END, fps, config: {damping: 200}});
@@ -381,21 +381,21 @@ const Pills: React.FC<{u: number; f: number; fps: number}> = ({u, f, fps}) => {
   return (
     <AbsoluteFill style={{zIndex: 3, pointerEvents: 'none'}}>
       {/* HOME */}
-      <P screen={0} delay={22} x={4} y={26} anchor="l"><StatPill u={u} label="Owed to you" value="$3,102" color={C.curb} /></P>
-      <P screen={0} delay={34} x={4} y={62} anchor="r"><StatPill u={u} label="Stops today" value="8 stops" /></P>
+      <P screen={0} delay={22} x={4} y={30} anchor="l"><StatPill u={u} label="Owed to you" value="$3,102" color={C.curb} /></P>
+      <P screen={0} delay={34} x={8} y={34} anchor="r"><StatPill u={u} label="Stops today" value="8 stops" /></P>
       {/* JOBS */}
-      <P screen={1} delay={20} x={3} y={22} anchor="l"><StatusPill u={u} dot={C.curb} text="In progress" /></P>
-      <P screen={1} delay={30} x={4} y={30} anchor="r"><StatusPill u={u} dot={C.lawn} text="Scheduled" /></P>
-      <P screen={1} delay={44} x={0} y={72} anchor="c"><NotePill u={u} color={C.curbDk} text="Rain warning: Sunday 73%" icon={<span style={{fontSize: 2.1 * u}}>🌧</span>} /></P>
+      <P screen={1} delay={20} x={3} y={24} anchor="l"><StatusPill u={u} dot={C.curb} text="In progress" /></P>
+      <P screen={1} delay={30} x={8} y={33} anchor="r"><StatusPill u={u} dot={C.lawn} text="Scheduled" /></P>
+      <P screen={1} delay={44} x={0} y={64} anchor="c"><NotePill u={u} color={C.curbDk} text="Rain warning: Sunday 73%" icon={<span style={{fontSize: 2.1 * u}}>🌧</span>} /></P>
       {/* ROUTE */}
-      <P screen={2} delay={26} x={4} y={64} anchor="r"><StatPill u={u} label="Today's drive" value="27.3 mi" /></P>
-      <P screen={2} delay={38} x={3} y={26} anchor="l"><StatusPill u={u} dot={C.curb} text="Optimized · 6 stops" /></P>
+      <P screen={2} delay={26} x={8} y={35} anchor="r"><StatPill u={u} label="Today's drive" value="27.3 mi" /></P>
+      <P screen={2} delay={38} x={3} y={27} anchor="l"><StatusPill u={u} dot={C.curb} text="Optimized · 6 stops" /></P>
       {/* CLIENTS */}
-      <P screen={3} delay={20} x={3} y={22} anchor="l"><StatusPill u={u} dot={C.curb} text="Prefers mornings" /></P>
-      <P screen={3} delay={32} x={3} y={58} anchor="l"><StatPill u={u} label="Last job" value="$130" color={C.lawn} sub="Pressure Washing" /></P>
-      <P screen={3} delay={46} x={0} y={74} anchor="c"><StatPill u={u} label="Gate / access" value="Code 2289" sub="side gate on left" /></P>
+      <P screen={3} delay={20} x={3} y={24} anchor="l"><StatusPill u={u} dot={C.curb} text="Prefers mornings" /></P>
+      <P screen={3} delay={32} x={3} y={54} anchor="l"><StatPill u={u} label="Last job" value="$130" color={C.lawn} sub="Pressure Washing" /></P>
+      <P screen={3} delay={46} x={0} y={64} anchor="c"><StatPill u={u} label="Gate / access" value="Code 2289" sub="side gate on left" /></P>
       {/* MONEY */}
-      <P screen={4} delay={22} x={3} y={24} anchor="l">
+      <P screen={4} delay={22} x={3} y={26} anchor="l">
         <Card u={u}>
           <div style={{display: 'flex', alignItems: 'center', gap: 0.9 * u, fontFamily: HANK, fontWeight: 700, fontSize: 1.9 * u, color: C.lawn}}>
             <svg width={2.2 * u} height={2.2 * u} viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-11" stroke={C.lawn} strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" /></svg> Invoice sent
@@ -404,7 +404,7 @@ const Pills: React.FC<{u: number; f: number; fps: number}> = ({u, f, fps}) => {
           <div style={{fontFamily: HANK, fontWeight: 500, fontSize: 1.7 * u, color: C.gravel}}>The Hollises · Window Washing</div>
         </Card>
       </P>
-      <P screen={4} delay={34} x={4} y={70} anchor="r"><StatusPill u={u} dot={C.lawn} text="14 paid this week" /></P>
+      <P screen={4} delay={34} x={8} y={35} anchor="r"><StatusPill u={u} dot={C.lawn} text="14 paid this week" /></P>
     </AbsoluteFill>
   );
 };
