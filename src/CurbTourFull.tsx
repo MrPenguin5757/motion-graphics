@@ -28,7 +28,10 @@ const win = (f: number, a: number, b: number, c: number, d: number) =>
 // beats: five screens, spin transition into each after the first
 const INTRO_OUT = 84;
 const S = [78, 228, 378, 528, 678]; // home, jobs, route, clients, money
-const SPIN = 28;
+const SPIN = 28; // 3D flip duration
+const SW = 22;   // in-app swipe duration
+// transition INTO each screen: entrance, then a mix of app swipes and one 3D flip
+const TT: ('enter' | 'swipe' | 'spin')[] = ['enter', 'swipe', 'spin', 'swipe', 'swipe'];
 const END = 828;
 export const DURATION = 958;
 const BASE = -16;
@@ -286,49 +289,87 @@ const MoneyScreen: React.FC<{u: number}> = ({u}) => (
 /* ---------- phone ---------- */
 const Face: React.FC<{u: number; back?: boolean; children: React.ReactNode}> = ({u, back, children}) => (
   <div style={{position: 'absolute', inset: 0, borderRadius: 5 * u, background: '#000', padding: 1.3 * u, backfaceVisibility: 'hidden', boxShadow: `0 ${4 * u}px ${8 * u}px rgba(0,0,0,.55)`, transform: back ? 'rotateY(180deg)' : undefined}}>
-    <div style={{width: '100%', height: '100%', borderRadius: 3.9 * u, overflow: 'hidden', background: back ? '#17130f' : C.sand, display: 'flex', flexDirection: 'column', color: C.ink, textAlign: 'left', alignItems: back ? 'center' : undefined, justifyContent: back ? 'center' : undefined, gap: back ? 3 * u : undefined}}>
+    <div style={{width: '100%', height: '100%', borderRadius: 3.9 * u, overflow: 'hidden', background: back ? '#141210' : C.sand, position: 'relative'}}>
       {children}
     </div>
   </div>
 );
 
+const Column: React.FC<{children: React.ReactNode}> = ({children}) => (
+  <div style={{position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', background: C.sand, color: C.ink, textAlign: 'left'}}>{children}</div>
+);
+
+const screenFor = (idx: number, u: number, f: number) => {
+  switch (idx) {
+    case 0: return <HomeScreen u={u} />;
+    case 1: return <JobsScreen u={u} />;
+    case 2: return <RouteScreen u={u} local={f - S[2]} />;
+    case 3: return <ClientsScreen u={u} />;
+    default: return <MoneyScreen u={u} />;
+  }
+};
+
 const activeIndex = (f: number) => {
   let idx = 0;
-  for (let i = 1; i < S.length; i++) if (f >= S[i] + SPIN / 2) idx = i;
+  for (let i = 1; i < S.length; i++) if (f >= S[i] + 12) idx = i;
   return idx;
 };
 
+/* a Curb-branded phone back, so the one 3D flip reads as a real device turning */
+const PhoneBack: React.FC<{u: number}> = ({u}) => (
+  <div style={{position: 'absolute', inset: 0, background: '#141210', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2.6 * u}}>
+    <div style={{position: 'absolute', top: 3 * u, left: 3 * u, width: 11 * u, height: 11 * u, borderRadius: 3 * u, background: '#0c0a08', padding: 1.1 * u, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0.9 * u}}>
+      {[0, 1, 2].map((i) => (
+        <div key={i} style={{width: '100%', aspectRatio: '1', borderRadius: '50%', background: '#040302', border: `${0.35 * u}px solid #26201a`}} />
+      ))}
+      <div style={{width: '52%', aspectRatio: '1', borderRadius: '50%', background: '#2a221b', placeSelf: 'center'}} />
+    </div>
+    <Mark size={15 * u} />
+    <b style={{fontFamily: BRIC, fontWeight: 800, fontSize: 5 * u, color: C.sand, letterSpacing: '-0.03em'}}>Curb</b>
+  </div>
+);
+
 const Phone: React.FC<{u: number; f: number; fps: number}> = ({u, f, fps}) => {
-  // spin into every screen after the first
-  let ry = BASE + Math.sin(f * 0.045) * 1.3;
+  // one clean 360 flip (Route); everything else stays face-forward. Accumulate so
+  // the rotation is continuous with the idle wobble (no snap in or out).
+  let spinAccum = 0;
   for (let i = 1; i < S.length; i++) {
-    if (f >= S[i] && f < S[i] + SPIN) ry = BASE + easeInOut((f - S[i]) / SPIN) * 360;
+    if (TT[i] !== 'spin') continue;
+    if (f >= S[i] + SPIN) spinAccum += 360;
+    else if (f >= S[i]) spinAccum += easeInOut((f - S[i]) / SPIN) * 360;
   }
+  const ry = BASE + Math.sin(f * 0.045) * 1.3 + spinAccum;
   const ty = Math.sin(f * 0.045) * 0.4;
-  const idx = activeIndex(f);
   const enter = spring({frame: f - S[0], fps, config: {damping: 200}});
   const exit = spring({frame: f - END, fps, config: {damping: 200}});
   const op = enter * (1 - exit);
   const inT = `translateY(${(1 - enter) * 16 - exit * 8}%) rotateY(${(1 - enter) * -55 + exit * 45}deg) scale(${(0.86 + 0.14 * enter) * (1 - 0.1 * exit)})`;
-  const screen = () => {
-    switch (idx) {
-      case 0: return <HomeScreen u={u} />;
-      case 1: return <JobsScreen u={u} />;
-      case 2: return <RouteScreen u={u} local={f - S[2]} />;
-      case 3: return <ClientsScreen u={u} />;
-      default: return <MoneyScreen u={u} />;
+
+  // in-app horizontal swipe for the non-flip transitions (pages through the tabs)
+  let swipe: {i: number; p: number} | null = null;
+  for (let i = 1; i < S.length; i++) {
+    if (TT[i] === 'swipe' && f >= S[i] && f < S[i] + SW) {
+      swipe = {i, p: easeInOut((f - S[i]) / SW)};
+      break;
     }
-  };
+  }
+  const idx = activeIndex(f);
+  const front = swipe ? (
+    <div style={{position: 'absolute', top: 0, left: 0, height: '100%', width: '200%', display: 'flex', transform: `translateX(${-swipe.p * 50}%)`}}>
+      <div style={{position: 'relative', width: '50%', height: '100%'}}><Column>{screenFor(swipe.i - 1, u, f)}</Column></div>
+      <div style={{position: 'relative', width: '50%', height: '100%'}}><Column>{screenFor(swipe.i, u, f)}</Column></div>
+    </div>
+  ) : (
+    <Column>{screenFor(idx, u, f)}</Column>
+  );
+
   return (
     <div style={{transformStyle: 'preserve-3d', transform: 'scale(1.28)'}}>
       <div style={{transformStyle: 'preserve-3d', opacity: op, transform: inT}}>
-        <div style={{transformStyle: 'preserve-3d', transform: `translateY(${ty}%) rotateY(${ry}deg) rotateX(6deg)`}}>
+        <div style={{transformStyle: 'preserve-3d', transform: `translateY(${ty}%) rotateX(6deg) rotateY(${ry}deg)`}}>
           <div style={{position: 'relative', width: 40 * u, aspectRatio: '9 / 18', transformStyle: 'preserve-3d'}}>
-            <Face u={u}>{screen()}</Face>
-            <Face u={u} back>
-              <Mark size={22 * u} />
-              <b style={{fontFamily: BRIC, fontWeight: 800, fontSize: 7 * u, color: C.sand, letterSpacing: '-0.03em'}}>Curb</b>
-            </Face>
+            <Face u={u}>{front}</Face>
+            <Face u={u} back><PhoneBack u={u} /></Face>
           </div>
         </div>
       </div>
