@@ -35,7 +35,7 @@ const SW = 15;   // in-app swipe duration (snappy)
 const TT: ('enter' | 'swipe' | 'spin')[] = ['enter', 'swipe', 'spin', 'swipe', 'swipe'];
 const END = 828;
 export const DURATION = 958;
-const BASE = -16;
+const ANG = [-17, 16, -15, 18, -14]; // resting phone angle per screen (alternates side to side)
 
 const useU = () => {
   const {width, height} = useVideoConfig();
@@ -330,38 +330,54 @@ const PhoneBack: React.FC<{u: number}> = ({u}) => (
   </div>
 );
 
+// nav position along the 5-screen filmstrip + the resting angle, both continuous
+const navState = (f: number) => {
+  let pos = 0;
+  let ang = ANG[0];
+  for (let i = 1; i < S.length; i++) {
+    if (TT[i] === 'spin') {
+      const p = easeInOut(Math.min(Math.max((f - S[i]) / SPIN, 0), 1));
+      if (f >= S[i]) {
+        pos = f >= S[i] + SPIN / 2 ? i : i - 1; // swap under cover of the flip
+        ang = ANG[i - 1] + (ANG[i] - ANG[i - 1]) * p;
+      }
+    } else {
+      if (f >= S[i] + SW) {
+        pos = i;
+        ang = ANG[i];
+      } else if (f >= S[i]) {
+        const p = easeOut((f - S[i]) / SW);
+        pos = i - 1 + p;
+        ang = ANG[i - 1] + (ANG[i] - ANG[i - 1]) * p;
+      }
+    }
+  }
+  return {pos, ang};
+};
+
 const Phone: React.FC<{u: number; f: number; fps: number}> = ({u, f, fps}) => {
-  // one clean 360 flip (Route); everything else stays face-forward. Accumulate so
-  // the rotation is continuous with the idle wobble (no snap in or out).
+  // one clean 360 flip (Route); accumulate so rotation stays continuous with the wobble
   let spinAccum = 0;
   for (let i = 1; i < S.length; i++) {
     if (TT[i] !== 'spin') continue;
     if (f >= S[i] + SPIN) spinAccum += 360;
     else if (f >= S[i]) spinAccum += easeInOut((f - S[i]) / SPIN) * 360;
   }
-  const ry = BASE + Math.sin(f * 0.045) * 1.3 + spinAccum;
+  const {pos, ang} = navState(f);
+  const ry = ang + Math.sin(f * 0.045) * 1.3 + spinAccum;
   const ty = Math.sin(f * 0.045) * 0.4;
   const enter = spring({frame: f - S[0], fps, config: {damping: 200}});
   const exit = spring({frame: f - END, fps, config: {damping: 200}});
   const op = enter * (1 - exit);
   const inT = `translateY(${(1 - enter) * 16 - exit * 8}%) rotateY(${(1 - enter) * -55 + exit * 45}deg) scale(${(0.86 + 0.14 * enter) * (1 - 0.1 * exit)})`;
 
-  // in-app horizontal swipe for the non-flip transitions (pages through the tabs)
-  let swipe: {i: number; p: number} | null = null;
-  for (let i = 1; i < S.length; i++) {
-    if (TT[i] === 'swipe' && f >= S[i] && f < S[i] + SW) {
-      swipe = {i, p: easeOut((f - S[i]) / SW)};
-      break;
-    }
-  }
-  const idx = activeIndex(f);
-  const front = swipe ? (
-    <div style={{position: 'absolute', top: 0, left: 0, height: '100%', width: '200%', display: 'flex', transform: `translateX(${-swipe.p * 50}%)`}}>
-      <div style={{position: 'relative', width: '50%', height: '100%'}}><Column>{screenFor(swipe.i - 1, u, f)}</Column></div>
-      <div style={{position: 'relative', width: '50%', height: '100%'}}><Column>{screenFor(swipe.i, u, f)}</Column></div>
+  // one continuous filmstrip of all five screens; slide to the active one (no seams / remounts)
+  const strip = (
+    <div style={{position: 'absolute', top: 0, left: 0, height: '100%', width: '500%', display: 'flex', background: C.sand, transform: `translateX(${-pos * 20}%)`}}>
+      {[0, 1, 2, 3, 4].map((k) => (
+        <div key={k} style={{position: 'relative', width: '20%', height: '100%'}}><Column>{screenFor(k, u, f)}</Column></div>
+      ))}
     </div>
-  ) : (
-    <Column>{screenFor(idx, u, f)}</Column>
   );
 
   return (
@@ -369,7 +385,7 @@ const Phone: React.FC<{u: number; f: number; fps: number}> = ({u, f, fps}) => {
       <div style={{transformStyle: 'preserve-3d', opacity: op, transform: inT}}>
         <div style={{transformStyle: 'preserve-3d', transform: `translateY(${ty}%) rotateX(6deg) rotateY(${ry}deg)`}}>
           <div style={{position: 'relative', width: 40 * u, aspectRatio: '9 / 18', transformStyle: 'preserve-3d'}}>
-            <Face u={u}>{front}</Face>
+            <Face u={u}>{strip}</Face>
             <Face u={u} back><PhoneBack u={u} /></Face>
           </div>
         </div>
