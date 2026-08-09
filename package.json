@@ -20,7 +20,11 @@
     "tourfull:9x16": "remotion render CurbTourFull-9x16 out/curb-tourfull-9x16.mp4",
     "tourfull:4x5": "remotion render CurbTourFull-4x5 out/curb-tourfull-4x5.mp4",
     "tourfull:1x1": "remotion render CurbTourFull-1x1 out/curb-tourfull-1x1.mp4",
-    "tourfull:all": "npm run tourfull:9x16 && npm run tourfull:4x5 && npm run tourfull:1x1"
+    "tourfull:all": "npm run tourfull:9x16 && npm run tourfull:4x5 && npm run tourfull:1x1",
+    "peryard:9x16": "remotion render CurbPerYard-9x16 out/curb-peryard-9x16.mp4",
+    "peryard:4x5": "remotion render CurbPerYard-4x5 out/curb-peryard-4x5.mp4",
+    "peryard:1x1": "remotion render CurbPerYard-1x1 out/curb-peryard-1x1.mp4",
+    "peryard:all": "npm run peryard:9x16 && npm run peryard:4x5 && npm run peryard:1x1"
   },
   "dependencies": {
     "@remotion/cli": "4.0.192",

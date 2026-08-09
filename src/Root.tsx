@@ -4,6 +4,7 @@ import {CurbAd, FPS, DURATION} from './CurbAd';
 import {CurbTour, FPS as TOUR_FPS, DURATION as TOUR_DURATION} from './CurbTour';
 import {CurbReviews, FPS as REV_FPS, DURATION as REV_DURATION} from './CurbReviews';
 import {CurbTourFull, FPS as TF_FPS, DURATION as TF_DURATION} from './CurbTourFull';
+import {CurbPerYard, FPS as PY_FPS, DURATION as PY_DURATION} from './CurbPerYard';
 
 // Each format your platforms need. Render any of them by id.
 const SIZES = [
@@ -54,6 +55,17 @@ export const RemotionRoot: React.FC = () => (
         component={CurbTourFull}
         durationInFrames={TF_DURATION}
         fps={TF_FPS}
+        width={f.width}
+        height={f.height}
+      />
+    ))}
+    {SIZES.map((f) => (
+      <Composition
+        key={`peryard-${f.suffix}`}
+        id={`CurbPerYard-${f.suffix}`}
+        component={CurbPerYard}
+        durationInFrames={PY_DURATION}
+        fps={PY_FPS}
         width={f.width}
         height={f.height}
       />
