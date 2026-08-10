@@ -24,7 +24,11 @@
     "peryard:9x16": "remotion render CurbPerYard-9x16 out/curb-peryard-9x16.mp4",
     "peryard:4x5": "remotion render CurbPerYard-4x5 out/curb-peryard-4x5.mp4",
     "peryard:1x1": "remotion render CurbPerYard-1x1 out/curb-peryard-1x1.mp4",
-    "peryard:all": "npm run peryard:9x16 && npm run peryard:4x5 && npm run peryard:1x1"
+    "peryard:all": "npm run peryard:9x16 && npm run peryard:4x5 && npm run peryard:1x1",
+    "slowseason:9x16": "remotion render CurbSlowSeason-9x16 out/curb-slowseason-9x16.mp4",
+    "slowseason:4x5": "remotion render CurbSlowSeason-4x5 out/curb-slowseason-4x5.mp4",
+    "slowseason:1x1": "remotion render CurbSlowSeason-1x1 out/curb-slowseason-1x1.mp4",
+    "slowseason:all": "npm run slowseason:9x16 && npm run slowseason:4x5 && npm run slowseason:1x1"
   },
   "dependencies": {
     "@remotion/cli": "4.0.192",

@@ -5,6 +5,7 @@ import {CurbTour, FPS as TOUR_FPS, DURATION as TOUR_DURATION} from './CurbTour';
 import {CurbReviews, FPS as REV_FPS, DURATION as REV_DURATION} from './CurbReviews';
 import {CurbTourFull, FPS as TF_FPS, DURATION as TF_DURATION} from './CurbTourFull';
 import {CurbPerYard, FPS as PY_FPS, DURATION as PY_DURATION} from './CurbPerYard';
+import {CurbSlowSeason, FPS as SS_FPS, DURATION as SS_DURATION} from './CurbSlowSeason';
 
 // Each format your platforms need. Render any of them by id.
 const SIZES = [
@@ -66,6 +67,17 @@ export const RemotionRoot: React.FC = () => (
         component={CurbPerYard}
         durationInFrames={PY_DURATION}
         fps={PY_FPS}
+        width={f.width}
+        height={f.height}
+      />
+    ))}
+    {SIZES.map((f) => (
+      <Composition
+        key={`slowseason-${f.suffix}`}
+        id={`CurbSlowSeason-${f.suffix}`}
+        component={CurbSlowSeason}
+        durationInFrames={SS_DURATION}
+        fps={SS_FPS}
         width={f.width}
         height={f.height}
       />
