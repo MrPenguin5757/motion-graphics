@@ -28,7 +28,11 @@
     "slowseason:9x16": "remotion render CurbSlowSeason-9x16 out/curb-slowseason-9x16.mp4",
     "slowseason:4x5": "remotion render CurbSlowSeason-4x5 out/curb-slowseason-4x5.mp4",
     "slowseason:1x1": "remotion render CurbSlowSeason-1x1 out/curb-slowseason-1x1.mp4",
-    "slowseason:all": "npm run slowseason:9x16 && npm run slowseason:4x5 && npm run slowseason:1x1"
+    "slowseason:all": "npm run slowseason:9x16 && npm run slowseason:4x5 && npm run slowseason:1x1",
+    "storefront:1x1": "remotion render StorefrontAd-1x1 out/storefront-1x1.mp4",
+    "storefront:9x16": "remotion render StorefrontAd-9x16 out/storefront-9x16.mp4",
+    "storefront:4x5": "remotion render StorefrontAd-4x5 out/storefront-4x5.mp4",
+    "storefront:all": "npm run storefront:1x1 && npm run storefront:9x16 && npm run storefront:4x5"
   },
   "dependencies": {
     "@remotion/cli": "4.0.192",
@@ -39,6 +43,8 @@
     "remotion": "4.0.192"
   },
   "devDependencies": {
+    "@fontsource/fraunces": "^5.3.0",
+    "@fontsource/inter": "^5.3.0",
     "@types/react": "18.3.3",
     "typescript": "5.5.4"
   }
