@@ -41,9 +41,9 @@ const S = {
 };
 
 export const FPS = 30;
-const TR = 16;
+const TR = 11; // snappier transitions
 // picture-first, room left for a voiceover; retimes easily when the VO arrives
-const SEQ = [162, 186, 118];
+const SEQ = [66, 156, 182, 114];
 export const DURATION = SEQ.reduce((a, b) => a + b, 0) - TR * (SEQ.length - 1);
 
 const CL = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
@@ -83,6 +83,22 @@ const Phone: React.FC<{u: number; w: number; children: React.ReactNode}> = ({u, 
     <div style={{background: '#f3f0ea', borderRadius: 4 * u, overflow: 'hidden'}}>{children}</div>
   </div>
 );
+
+/* ---------- 0. hook ---------- */
+const HookScene: React.FC = () => {
+  const u = useU();
+  const p1 = useSpr(0, 12, 0.6);
+  const p2 = useSpr(5, 12, 0.6);
+  const line = (p: number) => ({display: 'block', opacity: interpolate(p, [0, 0.5], [0, 1], CL), transform: `translateY(${(1 - Math.min(p, 1)) * 16}%) scale(${0.92 + Math.min(p, 1) * 0.08})`, transformOrigin: 'left center'});
+  return (
+    <AbsoluteFill style={{background: S.ink, flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', padding: `${8 * u}px`, fontFamily: INTER}}>
+      <h1 style={{margin: 0, fontFamily: FRAU, fontWeight: 900, fontSize: 11 * u, lineHeight: 0.98, letterSpacing: '-0.02em', color: S.cream}}>
+        <span style={line(p1)}>You're losing</span>
+        <span style={{...line(p2), color: S.terra}}>customers.</span>
+      </h1>
+    </AbsoluteFill>
+  );
+};
 
 /* ---------- 1. the search ---------- */
 const ResultCard: React.FC<{u: number; name: string; meta: string; hasSite: boolean; ring?: number}> = ({u, name, meta, hasSite, ring = 0}) => (
@@ -238,11 +254,13 @@ export const StorefrontWhy: React.FC = () => {
   return (
     <AbsoluteFill style={{background: S.cream}}>
       <TransitionSeries>
-        <TransitionSeries.Sequence durationInFrames={SEQ[0]}><SearchScene /></TransitionSeries.Sequence>
+        <TransitionSeries.Sequence durationInFrames={SEQ[0]}><HookScene /></TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={slide({direction: 'from-bottom'})} timing={t} />
-        <TransitionSeries.Sequence durationInFrames={SEQ[1]}><SiteScene /></TransitionSeries.Sequence>
+        <TransitionSeries.Sequence durationInFrames={SEQ[1]}><SearchScene /></TransitionSeries.Sequence>
+        <TransitionSeries.Transition presentation={slide({direction: 'from-bottom'})} timing={t} />
+        <TransitionSeries.Sequence durationInFrames={SEQ[2]}><SiteScene /></TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={slide({direction: 'from-right'})} timing={t} />
-        <TransitionSeries.Sequence durationInFrames={SEQ[2]}><CtaScene /></TransitionSeries.Sequence>
+        <TransitionSeries.Sequence durationInFrames={SEQ[3]}><CtaScene /></TransitionSeries.Sequence>
       </TransitionSeries>
     </AbsoluteFill>
   );
