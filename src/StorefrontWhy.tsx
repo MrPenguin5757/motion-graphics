@@ -43,7 +43,7 @@ const S = {
 export const FPS = 30;
 const TR = 11; // snappier transitions
 // picture-first, room left for a voiceover; retimes easily when the VO arrives
-const SEQ = [66, 156, 182, 114];
+const SEQ = [96, 156, 182, 122];
 export const DURATION = SEQ.reduce((a, b) => a + b, 0) - TR * (SEQ.length - 1);
 
 const CL = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
@@ -87,15 +87,36 @@ const Phone: React.FC<{u: number; w: number; children: React.ReactNode}> = ({u, 
 /* ---------- 0. hook ---------- */
 const HookScene: React.FC = () => {
   const u = useU();
+  const frame = useCurrentFrame();
   const p1 = useSpr(0, 12, 0.6);
-  const p2 = useSpr(5, 12, 0.6);
-  const line = (p: number) => ({display: 'block', opacity: interpolate(p, [0, 0.5], [0, 1], CL), transform: `translateY(${(1 - Math.min(p, 1)) * 16}%) scale(${0.92 + Math.min(p, 1) * 0.08})`, transformOrigin: 'left center'});
+  const p2 = useSpr(4, 12, 0.6);
+  const line = (p: number) => ({display: 'block', opacity: interpolate(p, [0, 0.5], [0, 1], CL), transform: `translateY(${(1 - Math.min(p, 1)) * 16}%) scale(${0.94 + Math.min(p, 1) * 0.06})`, transformOrigin: 'left center'});
+  const draw = interpolate(frame, [6, 40], [1, 0], CL);
+  const areaOp = interpolate(frame, [22, 42], [0, 1], CL);
+  const pts = [[6, 10], [24, 20], [40, 15], [56, 32], [74, 38], [94, 54]];
+  const poly = pts.map((p) => p.join(',')).join(' ');
+  const dotAt = (i: number) => interpolate(frame, [6 + i * 5, 14 + i * 5], [0, 1], CL);
   return (
-    <AbsoluteFill style={{background: S.ink, flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', padding: `${8 * u}px`, fontFamily: INTER}}>
-      <h1 style={{margin: 0, fontFamily: FRAU, fontWeight: 900, fontSize: 11 * u, lineHeight: 0.98, letterSpacing: '-0.02em', color: S.cream}}>
+    <AbsoluteFill style={{background: S.ink, flexDirection: 'column', justifyContent: 'flex-start', padding: `${9 * u}px ${8 * u}px ${7 * u}px`, fontFamily: INTER}}>
+      <h1 style={{margin: 0, fontFamily: FRAU, fontWeight: 900, fontSize: 8 * u, lineHeight: 0.98, letterSpacing: '-0.02em', color: S.cream}}>
         <span style={line(p1)}>You're losing</span>
         <span style={{...line(p2), color: S.terra}}>customers.</span>
       </h1>
+      <div style={{flex: 1, marginTop: 3.4 * u, position: 'relative'}}>
+        <svg viewBox="0 0 100 60" preserveAspectRatio="none" style={{position: 'absolute', inset: 0, width: '100%', height: '100%'}}>
+          {[15, 30, 45].map((y) => (<line key={y} x1={0} y1={y} x2={100} y2={y} stroke="rgba(250,248,244,.08)" strokeWidth={0.4} />))}
+          <line x1={0} y1={58} x2={100} y2={58} stroke="rgba(250,248,244,.22)" strokeWidth={0.6} />
+          <polygon points={`6,10 ${poly.split(' ').slice(1).join(' ')} 94,58 6,58`} fill={S.red} opacity={areaOp * 0.18} />
+          <polyline points={poly} fill="none" stroke={S.red} strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round" pathLength={1} strokeDasharray={1} strokeDashoffset={draw} />
+          <g transform="translate(94,54)" opacity={interpolate(frame, [34, 42], [0, 1], CL)}>
+            <path d="M0 0 L-6.5 -2.5 M0 0 L-2.5 -6.5" stroke={S.red} strokeWidth={2.6} strokeLinecap="round" fill="none" />
+          </g>
+          {pts.map((p, i) => (<circle key={i} cx={p[0]} cy={p[1]} r={1.7} fill="#e86a4d" opacity={dotAt(i)} />))}
+        </svg>
+        <div style={{position: 'absolute', right: 0, top: 1 * u, display: 'flex', alignItems: 'center', gap: 1 * u, background: 'rgba(214,69,37,.16)', border: `1px solid ${S.red}`, color: '#e86a4d', borderRadius: 99, padding: `${0.9 * u}px ${1.8 * u}px`, fontFamily: INTER, fontWeight: 700, fontSize: 2.1 * u, opacity: interpolate(frame, [30, 40], [0, 1], CL)}}>
+          <span style={{fontSize: 2.4 * u}}>▼</span> Every day
+        </div>
+      </div>
     </AbsoluteFill>
   );
 };
@@ -230,20 +251,26 @@ const SiteScene: React.FC = () => {
 const CtaScene: React.FC = () => {
   const u = useU();
   const mark = useSpr(2, 13, 0.7);
-  const kick = useSpr(10);
-  const wm = useSpr(15);
-  const under = useSpr(23);
-  const url = useSpr(29);
-  const tag = useSpr(37);
-  const up = (p: number, dy = 22) => ({opacity: p, transform: `translateY(${(1 - p) * dy}px)`});
+  const kick = useSpr(9);
+  const h1 = useSpr(14);
+  const h2 = useSpr(18);
+  const sub = useSpr(26);
+  const under = useSpr(24);
+  const url = useSpr(32);
+  const tag = useSpr(38);
+  const up = (p: number, dy = 20) => ({opacity: p, transform: `translateY(${(1 - p) * dy}px)`});
   return (
-    <AbsoluteFill style={{background: S.cream, alignItems: 'center', justifyContent: 'center', textAlign: 'center', gap: 2.4 * u, fontFamily: INTER}}>
-      <div style={{opacity: mark, transform: `scale(${0.6 + mark * 0.4})`}}><Awning size={19 * u} /></div>
-      <div style={{...up(kick, 16), fontFamily: INTER, fontWeight: 600, fontSize: 2.5 * u, letterSpacing: '0.2em', color: S.terra}}>NO COST · NO OBLIGATION</div>
-      <div style={{...up(wm, 0), fontFamily: FRAU, fontWeight: 900, fontSize: 8.4 * u, letterSpacing: '-0.02em', color: S.ink, lineHeight: 1.02, maxWidth: '86%'}}>I'll build yours free.</div>
-      <div style={{height: 0.9 * u, width: 20 * u, background: S.terra, borderRadius: 99, transform: `scaleX(${under})`, transformOrigin: 'center'}} />
-      <div style={{...up(url), fontFamily: INTER, fontWeight: 600, fontSize: 3.3 * u, color: S.terra}}>storefrontdesigns.xyz</div>
-      <div style={{...up(tag), fontFamily: INTER, fontWeight: 400, fontSize: 2.5 * u, color: S.inkMut, maxWidth: '80%'}}>Free concept sites for Ooltewah &amp; Chattanooga businesses.</div>
+    <AbsoluteFill style={{background: S.cream, alignItems: 'center', justifyContent: 'center', textAlign: 'center', gap: 2 * u, padding: `${6 * u}px`, fontFamily: INTER}}>
+      <div style={{opacity: mark, transform: `scale(${0.6 + mark * 0.4})`}}><Awning size={14 * u} /></div>
+      <div style={{...up(kick, 14), fontFamily: INTER, fontWeight: 600, fontSize: 2.4 * u, letterSpacing: '0.2em', color: S.terra}}>NO COST TO SEE IT</div>
+      <div style={{fontFamily: FRAU, fontWeight: 900, fontSize: 8 * u, lineHeight: 1.0, letterSpacing: '-0.02em', color: S.ink}}>
+        <div style={up(h1, 0)}>See it before</div>
+        <div style={{...up(h2, 0), color: S.terra}}>you pay.</div>
+      </div>
+      <div style={{...up(sub), fontFamily: INTER, fontWeight: 400, fontSize: 2.7 * u, lineHeight: 1.4, color: S.inkMut, maxWidth: '84%'}}>The concept is free. Building and launching your real site is a one-time fee.</div>
+      <div style={{height: 0.9 * u, width: 18 * u, background: S.terra, borderRadius: 99, transform: `scaleX(${under})`, transformOrigin: 'center'}} />
+      <div style={{...up(url), fontFamily: INTER, fontWeight: 600, fontSize: 3 * u, color: S.terra}}>storefrontdesigns.xyz</div>
+      <div style={{...up(tag), fontFamily: INTER, fontWeight: 400, fontSize: 2.3 * u, color: S.inkMut, maxWidth: '82%'}}>Concept sites for Ooltewah &amp; Chattanooga businesses.</div>
     </AbsoluteFill>
   );
 };
