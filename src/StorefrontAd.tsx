@@ -10,7 +10,6 @@ import {
   useVideoConfig,
 } from 'remotion';
 import {TransitionSeries, linearTiming} from '@remotion/transitions';
-import {fade} from '@remotion/transitions/fade';
 import {wipe} from '@remotion/transitions/wipe';
 import {slide} from '@remotion/transitions/slide';
 import {loadFont} from '@remotion/fonts';
@@ -97,24 +96,19 @@ const Leaf: React.FC<{size: number; color?: string}> = ({size, color = S.green})
 const ProblemScene: React.FC = () => {
   const u = useU();
   const frame = useCurrentFrame();
-  const kick = useSpr(2, 14, 0.7);
-  const h1 = useSpr(8);
-  const h2 = useSpr(13);
-  const sub = useSpr(20);
-  const draw = interpolate(frame, [22, 60], [1, 0], CL); // strokeDashoffset 1 -> 0
-  const areaOp = interpolate(frame, [40, 62], [0, 1], CL);
+  // no build-in: the statement is on screen from frame 1; the graph crashes in.
+  const draw = interpolate(frame, [2, 32], [1, 0], CL); // strokeDashoffset 1 -> 0
+  const areaOp = interpolate(frame, [16, 34], [0, 1], CL);
   const pts = [[6, 9], [23, 17], [39, 13], [55, 29], [72, 35], [92, 50]];
   const poly = pts.map((p) => p.join(',')).join(' ');
-  const dotAt = (i: number) => interpolate(frame, [22 + i * 6, 30 + i * 6], [0, 1], CL);
-  const rise = (p: number, dy = 110) => ({display: 'block', transform: `translateY(${(1 - p) * dy}%)`});
+  const dotAt = (i: number) => interpolate(frame, [2 + i * 5, 10 + i * 5], [0, 1], CL);
   return (
     <AbsoluteFill style={{background: S.ink, flexDirection: 'column', justifyContent: 'flex-start', padding: `${11 * u}px ${8 * u}px ${8 * u}px`, fontFamily: INTER}}>
-      <div style={{opacity: interpolate(kick, [0, 1], [0, 1], CL), transform: `translateY(${(1 - kick) * 40}%)`, color: S.redLt, fontFamily: INTER, fontWeight: 600, fontSize: 2.7 * u, letterSpacing: '0.22em'}}>THE PROBLEM</div>
+      <div style={{color: S.redLt, fontFamily: INTER, fontWeight: 600, fontSize: 2.7 * u, letterSpacing: '0.22em'}}>THE PROBLEM</div>
       <h1 style={{margin: `${1.6 * u}px 0 0`, fontFamily: FRAU, fontWeight: 900, fontSize: 9 * u, lineHeight: 1.0, letterSpacing: '-0.02em', color: S.cream}}>
-        <span style={{display: 'block', overflow: 'hidden'}}><span style={rise(h1)}>Losing customers</span></span>
-        <span style={{display: 'block', overflow: 'hidden'}}><span style={{...rise(h2), color: S.terra}}>you never see.</span></span>
+        Losing customers<br /><span style={{color: S.terra}}>you never see.</span>
       </h1>
-      <div style={{opacity: sub, transform: `translateY(${(1 - sub) * 18}px)`, marginTop: 2.2 * u, fontFamily: INTER, fontWeight: 400, fontSize: 3.1 * u, lineHeight: 1.4, color: 'rgba(250,248,244,.62)', maxWidth: '92%'}}>
+      <div style={{marginTop: 2.2 * u, fontFamily: INTER, fontWeight: 400, fontSize: 3.1 * u, lineHeight: 1.4, color: 'rgba(250,248,244,.62)', maxWidth: '92%'}}>
         A dated website turns them away before they ever reach out.
       </div>
       <div style={{flex: 1, marginTop: 3 * u, position: 'relative'}}>
@@ -124,12 +118,12 @@ const ProblemScene: React.FC = () => {
           <line x1={0} y1={56} x2={100} y2={56} stroke="rgba(250,248,244,.22)" strokeWidth={0.6} />
           <polygon points={`6,9 ${poly.split(' ').slice(1).join(' ')} 92,56 6,56`} fill={S.red} opacity={areaOp * 0.16} />
           <polyline points={poly} fill="none" stroke={S.red} strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" pathLength={1} strokeDasharray={1} strokeDashoffset={draw} />
-          <g transform="translate(92,50)" opacity={interpolate(frame, [56, 64], [0, 1], CL)}>
+          <g transform="translate(92,50)" opacity={interpolate(frame, [28, 36], [0, 1], CL)}>
             <path d="M0 0 L-6 -2.5 M0 0 L-2.5 -6.5" stroke={S.red} strokeWidth={2.4} strokeLinecap="round" fill="none" />
           </g>
           {pts.map((p, i) => (<circle key={i} cx={p[0]} cy={p[1]} r={1.6} fill={S.redLt} opacity={dotAt(i)} />))}
         </svg>
-        <div style={{position: 'absolute', right: 0, top: 2 * u, display: 'flex', alignItems: 'center', gap: 1 * u, background: 'rgba(214,69,37,.16)', border: `1px solid ${S.red}`, color: S.redLt, borderRadius: 99, padding: `${0.9 * u}px ${1.8 * u}px`, fontFamily: INTER, fontWeight: 700, fontSize: 2.1 * u, opacity: interpolate(frame, [48, 60], [0, 1], CL)}}>
+        <div style={{position: 'absolute', right: 0, top: 2 * u, display: 'flex', alignItems: 'center', gap: 1 * u, background: 'rgba(214,69,37,.16)', border: `1px solid ${S.red}`, color: S.redLt, borderRadius: 99, padding: `${0.9 * u}px ${1.8 * u}px`, fontFamily: INTER, fontWeight: 700, fontSize: 2.1 * u, opacity: interpolate(frame, [24, 34], [0, 1], CL)}}>
           <span style={{fontSize: 2.4 * u}}>▼</span> Trending down
         </div>
       </div>
@@ -310,20 +304,22 @@ const AfterScene: React.FC = () => {
 /* ---------- scene 4: the offer ---------- */
 const OfferScene: React.FC = () => {
   const u = useU();
-  const h1 = useSpr(4);
-  const h2 = useSpr(9);
-  const sub = useSpr(18);
-  const mark = useSpr(26, 13, 0.7);
+  const mark = useSpr(2, 13, 0.7);
+  const kick = useSpr(8);
+  const h1 = useSpr(12);
+  const h2 = useSpr(17);
+  const sub = useSpr(26);
   const rise = (p: number) => ({display: 'block', transform: `translateY(${(1 - p) * 110}%)`});
   return (
     <AbsoluteFill style={{background: S.cream, flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', padding: `${8 * u}px`, fontFamily: INTER}}>
-      <div style={{opacity: mark, transform: `scale(${0.7 + mark * 0.3})`, transformOrigin: 'left center', marginBottom: 3 * u}}><Awning size={11 * u} /></div>
-      <h1 style={{margin: 0, fontFamily: FRAU, fontWeight: 900, fontSize: 10 * u, lineHeight: 1.0, letterSpacing: '-0.02em', color: S.ink}}>
-        <span style={{display: 'block', overflow: 'hidden'}}><span style={rise(h1)}>I build these</span></span>
-        <span style={{display: 'block', overflow: 'hidden'}}><span style={{...rise(h2), color: S.terra}}>for free.</span></span>
+      <div style={{opacity: mark, transform: `scale(${0.7 + mark * 0.3})`, transformOrigin: 'left center', marginBottom: 2.6 * u}}><Awning size={10 * u} /></div>
+      <div style={{opacity: kick, transform: `translateY(${(1 - kick) * 20}px)`, fontFamily: INTER, fontWeight: 600, fontSize: 2.6 * u, letterSpacing: '0.2em', color: S.terra}}>NO COST · NO OBLIGATION</div>
+      <h1 style={{margin: `${1.4 * u}px 0 0`, fontFamily: FRAU, fontWeight: 900, fontSize: 9.4 * u, lineHeight: 1.0, letterSpacing: '-0.02em', color: S.ink}}>
+        <span style={{display: 'block', overflow: 'hidden'}}><span style={rise(h1)}>Get a free</span></span>
+        <span style={{display: 'block', overflow: 'hidden'}}><span style={{...rise(h2), color: S.terra}}>concept site.</span></span>
       </h1>
-      <div style={{opacity: sub, transform: `translateY(${(1 - sub) * 18}px)`, marginTop: 2.6 * u, fontFamily: INTER, fontWeight: 400, fontSize: 3.4 * u, lineHeight: 1.4, color: S.inkMut, maxWidth: '92%'}}>
-        You only pay if you want to launch it.
+      <div style={{opacity: sub, transform: `translateY(${(1 - sub) * 18}px)`, marginTop: 2.6 * u, fontFamily: INTER, fontWeight: 400, fontSize: 3.2 * u, lineHeight: 1.4, color: S.inkMut, maxWidth: '94%'}}>
+        I design it for your business first. You only pay when you are ready to launch.
       </div>
     </AbsoluteFill>
   );
@@ -358,13 +354,13 @@ export const StorefrontAd: React.FC = () => {
     <AbsoluteFill style={{background: S.cream}}>
       <TransitionSeries>
         <TransitionSeries.Sequence durationInFrames={SEQ[0]}><ProblemScene /></TransitionSeries.Sequence>
-        <TransitionSeries.Transition presentation={fade()} timing={t} />
+        <TransitionSeries.Transition presentation={slide({direction: 'from-bottom'})} timing={t} />
         <TransitionSeries.Sequence durationInFrames={SEQ[1]}><BeforeScene /></TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={wipe({direction: 'from-left'})} timing={t} />
         <TransitionSeries.Sequence durationInFrames={SEQ[2]}><AfterScene /></TransitionSeries.Sequence>
-        <TransitionSeries.Transition presentation={fade()} timing={t} />
-        <TransitionSeries.Sequence durationInFrames={SEQ[3]}><OfferScene /></TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={slide({direction: 'from-bottom'})} timing={t} />
+        <TransitionSeries.Sequence durationInFrames={SEQ[3]}><OfferScene /></TransitionSeries.Sequence>
+        <TransitionSeries.Transition presentation={slide({direction: 'from-right'})} timing={t} />
         <TransitionSeries.Sequence durationInFrames={SEQ[4]}><EndScene /></TransitionSeries.Sequence>
       </TransitionSeries>
     </AbsoluteFill>
