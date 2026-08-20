@@ -140,22 +140,54 @@ const OpenerScene: React.FC = () => {
   );
 };
 
-/* ---------- 1. send info ---------- */
-const InfoChip: React.FC<{u: number; delay: number; label: string}> = ({u, delay, label}) => {
-  const p = useSpr(delay, 13, 0.7);
-  return (
-    <div style={{opacity: interpolate(p, [0, 0.5], [0, 1], CL), transform: `translateY(${(1 - Math.min(p, 1)) * 14}px) scale(${0.9 + Math.min(p, 1) * 0.1})`, background: '#fff', border: `1px solid rgba(28,26,23,.10)`, borderRadius: 99, padding: `${1.2 * u}px ${2.4 * u}px`, fontFamily: INTER, fontWeight: 600, fontSize: 2.7 * u, color: S.ink, boxShadow: '0 1px 3px rgba(28,26,23,.06)'}}>{label}</div>
-  );
-};
+/* ---------- 1. send info (animated form fill) ---------- */
+const PhotoIcon: React.FC<{u: number}> = ({u}) => (
+  <svg width="52%" height="52%" viewBox="0 0 24 24" fill="none">
+    <circle cx="8" cy="8.5" r="2.2" fill="#fff" opacity="0.9" />
+    <path d="M3 19 L9 12 L13 16 L17 11 L21 19 Z" fill="#fff" opacity="0.9" />
+  </svg>
+);
 
 const Step1: React.FC = () => {
   const u = useU();
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const card = useSpr(4, 14, 0.8);
+  const nameFull = 'Verde Cafe';
+  const hoursFull = 'Mon-Sat, 7a-3p';
+  const nameN = Math.max(0, Math.min(nameFull.length, Math.floor((frame - 10) / 2.2)));
+  const hoursN = Math.max(0, Math.min(hoursFull.length, Math.floor((frame - 40) / 2.3)));
+  const nameActive = frame >= 8 && frame < 40;
+  const hoursActive = frame >= 38 && frame < 76;
+  const blink = Math.floor(frame / 7) % 2 ? 1 : 0.2;
+  const tints = ['rgba(192,122,75,.85)', 'rgba(58,90,64,.85)', 'rgba(224,166,60,.85)'];
+  const field = (label: string, value: string, active: boolean) => (
+    <div style={{width: '100%'}}>
+      <div style={{fontFamily: INTER, fontWeight: 600, fontSize: 1.9 * u, letterSpacing: '0.02em', color: S.inkMut, marginBottom: 0.7 * u}}>{label}</div>
+      <div style={{background: '#fff', border: `1.6px solid ${active ? S.terra : 'rgba(28,26,23,.14)'}`, borderRadius: 1.4 * u, padding: `${1.3 * u}px ${1.8 * u}px`, minHeight: 3.2 * u, display: 'flex', alignItems: 'center', fontFamily: INTER, fontWeight: 600, fontSize: 2.7 * u, color: S.ink}}>
+        {value}{active && <span style={{opacity: blink, color: S.terra, marginLeft: 1}}>|</span>}
+      </div>
+    </div>
+  );
   return (
     <StepShell u={u} n="1" title={<>You send<br />your info.</>}>
-      <div style={{display: 'flex', flexWrap: 'wrap', gap: 1.6 * u, marginTop: 1 * u, maxWidth: '96%'}}>
-        {['Name', 'Hours', 'Phone', 'Links', 'Photos'].map((t, i) => (<InfoChip key={t} u={u} delay={12 + i * 5} label={t} />))}
+      <div style={{width: '100%', marginTop: 0.6 * u, opacity: interpolate(card, [0, 0.5], [0, 1], CL), transform: `translateY(${(1 - Math.min(card, 1)) * 12}px) scale(${0.97 + Math.min(card, 1) * 0.03})`, background: S.cream, border: '1px solid rgba(28,26,23,.10)', borderRadius: 2.4 * u, padding: `${2.6 * u}px`, boxShadow: `0 ${1.6 * u}px ${4.5 * u}px rgba(28,26,23,.12)`, display: 'flex', flexDirection: 'column', gap: 2 * u}}>
+        {field('Business name', nameFull.slice(0, nameN), nameActive)}
+        {field('Hours', hoursFull.slice(0, hoursN), hoursActive)}
+        <div>
+          <div style={{fontFamily: INTER, fontWeight: 600, fontSize: 1.9 * u, letterSpacing: '0.02em', color: S.inkMut, marginBottom: 0.9 * u}}>Photos</div>
+          <div style={{display: 'flex', gap: 1.4 * u}}>
+            {tints.map((t, i) => {
+              const p = spring({frame: frame - (78 + i * 6), fps, config: {damping: 13, mass: 0.7}});
+              return (
+                <div key={i} style={{flex: 1, aspectRatio: '1 / 1', borderRadius: 1.4 * u, background: t, display: 'grid', placeItems: 'center', opacity: interpolate(p, [0, 0.5], [0, 1], CL), transform: `translateY(${(1 - Math.min(p, 1)) * 12}px) scale(${0.85 + Math.min(p, 1) * 0.15})`}}>
+                  <PhotoIcon u={u} />
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
-      <div style={{marginTop: 1.6 * u, fontFamily: INTER, fontWeight: 400, fontSize: 3 * u, color: S.inkMut, maxWidth: '90%'}}>The basics about your business. That is all I need to start.</div>
     </StepShell>
   );
 };
