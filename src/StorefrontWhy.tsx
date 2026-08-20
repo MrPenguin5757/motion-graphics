@@ -104,15 +104,17 @@ const ResultCard: React.FC<{u: number; name: string; meta: string; hasSite: bool
 const SearchScene: React.FC = () => {
   const u = useU();
   const frame = useCurrentFrame();
+  const head = useSpr(3);
   const s = useSpr(2);
   const card = (d: number) => spring({frame: frame - d, fps: 30, config: {damping: 200}});
   const tap = interpolate(frame, [70, 80, 92], [0, 1, 0], CL);
   const chose = interpolate(frame, [84, 96], [0, 1], CL);
   const cap = interpolate(frame, [104, 116], [0, 1], CL);
   return (
-    <AbsoluteFill style={{background: S.cream, alignItems: 'center', justifyContent: 'center', fontFamily: INTER}}>
-      <div style={{width: 56 * u, opacity: s, transform: `translateY(${(1 - s) * 4}%) scale(${0.97 + s * 0.03})`}}>
-        <Phone u={u} w={56}>
+    <AbsoluteFill style={{background: S.cream, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2.6 * u, padding: `${5 * u}px`, fontFamily: INTER}}>
+      <div style={{opacity: head, transform: `translateY(${(1 - head) * 16}px)`, textAlign: 'center', fontFamily: FRAU, fontWeight: 900, fontSize: 5.4 * u, letterSpacing: '-0.02em', color: S.ink, lineHeight: 1.0}}>They Google you first.</div>
+      <div style={{width: 52 * u, opacity: s, transform: `translateY(${(1 - s) * 4}%) scale(${0.97 + s * 0.03})`}}>
+        <Phone u={u} w={52}>
           <div style={{background: '#fff', margin: `${2 * u}px ${2 * u}px ${1.4 * u}px`, borderRadius: 99, display: 'flex', alignItems: 'center', gap: 1.2 * u, padding: `${1.3 * u}px ${2 * u}px`, boxShadow: '0 1px 4px rgba(28,26,23,.08)'}}>
             <svg width={2.3 * u} height={2.3 * u} viewBox="0 0 24 24" fill="none" stroke={S.inkMut} strokeWidth={2.4}><circle cx="11" cy="11" r="7" /><path d="M21 21l-4-4" strokeLinecap="round" /></svg>
             <span style={{fontFamily: INTER, fontWeight: 500, fontSize: 2 * u, color: S.ink}}>coffee shop near me</span>
@@ -136,8 +138,8 @@ const SearchScene: React.FC = () => {
           </div>
         </Phone>
       </div>
-      <div style={{position: 'absolute', bottom: 6 * u, left: 0, right: 0, textAlign: 'center', opacity: cap, transform: `translateY(${(1 - cap) * 14}px)`, fontFamily: FRAU, fontWeight: 700, fontSize: 4.4 * u, letterSpacing: '-0.02em', color: S.ink}}>
-        They pick who shows up.
+      <div style={{textAlign: 'center', opacity: cap, transform: `translateY(${(1 - cap) * 14}px)`, fontFamily: INTER, fontWeight: 500, fontSize: 3 * u, color: S.inkMut}}>
+        No website, no reason to pick you.
       </div>
     </AbsoluteFill>
   );
@@ -176,8 +178,10 @@ const Chip: React.FC<{u: number; delay: number; x: number; y: number; anchor: 'l
 const SiteScene: React.FC = () => {
   const u = useU();
   const s = useSpr(2);
+  const head = useSpr(3);
   return (
     <AbsoluteFill style={{background: S.cream, alignItems: 'center', justifyContent: 'center', fontFamily: INTER}}>
+      <div style={{position: 'absolute', top: 6 * u, left: 0, right: 0, textAlign: 'center', opacity: head, transform: `translateY(${(1 - head) * 16}px)`, fontFamily: FRAU, fontWeight: 900, fontSize: 5.6 * u, letterSpacing: '-0.02em', color: S.ink, lineHeight: 1.0}}>A website does the work.</div>
       <div style={{width: 44 * u, opacity: s, transform: `translateY(${(1 - s) * 4}%) scale(${0.96 + s * 0.04})`}}>
         <Phone u={u} w={44}>
           <div style={{background: S.cream, padding: `${1.8 * u}px ${2 * u}px ${2.2 * u}px`}}>
