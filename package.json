@@ -36,7 +36,11 @@
     "why:1x1": "remotion render StorefrontWhy-1x1 out/storefront-why-1x1.mp4",
     "why:9x16": "remotion render StorefrontWhy-9x16 out/storefront-why-9x16.mp4",
     "why:4x5": "remotion render StorefrontWhy-4x5 out/storefront-why-4x5.mp4",
-    "why:all": "npm run why:1x1 && npm run why:9x16 && npm run why:4x5"
+    "why:all": "npm run why:1x1 && npm run why:9x16 && npm run why:4x5",
+    "how:9x16": "remotion render StorefrontHow-9x16 out/storefront-how-9x16.mp4",
+    "how:1x1": "remotion render StorefrontHow-1x1 out/storefront-how-1x1.mp4",
+    "how:4x5": "remotion render StorefrontHow-4x5 out/storefront-how-4x5.mp4",
+    "how:all": "npm run how:9x16 && npm run how:1x1 && npm run how:4x5"
   },
   "dependencies": {
     "@remotion/cli": "4.0.192",
