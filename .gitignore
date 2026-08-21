@@ -3,3 +3,6 @@ out/
 .DS_Store
 *.log
 .remotion/
+
+# raw social photos (large binaries)
+public/slides/raw/
