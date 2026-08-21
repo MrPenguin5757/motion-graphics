@@ -4,5 +4,3 @@ out/
 *.log
 .remotion/
 
-# raw social photos (large binaries)
-public/slides/raw/
