@@ -280,11 +280,11 @@ const BeforeScene: React.FC = () => {
   // step in a little and settle, hold there while panning down a touch, then
   // ONE smooth accelerating zoom straight into the white paper for the hand-off
   const stepIn = interpolate(frame, [28, 50], [1.0, 1.55], {...CL, easing: Easing.out(Easing.cubic)});
-  const dive = interpolate(frame, [80, SEQ[1]], [0, 2.2], {...CL, easing: Easing.in(Easing.cubic)});
+  const dive = interpolate(frame, [86, 128], [0, 2.2], {...CL, easing: Easing.in(Easing.cubic)});
   const zoom = stepIn + dive;
-  const pan = interpolate(frame, [54, 120], [0, -6 * u], {...CL, easing: Easing.inOut(Easing.quad)});
+  const pan = interpolate(frame, [54, 116], [0, -6 * u], {...CL, easing: Easing.inOut(Easing.quad)});
   const capFade = interpolate(frame, [28, 44], [1, 0], CL);
-  const toWhite = interpolate(frame, [122, 136], [0, 1], CL);
+  const toWhite = interpolate(frame, [116, 130], [0, 1], CL);
   return (
     <AbsoluteFill style={{background: C.asphalt, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3 * u, padding: `${6 * u}px`, fontFamily: HANK, overflow: 'hidden'}}>
       <Badge u={u} color={C.sand} bg="#000">BEFORE</Badge>
