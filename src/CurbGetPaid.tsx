@@ -34,7 +34,7 @@ const C = {
 
 export const FPS = 30;
 const TR = 12;
-const SEQ = [78, 114, 174, 102, 120];
+const SEQ = [102, 120, 174, 102, 120];
 export const DURATION = SEQ.reduce((a, b) => a + b, 0) - TR * (SEQ.length - 1);
 
 const CL = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
@@ -274,17 +274,17 @@ const BeforeScene: React.FC = () => {
   const u = useU();
   const frame = useCurrentFrame();
   const s = useSpr(4);
-  // slow push-in and downward crane, like an eye drifting down the list
-  // (kept net-upward so the growing phone never collides with the caption)
-  const zoom = interpolate(frame, [0, SEQ[1]], [1.0, 1.05], CL);
-  const crane = interpolate(frame, [0, SEQ[1]], [-3.4 * u, -0.6 * u], CL);
+  // hold ~1.4s so the list is readable, then punch in fast and pan down through it
+  const zoom = interpolate(frame, [0, 44, 64, SEQ[1]], [1.0, 1.03, 1.5, 1.56], {...CL, easing: Easing.inOut(Easing.cubic)});
+  const pan = interpolate(frame, [44, SEQ[1]], [0, -9 * u], {...CL, easing: Easing.inOut(Easing.quad)});
+  const capFade = interpolate(frame, [44, 58], [1, 0], CL);
   return (
     <AbsoluteFill style={{background: C.asphalt, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3 * u, padding: `${6 * u}px`, fontFamily: HANK, overflow: 'hidden'}}>
       <Badge u={u} color={C.sand} bg="#000">BEFORE</Badge>
-      <div style={{transform: `scale(${zoom}) translateY(${crane}px)`}}>
+      <div style={{transformOrigin: '50% 34%', transform: `scale(${zoom}) translateY(${pan}px)`}}>
         <div style={{opacity: s, transform: `translateY(${(1 - s) * 3}%) scale(${0.97 + s * 0.03})`}}><Phone u={u} w={52}><NotesScreen u={u} /></Phone></div>
       </div>
-      <Cap u={u}>Chasing it over text.</Cap>
+      <div style={{opacity: capFade}}><Cap u={u}>Chasing it over text.</Cap></div>
     </AbsoluteFill>
   );
 };
@@ -293,13 +293,12 @@ const AfterScene: React.FC = () => {
   const s = useSpr(2);
   const frame = useCurrentFrame();
   const cap = interpolate(frame, [96, 108], [0, 1], CL);
-  // gentle continuous push-in so the screen never sits fully still
-  const zoom = interpolate(frame, [0, SEQ[2]], [1.0, 1.045], CL);
-  const crane = interpolate(frame, [0, SEQ[2]], [-2.6 * u, -0.4 * u], CL);
+  // keep the whole phone in frame; just drift the focus toward the row being tapped
+  const zoom = interpolate(frame, [0, 50, 92, SEQ[2]], [1.0, 1.015, 1.06, 1.055], CL);
   return (
     <AbsoluteFill style={{background: C.asphalt, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3 * u, padding: `${6 * u}px`, fontFamily: HANK, overflow: 'hidden'}}>
       <Badge u={u} color={C.sand} bg={C.curb}>AFTER</Badge>
-      <div style={{transform: `scale(${zoom}) translateY(${crane}px)`}}>
+      <div style={{transformOrigin: '50% 46%', transform: `scale(${zoom})`}}>
         <div style={{opacity: s, transform: `translateY(${(1 - s) * 3}%) scale(${0.97 + s * 0.03})`}}><Phone u={u} w={52}><MoneyScreen u={u} /></Phone></div>
       </div>
       <div style={{opacity: cap, transform: `translateY(${(1 - cap) * 14}px)`, fontFamily: BRIC, fontWeight: 800, fontSize: 4.4 * u, letterSpacing: '-0.02em', color: C.sand, textAlign: 'center'}}>One tap. Paid.</div>
