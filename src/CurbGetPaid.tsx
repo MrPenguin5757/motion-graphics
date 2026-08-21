@@ -3,6 +3,7 @@ import {
   AbsoluteFill,
   continueRender,
   delayRender,
+  Easing,
   interpolate,
   spring,
   staticFile,
@@ -28,7 +29,7 @@ const C = {
   sand: '#F4EFE4', concrete: '#FBF8F1', pebble: '#ECE6D8', ink: '#211E1A',
   asphalt: '#1D1A16', asphalt2: '#26221C', curb: '#D75F1F', curbDk: '#E56A25',
   marigold: '#F3A847', lawn: '#3C7A59', lawnDk: '#4E9670', sky: '#2F6FB0',
-  gravel: '#7A7264', gravelDk: '#BDB4A4', red: '#D64B2E',
+  gravel: '#7A7264', gravelDk: '#BDB4A4', red: '#D64B2E', danger: '#C4362A',
 };
 
 export const FPS = 30;
@@ -66,11 +67,14 @@ const Mark: React.FC<{size: number; draw?: boolean; delay?: number}> = ({size, d
 /* ---------- phone shell + curb app chrome ---------- */
 const Phone: React.FC<{u: number; w: number; children: React.ReactNode}> = ({u, w, children}) => (
   <div style={{width: w * u, aspectRatio: '9 / 19', background: '#000', borderRadius: 5 * u, padding: 1.3 * u, boxShadow: `0 ${3 * u}px ${8 * u}px rgba(0,0,0,.5)`}}>
-    <div style={{width: '100%', height: '100%', borderRadius: 3.9 * u, overflow: 'hidden', background: C.sand, position: 'relative', display: 'flex', flexDirection: 'column', textAlign: 'left'}}>{children}</div>
+    <div style={{width: '100%', height: '100%', borderRadius: 3.9 * u, overflow: 'hidden', background: C.sand, position: 'relative', display: 'flex', flexDirection: 'column', textAlign: 'left'}}>
+      {children}
+      <div style={{position: 'absolute', top: 1.1 * u, left: '50%', transform: 'translateX(-50%)', width: w * u * 0.32, height: 2.6 * u, background: '#000', borderRadius: 99, zIndex: 8}} />
+    </div>
   </div>
 );
 const Top: React.FC<{u: number}> = ({u}) => (
-  <div style={{background: C.asphalt, display: 'flex', alignItems: 'center', gap: 1.3 * u, padding: `${2 * u}px ${2.2 * u}px ${1.6 * u}px`}}>
+  <div style={{background: C.asphalt, display: 'flex', alignItems: 'center', gap: 1.3 * u, padding: `${4.6 * u}px ${2.2 * u}px ${1.6 * u}px`}}>
     <Mark size={4.4 * u} /><span style={{flex: 1, background: 'rgba(244,239,228,.10)', color: C.sand, borderRadius: 99, padding: `${0.8 * u}px ${1.7 * u}px`, fontSize: 1.8 * u, fontWeight: 600}}>All trades ⌄</span>
   </div>
 );
@@ -101,22 +105,33 @@ const ProblemScene: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const k = useSpr(2, 14, 0.7);
-  const card = useSpr(14);
+  const card = useSpr(16);
+  const tag = useSpr(6, 13, 0.7);
   const jobs = [true, true, false, false, false, false];
+  // hook: total counts up fast, then keeps a slow breathing drift the whole scene
+  const count = Math.round(interpolate(frame, [12, 34], [0, 612], {...CL, easing: Easing.out(Easing.cubic)}));
+  const drift = Math.sin(frame / 26) * 0.7 * u;
+  const pulse = 0.55 + 0.45 * (0.5 + 0.5 * Math.sin(frame / 7));
   return (
-    <AbsoluteFill style={{background: C.asphalt, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 4 * u, padding: `${9 * u}px`, fontFamily: HANK}}>
-      <div style={{opacity: k, transform: `translateY(${(1 - k) * 16}px)`, alignSelf: 'flex-start'}}>
-        <div style={{color: C.curbDk, fontWeight: 700, fontSize: 2.7 * u, letterSpacing: '0.2em'}}>THREE WEEKS LATER</div>
-        <div style={{fontFamily: BRIC, fontWeight: 800, fontSize: 11 * u, lineHeight: 0.98, letterSpacing: '-0.03em', color: C.sand, marginTop: 1.6 * u}}>You did<br />the work.<br /><span style={{color: C.curbDk}}>Still not paid.</span></div>
-      </div>
-      <div style={{width: '100%', background: C.asphalt2, borderRadius: 3 * u, padding: `${3.4 * u}px`, opacity: card, transform: `translateY(${(1 - card) * 16}px)`}}>
-        <div style={{fontSize: 2.2 * u, letterSpacing: '0.13em', color: C.gravelDk, fontWeight: 700}}>OWED TO YOU</div>
-        <div style={{fontFamily: BRIC, fontWeight: 800, fontSize: 11 * u, letterSpacing: '-0.03em', color: C.curbDk, lineHeight: 1, margin: `${0.6 * u}px 0 ${1.6 * u}px`}}>$612</div>
-        <div style={{display: 'flex', gap: 1.2 * u}}>
-          {jobs.map((paid, i) => {
-            const p = spring({frame: frame - (24 + i * 4), fps, config: {damping: 13, mass: 0.7}});
-            return <div key={i} style={{flex: 1, opacity: interpolate(p, [0, 0.5], [0, 1], CL), transform: `scale(${0.8 + Math.min(p, 1) * 0.2})`, background: paid ? 'rgba(60,122,89,.2)' : 'rgba(215,95,31,.18)', color: paid ? C.lawnDk : C.curbDk, borderRadius: 1.4 * u, textAlign: 'center', padding: `${1.4 * u}px 0`, fontWeight: 700, fontSize: 1.9 * u}}>{paid ? 'Paid' : 'Unpaid'}</div>;
-          })}
+    <AbsoluteFill style={{background: C.asphalt, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 4 * u, padding: `${9 * u}px`, fontFamily: HANK, overflow: 'hidden'}}>
+      <div style={{transform: `translateY(${drift}px)`, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 4 * u}}>
+        <div style={{opacity: k, transform: `translateY(${(1 - k) * 16}px)`}}>
+          <div style={{display: 'inline-flex', alignItems: 'center', gap: 1.2 * u, background: 'rgba(196,54,42,.16)', border: `1px solid rgba(196,54,42,.5)`, borderRadius: 99, padding: `${0.9 * u}px ${2 * u}px`, transform: `scale(${0.9 + tag * 0.1})`, opacity: tag}}>
+            <span style={{width: 1.6 * u, height: 1.6 * u, borderRadius: '50%', background: C.danger, opacity: pulse}} />
+            <span style={{color: '#EF7B66', fontWeight: 700, fontSize: 2.3 * u, letterSpacing: '0.14em'}}>3 WEEKS OVERDUE</span>
+          </div>
+          <div style={{fontFamily: BRIC, fontWeight: 800, fontSize: 11 * u, lineHeight: 0.98, letterSpacing: '-0.03em', color: C.sand, marginTop: 2 * u}}>You did<br />the work.<br /><span style={{color: C.danger}}>Still not paid.</span></div>
+        </div>
+        <div style={{width: '100%', background: C.asphalt2, borderRadius: 3 * u, padding: `${3.4 * u}px`, opacity: card, transform: `translateY(${(1 - card) * 16}px)`}}>
+          <div style={{fontSize: 2.2 * u, letterSpacing: '0.13em', color: C.gravelDk, fontWeight: 700}}>OWED TO YOU</div>
+          <div style={{fontFamily: BRIC, fontWeight: 800, fontSize: 11 * u, letterSpacing: '-0.03em', color: C.danger, lineHeight: 1, margin: `${0.6 * u}px 0 ${1.6 * u}px`}}>${count.toLocaleString()}</div>
+          <div style={{display: 'flex', gap: 1.2 * u}}>
+            {jobs.map((paid, i) => {
+              const p = spring({frame: frame - (26 + i * 4), fps, config: {damping: 11, mass: 0.7}});
+              const shake = paid ? 0 : Math.sin(frame / 9 + i) * (1 - Math.min(p, 1)) * 0.6 * u;
+              return <div key={i} style={{flex: 1, opacity: interpolate(p, [0, 0.5], [0, 1], CL), transform: `scale(${0.8 + Math.min(p, 1) * 0.2}) translateX(${shake}px)`, background: paid ? 'rgba(60,122,89,.2)' : 'rgba(196,54,42,.2)', color: paid ? C.lawnDk : '#EF7B66', borderRadius: 1.4 * u, textAlign: 'center', padding: `${1.4 * u}px 0`, fontWeight: 700, fontSize: 1.9 * u}}>{paid ? 'Paid' : 'Unpaid'}</div>;
+            })}
+          </div>
         </div>
       </div>
     </AbsoluteFill>
@@ -130,7 +145,7 @@ const NotesScreen: React.FC<{u: number}> = ({u}) => {
   );
   return (
     <>
-      <div style={{background: '#fff', display: 'flex', alignItems: 'center', gap: 1 * u, padding: `${2.4 * u}px ${2.4 * u}px ${1.6 * u}px`, color: C.marigold, fontWeight: 600, fontSize: 2 * u}}>
+      <div style={{background: '#fff', display: 'flex', alignItems: 'center', gap: 1 * u, padding: `${4.8 * u}px ${2.4 * u}px ${1.6 * u}px`, color: C.marigold, fontWeight: 600, fontSize: 2 * u}}>
         <span style={{fontSize: 2.6 * u}}>‹</span> Notes
       </div>
       <div style={{flex: 1, background: '#fffef8', padding: `${1.6 * u}px ${2.6 * u}px`, display: 'flex', flexDirection: 'column', gap: 1.5 * u}}>
@@ -236,15 +251,19 @@ const JobsMini: React.FC<{u: number}> = ({u}) => (
 
 const WidenScene: React.FC = () => {
   const u = useU();
+  const frame = useCurrentFrame();
   const head = useSpr(2);
   const p1 = useSpr(8, 14, 0.7);
   const p2 = useSpr(16, 14, 0.7);
+  // phones bob gently out of phase so the frame keeps living
+  const bob1 = Math.sin(frame / 24) * 0.9 * u;
+  const bob2 = Math.sin(frame / 24 + 1.6) * 0.9 * u;
   return (
-    <AbsoluteFill style={{background: C.asphalt, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 5 * u, padding: `${8 * u}px`, fontFamily: HANK}}>
+    <AbsoluteFill style={{background: C.asphalt, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 5 * u, padding: `${8 * u}px`, fontFamily: HANK, overflow: 'hidden'}}>
       <div style={{opacity: head, transform: `translateY(${(1 - head) * 16}px)`, textAlign: 'center', fontFamily: BRIC, fontWeight: 800, fontSize: 8.4 * u, lineHeight: 0.98, letterSpacing: '-0.03em', color: C.sand}}>One app runs<br /><span style={{color: C.curbDk}}>the whole day.</span></div>
       <div style={{display: 'flex', gap: 4 * u, alignItems: 'center'}}>
-        <div style={{opacity: interpolate(p1, [0, 0.5], [0, 1], CL), transform: `translateY(${(1 - Math.min(p1, 1)) * 20}px) rotate(-4deg)`}}><Phone u={u} w={30}><RouteMini u={u} /></Phone></div>
-        <div style={{opacity: interpolate(p2, [0, 0.5], [0, 1], CL), transform: `translateY(${(1 - Math.min(p2, 1)) * 20}px) rotate(4deg)`}}><Phone u={u} w={30}><JobsMini u={u} /></Phone></div>
+        <div style={{opacity: interpolate(p1, [0, 0.5], [0, 1], CL), transform: `translateY(${(1 - Math.min(p1, 1)) * 20 + bob1}px) rotate(-4deg)`}}><Phone u={u} w={30}><RouteMini u={u} /></Phone></div>
+        <div style={{opacity: interpolate(p2, [0, 0.5], [0, 1], CL), transform: `translateY(${(1 - Math.min(p2, 1)) * 20 + bob2}px) rotate(4deg)`}}><Phone u={u} w={30}><JobsMini u={u} /></Phone></div>
       </div>
     </AbsoluteFill>
   );
@@ -253,11 +272,18 @@ const WidenScene: React.FC = () => {
 /* ---------- before / after scene shells ---------- */
 const BeforeScene: React.FC = () => {
   const u = useU();
+  const frame = useCurrentFrame();
   const s = useSpr(4);
+  // slow push-in and downward crane, like an eye drifting down the list
+  // (kept net-upward so the growing phone never collides with the caption)
+  const zoom = interpolate(frame, [0, SEQ[1]], [1.0, 1.05], CL);
+  const crane = interpolate(frame, [0, SEQ[1]], [-3.4 * u, -0.6 * u], CL);
   return (
-    <AbsoluteFill style={{background: C.asphalt, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3 * u, padding: `${6 * u}px`, fontFamily: HANK}}>
+    <AbsoluteFill style={{background: C.asphalt, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3 * u, padding: `${6 * u}px`, fontFamily: HANK, overflow: 'hidden'}}>
       <Badge u={u} color={C.sand} bg="#000">BEFORE</Badge>
-      <div style={{opacity: s, transform: `translateY(${(1 - s) * 3}%) scale(${0.97 + s * 0.03})`}}><Phone u={u} w={52}><NotesScreen u={u} /></Phone></div>
+      <div style={{transform: `scale(${zoom}) translateY(${crane}px)`}}>
+        <div style={{opacity: s, transform: `translateY(${(1 - s) * 3}%) scale(${0.97 + s * 0.03})`}}><Phone u={u} w={52}><NotesScreen u={u} /></Phone></div>
+      </div>
       <Cap u={u}>Chasing it over text.</Cap>
     </AbsoluteFill>
   );
@@ -267,10 +293,15 @@ const AfterScene: React.FC = () => {
   const s = useSpr(2);
   const frame = useCurrentFrame();
   const cap = interpolate(frame, [96, 108], [0, 1], CL);
+  // gentle continuous push-in so the screen never sits fully still
+  const zoom = interpolate(frame, [0, SEQ[2]], [1.0, 1.045], CL);
+  const crane = interpolate(frame, [0, SEQ[2]], [-2.6 * u, -0.4 * u], CL);
   return (
-    <AbsoluteFill style={{background: C.asphalt, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3 * u, padding: `${6 * u}px`, fontFamily: HANK}}>
+    <AbsoluteFill style={{background: C.asphalt, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3 * u, padding: `${6 * u}px`, fontFamily: HANK, overflow: 'hidden'}}>
       <Badge u={u} color={C.sand} bg={C.curb}>AFTER</Badge>
-      <div style={{opacity: s, transform: `translateY(${(1 - s) * 3}%) scale(${0.97 + s * 0.03})`}}><Phone u={u} w={52}><MoneyScreen u={u} /></Phone></div>
+      <div style={{transform: `scale(${zoom}) translateY(${crane}px)`}}>
+        <div style={{opacity: s, transform: `translateY(${(1 - s) * 3}%) scale(${0.97 + s * 0.03})`}}><Phone u={u} w={52}><MoneyScreen u={u} /></Phone></div>
+      </div>
       <div style={{opacity: cap, transform: `translateY(${(1 - cap) * 14}px)`, fontFamily: BRIC, fontWeight: 800, fontSize: 4.4 * u, letterSpacing: '-0.02em', color: C.sand, textAlign: 'center'}}>One tap. Paid.</div>
     </AbsoluteFill>
   );
