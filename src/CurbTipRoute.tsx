@@ -31,7 +31,6 @@ export const FPS = 30;
 export const DURATION = 432;
 const CL = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 
-// six real stops; "booked" is the order they called, "prox" groups by street
 type Stop = {id: number; name: string; svc: string; addr: string; grp: 'A' | 'R' | 'M'};
 const STOPS: Stop[] = [
   {id: 0, name: 'Marcus Webb', svc: 'Auto Detail', addr: '412 Ashwood Dr', grp: 'A'},
@@ -44,14 +43,19 @@ const STOPS: Stop[] = [
 const BOOKED = [0, 1, 2, 3, 4, 5];
 const PROX = [0, 2, 1, 4, 3, 5];
 const GRP_COLOR: Record<string, string> = {A: C.curb, R: C.sky, M: C.lawn};
+// scattered pin positions on the concept map (viewBox 0..100 x, 0..178 y)
+const PINS: [number, number, string][] = [
+  [24, 40, 'A'], [72, 30, 'R'], [44, 66, 'A'], [82, 96, 'M'], [28, 118, 'R'], [60, 146, 'M'],
+];
 
-const REORDER = 150;
+const LIST_IN = 116;
+const REORDER = 190;
 
 const CAPTIONS: {t: string; a: number; b: number}[] = [
-  {t: 'Six stops, in the order they called.', a: 26, b: 92},
-  {t: 'Ashwood, cross town, back to Ashwood.', a: 96, b: 148},
-  {t: 'Curb reorders them by what is closest.', a: 156, b: 220},
-  {t: 'Same day. Way less crossing town.', a: 232, b: 300},
+  {t: 'Six stops, all over town.', a: 24, b: 96},
+  {t: 'Booked in the order they called.', a: 128, b: 182},
+  {t: 'Curb orders them by what is closest.', a: 196, b: 258},
+  {t: 'Same day. Way less crossing town.', a: 266, b: 306},
 ];
 
 const useU = () => {
@@ -59,7 +63,6 @@ const useU = () => {
   return Math.min(width, height) / 100;
 };
 
-/* ---------- app pieces ---------- */
 const Mark: React.FC<{size: number; bg?: boolean}> = ({size, bg = true}) => (
   <div style={{width: size, height: size, borderRadius: size * 0.24, background: bg ? C.curb : 'transparent', display: 'grid', placeItems: 'center'}}>
     <svg width={size * 0.62} height={size * 0.62} viewBox="0 0 56 56">
@@ -78,18 +81,52 @@ const CaptionPill: React.FC<{u: number}> = ({u}) => {
   const outS = interpolate(frame, [active.b - 8, active.b], [1, 0], CL);
   const o = Math.min(inS, 1) * outS;
   return (
-    <div style={{position: 'absolute', left: 0, right: 0, bottom: 27 * u, display: 'flex', justifyContent: 'center', opacity: o, transform: `translateY(${(1 - Math.min(inS, 1)) * 22}px)`}}>
+    <div style={{position: 'absolute', left: 0, right: 0, bottom: 20 * u, display: 'flex', justifyContent: 'center', opacity: o, transform: `translateY(${(1 - Math.min(inS, 1)) * 22}px)`, zIndex: 40}}>
       <div style={{background: C.asphalt, color: C.sand, fontFamily: BRIC, fontWeight: 800, fontSize: 4.2 * u, letterSpacing: '-0.02em', padding: `${1.6 * u}px ${3 * u}px`, borderRadius: 3 * u, boxShadow: `0 ${1 * u}px ${3 * u}px rgba(0,0,0,.35)`, maxWidth: '88%', textAlign: 'center'}}>{active.t}</div>
     </div>
   );
 };
 
+/* ---------- beat 1: concept map (scattered stops, no route) ---------- */
+const MapScene: React.FC = () => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  return (
+    <AbsoluteFill style={{background: C.concrete}}>
+      <svg width="100%" height="100%" viewBox="0 0 100 178" preserveAspectRatio="xMidYMid slice" style={{display: 'block'}}>
+        <rect x="0" y="0" width="100" height="178" fill={C.concrete} />
+        {[[6, 34, 24, 22], [58, 12, 30, 20], [66, 66, 28, 28], [10, 120, 32, 24], [54, 140, 34, 26]].map((b, i) => (
+          <rect key={i} x={b[0]} y={b[1]} width={b[2]} height={b[3]} rx="3" fill={'#CBD9C7'} opacity={0.5} />
+        ))}
+        {[20, 52, 88, 124, 158].map((y) => <rect key={'h' + y} x="0" y={y} width="100" height="3" fill={C.pebble} />)}
+        {[24, 52, 80].map((x) => <rect key={'v' + x} x={x} y="0" width="3" height="178" fill={C.pebble} />)}
+        {PINS.map((p, i) => {
+          const drop = spring({frame: frame - (10 + i * 5), fps, config: {damping: 11, mass: 0.6}});
+          const pulse = 1 + 0.06 * Math.sin(frame / 9 + i);
+          const s = Math.min(drop, 1) * pulse;
+          return (
+            <g key={i} transform={`translate(${p[0]} ${p[1]})`} opacity={drop > 0.02 ? 1 : 0}>
+              <circle cx="0" cy="0" r={6.5} fill={GRP_COLOR[p[2]]} opacity={0.16 * Math.min(drop, 1)} />
+              <g transform={`translate(0 ${(1 - Math.min(drop, 1)) * -6}) scale(${s})`} style={{transformOrigin: 'center'}}>
+                <circle cx="0" cy="0" r={3.5} fill={GRP_COLOR[p[2]]} />
+                <circle cx="0" cy="0" r={1.3} fill="#fff" />
+              </g>
+            </g>
+          );
+        })}
+      </svg>
+      <div style={{position: 'absolute', top: 7, left: 7, fontFamily: BRIC, fontWeight: 800, color: C.ink, fontSize: 34, letterSpacing: '-0.02em', opacity: interpolate(frame, [6, 20], [0, 1], CL)}}>Today</div>
+    </AbsoluteFill>
+  );
+};
+
+/* ---------- beat 2/3: the real list ---------- */
 const StopCard: React.FC<{u: number; stop: Stop; rowH: number}> = ({u, stop, rowH}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const from = BOOKED.indexOf(stop.id);
   const to = PROX.indexOf(stop.id);
-  const drop = spring({frame: frame - (8 + from * 3), fps, config: {damping: 13, mass: 0.7}});
+  const drop = spring({frame: frame - (LIST_IN + 6 + from * 4), fps, config: {damping: 14, mass: 0.7}});
   const move = spring({frame: frame - (REORDER + to * 4), fps, config: {damping: 15, mass: 0.9}});
   const y = interpolate(move, [0, 1], [from * rowH, to * rowH]);
   const num = frame < REORDER + 12 ? from + 1 : to + 1;
@@ -107,16 +144,44 @@ const StopCard: React.FC<{u: number; stop: Stop; rowH: number}> = ({u, stop, row
   );
 };
 
-/* ---------- end card ---------- */
+const ListScene: React.FC<{u: number}> = ({u}) => {
+  const frame = useCurrentFrame();
+  const rowH = 20 * u;
+  const badge = interpolate(frame, [226, 242], [0, 1], CL);
+  const pressed = frame >= 306 ? 1 - Math.max(0, 1 - Math.abs(frame - 314) / 8) * 0.05 : 1;
+  return (
+    <AbsoluteFill style={{background: C.concrete}}>
+      <div style={{position: 'absolute', top: 0, left: 0, right: 0, height: 15 * u, background: C.asphalt, display: 'flex', alignItems: 'flex-end', gap: 1.6 * u, padding: `0 ${4 * u}px ${1.8 * u}px`}}>
+        <Mark size={5 * u} />
+        <div style={{lineHeight: 1}}>
+          <div style={{fontFamily: BRIC, fontWeight: 800, fontSize: 3.6 * u, color: C.sand, letterSpacing: '-0.02em'}}>Route</div>
+          <div style={{fontFamily: HANK, fontWeight: 500, fontSize: 2.1 * u, color: C.gravelDk}}>6 stops · today</div>
+        </div>
+        <div style={{flex: 1}} />
+        <div style={{alignSelf: 'center', marginBottom: -0.4 * u, background: C.lawn, color: '#fff', fontFamily: HANK, fontWeight: 700, fontSize: 2.3 * u, padding: `${0.8 * u}px ${1.8 * u}px`, borderRadius: 99, opacity: badge, transform: `translateY(${(1 - badge) * -8}px)`}}>Ordered by proximity</div>
+      </div>
+      <div style={{position: 'absolute', top: 18 * u, left: 4 * u, right: 4 * u, height: 6 * rowH}}>
+        {STOPS.map((s) => <StopCard key={s.id} u={u} stop={s} rowH={rowH} />)}
+      </div>
+      <div style={{position: 'absolute', left: 0, right: 0, bottom: 0, height: 24 * u, background: C.sand, borderTop: `1px solid rgba(33,30,26,.08)`, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 1.6 * u, padding: `0 ${4 * u}px`}}>
+        <div style={{display: 'flex', justifyContent: 'center', gap: 1.4 * u, fontFamily: HANK, fontWeight: 600, fontSize: 2.4 * u, color: C.gravel}}>
+          Opens in <span style={{color: C.ink, fontWeight: 700}}>Apple Maps</span> · Google · Waze
+        </div>
+        <div style={{background: C.curb, color: '#fff', textAlign: 'center', fontFamily: BRIC, fontWeight: 800, fontSize: 3.8 * u, padding: `${1.9 * u}px 0`, borderRadius: 2.4 * u, transform: `scale(${pressed})`, boxShadow: `0 0 ${2 * u}px rgba(215,95,31,.3)`}}>Start route</div>
+      </div>
+    </AbsoluteFill>
+  );
+};
+
 const EndCard: React.FC<{u: number}> = ({u}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const rise = spring({frame: frame - 320, fps, config: {damping: 20, mass: 0.9}});
-  if (frame < 316) return null;
-  const line = interpolate(frame, [336, 352], [0, 1], CL);
-  const link = interpolate(frame, [350, 366], [0, 1], CL);
+  const rise = spring({frame: frame - 330, fps, config: {damping: 20, mass: 0.9}});
+  if (frame < 326) return null;
+  const line = interpolate(frame, [346, 362], [0, 1], CL);
+  const link = interpolate(frame, [360, 376], [0, 1], CL);
   return (
-    <AbsoluteFill style={{background: C.asphalt, alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 3 * u, transform: `translateY(${(1 - Math.min(rise, 1)) * 100}%)`}}>
+    <AbsoluteFill style={{background: C.asphalt, alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 3 * u, transform: `translateY(${(1 - Math.min(rise, 1)) * 100}%)`, zIndex: 50}}>
       <div style={{display: 'flex', alignItems: 'center', gap: 2 * u}}>
         <Mark size={11 * u} />
         <span style={{fontFamily: BRIC, fontWeight: 800, fontSize: 10 * u, letterSpacing: '-0.03em', color: C.sand}}>Curb</span>
@@ -127,47 +192,24 @@ const EndCard: React.FC<{u: number}> = ({u}) => {
   );
 };
 
-/* ---------- composition ---------- */
+/* ---------- composition: map -> list -> organize -> logo ---------- */
 export const CurbTipRoute: React.FC = () => {
   const u = useU();
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const rowH = 20 * u;
-  const badge = interpolate(frame, [186, 202], [0, 1], CL);
-  // Start route press (real: one tap opens your nav app, shown by the label below)
-  const pressed = frame >= 300 ? 1 - Math.max(0, 1 - Math.abs(frame - 308) / 8) * 0.05 : 1;
-  const mapDim = interpolate(frame, [306, 322], [0, 0.5], CL);
+  // vertical push from the concept map into the app list
+  const slide = spring({frame: frame - 100, fps, config: {damping: 26, mass: 0.9}});
+  const mapY = -108 * slide;
+  const listY = 108 * (1 - slide);
   return (
-    <AbsoluteFill style={{background: C.concrete}}>
-      {/* app top bar */}
-      <div style={{position: 'absolute', top: 0, left: 0, right: 0, height: 15 * u, background: C.asphalt, display: 'flex', alignItems: 'flex-end', gap: 1.6 * u, padding: `0 ${4 * u}px ${1.8 * u}px`}}>
-        <Mark size={5 * u} />
-        <div style={{lineHeight: 1}}>
-          <div style={{fontFamily: BRIC, fontWeight: 800, fontSize: 3.6 * u, color: C.sand, letterSpacing: '-0.02em'}}>Route</div>
-          <div style={{fontFamily: HANK, fontWeight: 500, fontSize: 2.1 * u, color: C.gravelDk}}>6 stops · today</div>
-        </div>
-        <div style={{flex: 1}} />
-        <div style={{alignSelf: 'center', marginBottom: -0.4 * u, background: C.lawn, color: '#fff', fontFamily: HANK, fontWeight: 700, fontSize: 2.3 * u, padding: `${0.8 * u}px ${1.8 * u}px`, borderRadius: 99, opacity: badge, transform: `translateY(${(1 - badge) * -8}px)`}}>Ordered by proximity</div>
-      </div>
-
-      {/* stop list */}
-      <div style={{position: 'absolute', top: 18 * u, left: 4 * u, right: 4 * u, height: 6 * rowH}}>
-        {STOPS.map((s) => <StopCard key={s.id} u={u} stop={s} rowH={rowH} />)}
-      </div>
-
-      {/* caption */}
+    <AbsoluteFill style={{background: C.asphalt}}>
+      <AbsoluteFill style={{transform: `translateY(${mapY}%)`}}>
+        <MapScene />
+      </AbsoluteFill>
+      <AbsoluteFill style={{transform: `translateY(${listY}%)`}}>
+        <ListScene u={u} />
+      </AbsoluteFill>
       <CaptionPill u={u} />
-
-      {/* bottom bar: Start route -> opens your maps */}
-      <div style={{position: 'absolute', left: 0, right: 0, bottom: 0, height: 24 * u, background: C.sand, borderTop: `1px solid rgba(33,30,26,.08)`, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 1.6 * u, padding: `0 ${4 * u}px`}}>
-        <div style={{display: 'flex', justifyContent: 'center', gap: 1.4 * u, fontFamily: HANK, fontWeight: 600, fontSize: 2.4 * u, color: C.gravel}}>
-          Opens in <span style={{color: C.ink, fontWeight: 700}}>Apple Maps</span> · Google · Waze
-        </div>
-        <div style={{background: C.curb, color: '#fff', textAlign: 'center', fontFamily: BRIC, fontWeight: 800, fontSize: 3.8 * u, padding: `${1.9 * u}px 0`, borderRadius: 2.4 * u, transform: `scale(${pressed})`, boxShadow: `0 0 ${2 * u}px rgba(215,95,31,.3)`}}>Start route</div>
-      </div>
-
-      {/* dim + end card */}
-      <AbsoluteFill style={{background: '#000', opacity: mapDim, pointerEvents: 'none'}} />
       <EndCard u={u} />
     </AbsoluteFill>
   );
