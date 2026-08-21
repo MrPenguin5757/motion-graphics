@@ -34,7 +34,7 @@ const C = {
 
 export const FPS = 30;
 const TR = 12;
-const SEQ = [120, 120, 174, 102, 120];
+const SEQ = [120, 150, 210, 72, 120];
 // four transitions between five scenes: three are TR frames, the Notes->Money
 // hand-off is a longer 16-frame white fade
 export const DURATION = SEQ.reduce((a, b) => a + b, 0) - (TR * 3 + 16);
@@ -187,10 +187,10 @@ const owed = (u: number, name: string, sub: string, amt: string, paid: boolean) 
 
 const MoneyScreen: React.FC<{u: number}> = ({u}) => {
   const frame = useCurrentFrame();
-  const total = Math.round(interpolate(frame, [86, 96], [612, 432], CL));
-  const unpaid = frame < 90 ? 4 : 3;
-  const marcusPaid = frame >= 88;
-  const toast = interpolate(frame, [50, 60, 78, 88], [0, 1, 1, 0], CL);
+  const total = Math.round(interpolate(frame, [110, 120], [612, 432], CL));
+  const unpaid = frame < 114 ? 4 : 3;
+  const marcusPaid = frame >= 112;
+  const toast = interpolate(frame, [74, 84, 102, 112], [0, 1, 1, 0], CL);
   return (
     <>
       <Top u={u} />
@@ -277,12 +277,12 @@ const BeforeScene: React.FC = () => {
   const u = useU();
   const frame = useCurrentFrame();
   const s = useSpr(4);
-  // hold ~1.4s so the list is readable, then punch in fast, then drive
-  // hard into the white paper so the frame goes pure white for the hand-off
-  const zoom = interpolate(frame, [0, 44, 64, 96, SEQ[1]], [1.0, 1.03, 1.5, 1.8, 3.1], {...CL, easing: Easing.inOut(Easing.cubic)});
-  const pan = interpolate(frame, [44, SEQ[1]], [0, -9 * u], {...CL, easing: Easing.inOut(Easing.quad)});
-  const capFade = interpolate(frame, [44, 58], [1, 0], CL);
-  const toWhite = interpolate(frame, [94, 106], [0, 1], CL);
+  // hold ~2.4s so the list is readable, ease in until the phone borders are
+  // just visible, then drive hard into the white paper for the hand-off
+  const zoom = interpolate(frame, [0, 70, 100, 118, SEQ[1]], [1.0, 1.04, 1.5, 1.92, 3.4], {...CL, easing: Easing.inOut(Easing.cubic)});
+  const pan = interpolate(frame, [70, SEQ[1]], [0, -9 * u], {...CL, easing: Easing.inOut(Easing.quad)});
+  const capFade = interpolate(frame, [70, 84], [1, 0], CL);
+  const toWhite = interpolate(frame, [120, 134], [0, 1], CL);
   return (
     <AbsoluteFill style={{background: C.asphalt, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3 * u, padding: `${6 * u}px`, fontFamily: HANK, overflow: 'hidden'}}>
       <Badge u={u} color={C.sand} bg="#000">BEFORE</Badge>
@@ -296,23 +296,25 @@ const BeforeScene: React.FC = () => {
 };
 const AfterScene: React.FC = () => {
   const u = useU();
-  const s = useSpr(2);
   const frame = useCurrentFrame();
-  const cap = interpolate(frame, [96, 108], [0, 1], CL);
+  const {fps} = useVideoConfig();
+  const cap = interpolate(frame, [130, 144], [0, 1], CL);
   // keep the whole phone in frame; just drift the focus toward the row being tapped
-  const zoom = interpolate(frame, [0, 50, 92, SEQ[2]], [1.0, 1.015, 1.06, 1.055], CL);
-  // pull back out of the white the Notes scene drove into: start zoomed-in
-  // behind a white cover, then settle to normal as the white lifts
-  const intro = interpolate(frame, [0, 26], [1.5, 1.0], {...CL, easing: Easing.out(Easing.cubic)});
-  const fromWhite = interpolate(frame, [8, 24], [1, 0], CL);
+  const zoom = interpolate(frame, [0, 60, 120, SEQ[2]], [1.0, 1.02, 1.06, 1.055], CL);
+  // seamless white hand-off: the frame arrives pure white, then the Money
+  // phone springs up from the bottom while the white bg settles to asphalt
+  const rise = spring({frame: frame - 12, fps, config: {damping: 13, mass: 0.85}});
+  const riseY = (1 - rise) * 120;
+  const fromWhite = interpolate(frame, [18, 42], [1, 0], CL);
+  const badgeIn = interpolate(frame, [36, 50], [0, 1], CL);
   return (
     <AbsoluteFill style={{background: C.asphalt, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3 * u, padding: `${6 * u}px`, fontFamily: HANK, overflow: 'hidden'}}>
-      <Badge u={u} color={C.sand} bg={C.curb}>AFTER</Badge>
-      <div style={{transformOrigin: '50% 46%', transform: `scale(${zoom * intro})`}}>
-        <div style={{opacity: s, transform: `translateY(${(1 - s) * 3}%) scale(${0.97 + s * 0.03})`}}><Phone u={u} w={52}><MoneyScreen u={u} /></Phone></div>
+      <div style={{position: 'absolute', inset: 0, background: '#fffef8', opacity: fromWhite}} />
+      <div style={{opacity: badgeIn, transform: `translateY(${(1 - badgeIn) * -8}px)`}}><Badge u={u} color={C.sand} bg={C.curb}>AFTER</Badge></div>
+      <div style={{transformOrigin: '50% 46%', transform: `translateY(${riseY}%) scale(${zoom})`}}>
+        <Phone u={u} w={52}><MoneyScreen u={u} /></Phone>
       </div>
       <div style={{opacity: cap, transform: `translateY(${(1 - cap) * 14}px)`, fontFamily: BRIC, fontWeight: 800, fontSize: 4.4 * u, letterSpacing: '-0.02em', color: C.sand, textAlign: 'center'}}>One tap. Paid.</div>
-      <AbsoluteFill style={{background: '#fffef8', opacity: fromWhite, pointerEvents: 'none'}} />
     </AbsoluteFill>
   );
 };
