@@ -277,12 +277,14 @@ const BeforeScene: React.FC = () => {
   const u = useU();
   const frame = useCurrentFrame();
   const s = useSpr(4);
-  // hold with the whole phone (its sides) visible, then ONE smooth continuous
-  // zoom that accelerates straight into the white paper for the hand-off
-  const zoom = interpolate(frame, [0, 50, SEQ[1]], [1.0, 1.0, 3.4], {...CL, easing: Easing.in(Easing.cubic)});
-  const pan = interpolate(frame, [50, SEQ[1]], [0, -5 * u], CL);
-  const capFade = interpolate(frame, [50, 64], [1, 0], CL);
-  const toWhite = interpolate(frame, [120, 134], [0, 1], CL);
+  // step in a little and settle, hold there while panning down a touch, then
+  // ONE smooth accelerating zoom straight into the white paper for the hand-off
+  const stepIn = interpolate(frame, [28, 50], [1.0, 1.55], {...CL, easing: Easing.out(Easing.cubic)});
+  const dive = interpolate(frame, [80, SEQ[1]], [0, 2.2], {...CL, easing: Easing.in(Easing.cubic)});
+  const zoom = stepIn + dive;
+  const pan = interpolate(frame, [54, 120], [0, -6 * u], {...CL, easing: Easing.inOut(Easing.quad)});
+  const capFade = interpolate(frame, [28, 44], [1, 0], CL);
+  const toWhite = interpolate(frame, [122, 136], [0, 1], CL);
   return (
     <AbsoluteFill style={{background: C.asphalt, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3 * u, padding: `${6 * u}px`, fontFamily: HANK, overflow: 'hidden'}}>
       <Badge u={u} color={C.sand} bg="#000">BEFORE</Badge>
@@ -297,22 +299,22 @@ const BeforeScene: React.FC = () => {
 const AfterScene: React.FC = () => {
   const u = useU();
   const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
   const cap = interpolate(frame, [130, 144], [0, 1], CL);
   // keep the whole phone in frame; just drift the focus toward the row being tapped
   const zoom = interpolate(frame, [0, 60, 120, SEQ[2]], [1.0, 1.02, 1.06, 1.055], CL);
-  // seamless white hand-off: the frame arrives pure white, the Money phone
-  // fades in on that white, then the white bg fades away into the dark scene
-  const phoneIn = interpolate(frame, [14, 30], [0, 1], CL);
-  const fromWhite = interpolate(frame, [30, 54], [1, 0], CL);
-  const badgeIn = interpolate(frame, [44, 58], [0, 1], CL);
+  // the frame arrives pure white and STAYS white; the Money phone springs up
+  // from the bottom onto it, like the app opening on a clean sheet
+  const rise = spring({frame: frame - 12, fps, config: {damping: 14, mass: 0.85}});
+  const riseY = (1 - rise) * 120;
+  const badgeIn = interpolate(frame, [34, 50], [0, 1], CL);
   return (
-    <AbsoluteFill style={{background: C.asphalt, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3 * u, padding: `${6 * u}px`, fontFamily: HANK, overflow: 'hidden'}}>
-      <div style={{position: 'absolute', inset: 0, background: '#fffef8', opacity: fromWhite}} />
+    <AbsoluteFill style={{background: '#fffef8', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3 * u, padding: `${6 * u}px`, fontFamily: HANK, overflow: 'hidden'}}>
       <div style={{opacity: badgeIn, transform: `translateY(${(1 - badgeIn) * -8}px)`}}><Badge u={u} color={C.sand} bg={C.curb}>AFTER</Badge></div>
-      <div style={{opacity: phoneIn, transformOrigin: '50% 46%', transform: `scale(${zoom})`}}>
+      <div style={{transformOrigin: '50% 46%', transform: `translateY(${riseY}%) scale(${zoom})`}}>
         <Phone u={u} w={52}><MoneyScreen u={u} /></Phone>
       </div>
-      <div style={{opacity: cap, transform: `translateY(${(1 - cap) * 14}px)`, fontFamily: BRIC, fontWeight: 800, fontSize: 4.4 * u, letterSpacing: '-0.02em', color: C.sand, textAlign: 'center'}}>One tap. Paid.</div>
+      <div style={{opacity: cap, transform: `translateY(${(1 - cap) * 14}px)`, fontFamily: BRIC, fontWeight: 800, fontSize: 4.4 * u, letterSpacing: '-0.02em', color: C.ink, textAlign: 'center'}}>One tap. Paid.</div>
     </AbsoluteFill>
   );
 };
