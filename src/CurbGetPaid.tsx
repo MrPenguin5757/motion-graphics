@@ -11,8 +11,8 @@ import {
   useVideoConfig,
 } from 'remotion';
 import {TransitionSeries, linearTiming} from '@remotion/transitions';
-import {wipe} from '@remotion/transitions/wipe';
 import {slide} from '@remotion/transitions/slide';
+import {fade} from '@remotion/transitions/fade';
 import {loadFont} from '@remotion/fonts';
 
 const BRIC = 'Bricolage Grotesque';
@@ -34,8 +34,10 @@ const C = {
 
 export const FPS = 30;
 const TR = 12;
-const SEQ = [102, 120, 174, 102, 120];
-export const DURATION = SEQ.reduce((a, b) => a + b, 0) - TR * (SEQ.length - 1);
+const SEQ = [120, 120, 174, 102, 120];
+// four transitions between five scenes: three are TR frames, the Notes->Money
+// hand-off is a longer 16-frame white fade
+export const DURATION = SEQ.reduce((a, b) => a + b, 0) - (TR * 3 + 16);
 
 const CL = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 const useU = () => {
@@ -104,34 +106,35 @@ const ProblemScene: React.FC = () => {
   const u = useU();
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const k = useSpr(2, 14, 0.7);
-  const card = useSpr(16);
-  const tag = useSpr(6, 13, 0.7);
-  const jobs = [true, true, false, false, false, false];
-  // hook: total counts up fast, then keeps a slow breathing drift the whole scene
-  const count = Math.round(interpolate(frame, [12, 34], [0, 612], {...CL, easing: Easing.out(Easing.cubic)}));
-  const drift = Math.sin(frame / 26) * 0.7 * u;
+  const tag = useSpr(4, 13, 0.7);
+  const head = useSpr(8, 14, 0.7);
+  // the ghosted follow-up texts, then "read" with no reply, then the owed number
+  const texts = ['Hey! Following up on that invoice', 'Any update on payment?', '??'];
+  const readS = useSpr(52, 16);
+  const owed = useSpr(60, 13, 0.7);
+  const count = Math.round(interpolate(frame, [60, 84], [0, 612], {...CL, easing: Easing.out(Easing.cubic)}));
+  const drift = Math.sin(frame / 26) * 0.6 * u;
   const pulse = 0.55 + 0.45 * (0.5 + 0.5 * Math.sin(frame / 7));
   return (
-    <AbsoluteFill style={{background: C.asphalt, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 4 * u, padding: `${9 * u}px`, fontFamily: HANK, overflow: 'hidden'}}>
-      <div style={{transform: `translateY(${drift}px)`, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 4 * u}}>
-        <div style={{opacity: k, transform: `translateY(${(1 - k) * 16}px)`}}>
+    <AbsoluteFill style={{background: C.asphalt, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3.4 * u, padding: `${8 * u}px`, fontFamily: HANK, overflow: 'hidden'}}>
+      <div style={{transform: `translateY(${drift}px)`, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: 3.2 * u}}>
+        <div style={{opacity: head, transform: `translateY(${(1 - head) * 16}px)`}}>
           <div style={{display: 'inline-flex', alignItems: 'center', gap: 1.2 * u, background: 'rgba(196,54,42,.16)', border: `1px solid rgba(196,54,42,.5)`, borderRadius: 99, padding: `${0.9 * u}px ${2 * u}px`, transform: `scale(${0.9 + tag * 0.1})`, opacity: tag}}>
             <span style={{width: 1.6 * u, height: 1.6 * u, borderRadius: '50%', background: C.danger, opacity: pulse}} />
             <span style={{color: '#EF7B66', fontWeight: 700, fontSize: 2.3 * u, letterSpacing: '0.14em'}}>3 WEEKS OVERDUE</span>
           </div>
-          <div style={{fontFamily: BRIC, fontWeight: 800, fontSize: 11 * u, lineHeight: 0.98, letterSpacing: '-0.03em', color: C.sand, marginTop: 2 * u}}>You did<br />the work.<br /><span style={{color: C.danger}}>Still not paid.</span></div>
+          <div style={{fontFamily: BRIC, fontWeight: 800, fontSize: 7.6 * u, lineHeight: 1, letterSpacing: '-0.03em', color: C.sand, marginTop: 1.8 * u}}>You did the work.<br /><span style={{color: C.danger}}>Still not paid.</span></div>
         </div>
-        <div style={{width: '100%', background: C.asphalt2, borderRadius: 3 * u, padding: `${3.4 * u}px`, opacity: card, transform: `translateY(${(1 - card) * 16}px)`}}>
-          <div style={{fontSize: 2.2 * u, letterSpacing: '0.13em', color: C.gravelDk, fontWeight: 700}}>OWED TO YOU</div>
-          <div style={{fontFamily: BRIC, fontWeight: 800, fontSize: 11 * u, letterSpacing: '-0.03em', color: C.danger, lineHeight: 1, margin: `${0.6 * u}px 0 ${1.6 * u}px`}}>${count.toLocaleString()}</div>
-          <div style={{display: 'flex', gap: 1.2 * u}}>
-            {jobs.map((paid, i) => {
-              const p = spring({frame: frame - (26 + i * 4), fps, config: {damping: 11, mass: 0.7}});
-              const shake = paid ? 0 : Math.sin(frame / 9 + i) * (1 - Math.min(p, 1)) * 0.6 * u;
-              return <div key={i} style={{flex: 1, opacity: interpolate(p, [0, 0.5], [0, 1], CL), transform: `scale(${0.8 + Math.min(p, 1) * 0.2}) translateX(${shake}px)`, background: paid ? 'rgba(60,122,89,.2)' : 'rgba(196,54,42,.2)', color: paid ? C.lawnDk : '#EF7B66', borderRadius: 1.4 * u, textAlign: 'center', padding: `${1.4 * u}px 0`, fontWeight: 700, fontSize: 1.9 * u}}>{paid ? 'Paid' : 'Unpaid'}</div>;
-            })}
-          </div>
+        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 1.3 * u}}>
+          {texts.map((b, i) => {
+            const p = spring({frame: frame - (18 + i * 10), fps, config: {damping: 15, mass: 0.7}});
+            return <div key={i} style={{opacity: p, transform: `translateY(${(1 - p) * 10}px) scale(${0.9 + Math.min(p, 1) * 0.1})`, transformOrigin: 'bottom right', maxWidth: '82%', background: C.sky, color: '#fff', fontWeight: 600, fontSize: 2.9 * u, padding: `${1.5 * u}px ${2.4 * u}px`, borderRadius: `${2.8 * u}px ${2.8 * u}px ${0.6 * u}px ${2.8 * u}px`}}>{b}</div>;
+          })}
+          <div style={{opacity: readS, fontSize: 2 * u, color: C.gravel, fontWeight: 600, marginTop: 0.3 * u}}>Read 3:47 PM · no reply</div>
+        </div>
+        <div style={{opacity: owed, transform: `translateY(${(1 - owed) * 14}px)`, display: 'flex', alignItems: 'baseline', gap: 1.8 * u, borderTop: `1px solid rgba(244,239,228,.12)`, paddingTop: 2.4 * u}}>
+          <span style={{fontFamily: BRIC, fontWeight: 800, fontSize: 8.6 * u, letterSpacing: '-0.03em', color: C.danger, lineHeight: 1}}>${count.toLocaleString()}</span>
+          <span style={{fontSize: 2.6 * u, color: C.gravelDk, fontWeight: 700}}>owed · 3 jobs</span>
         </div>
       </div>
     </AbsoluteFill>
@@ -274,10 +277,12 @@ const BeforeScene: React.FC = () => {
   const u = useU();
   const frame = useCurrentFrame();
   const s = useSpr(4);
-  // hold ~1.4s so the list is readable, then punch in fast and pan down through it
-  const zoom = interpolate(frame, [0, 44, 64, SEQ[1]], [1.0, 1.03, 1.5, 1.56], {...CL, easing: Easing.inOut(Easing.cubic)});
+  // hold ~1.4s so the list is readable, then punch in fast, then drive
+  // hard into the white paper so the frame goes pure white for the hand-off
+  const zoom = interpolate(frame, [0, 44, 64, 96, SEQ[1]], [1.0, 1.03, 1.5, 1.8, 3.1], {...CL, easing: Easing.inOut(Easing.cubic)});
   const pan = interpolate(frame, [44, SEQ[1]], [0, -9 * u], {...CL, easing: Easing.inOut(Easing.quad)});
   const capFade = interpolate(frame, [44, 58], [1, 0], CL);
+  const toWhite = interpolate(frame, [94, 106], [0, 1], CL);
   return (
     <AbsoluteFill style={{background: C.asphalt, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3 * u, padding: `${6 * u}px`, fontFamily: HANK, overflow: 'hidden'}}>
       <Badge u={u} color={C.sand} bg="#000">BEFORE</Badge>
@@ -285,6 +290,7 @@ const BeforeScene: React.FC = () => {
         <div style={{opacity: s, transform: `translateY(${(1 - s) * 3}%) scale(${0.97 + s * 0.03})`}}><Phone u={u} w={52}><NotesScreen u={u} /></Phone></div>
       </div>
       <div style={{opacity: capFade}}><Cap u={u}>Chasing it over text.</Cap></div>
+      <AbsoluteFill style={{background: '#fffef8', opacity: toWhite, pointerEvents: 'none'}} />
     </AbsoluteFill>
   );
 };
@@ -295,13 +301,18 @@ const AfterScene: React.FC = () => {
   const cap = interpolate(frame, [96, 108], [0, 1], CL);
   // keep the whole phone in frame; just drift the focus toward the row being tapped
   const zoom = interpolate(frame, [0, 50, 92, SEQ[2]], [1.0, 1.015, 1.06, 1.055], CL);
+  // pull back out of the white the Notes scene drove into: start zoomed-in
+  // behind a white cover, then settle to normal as the white lifts
+  const intro = interpolate(frame, [0, 26], [1.5, 1.0], {...CL, easing: Easing.out(Easing.cubic)});
+  const fromWhite = interpolate(frame, [8, 24], [1, 0], CL);
   return (
     <AbsoluteFill style={{background: C.asphalt, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3 * u, padding: `${6 * u}px`, fontFamily: HANK, overflow: 'hidden'}}>
       <Badge u={u} color={C.sand} bg={C.curb}>AFTER</Badge>
-      <div style={{transformOrigin: '50% 46%', transform: `scale(${zoom})`}}>
+      <div style={{transformOrigin: '50% 46%', transform: `scale(${zoom * intro})`}}>
         <div style={{opacity: s, transform: `translateY(${(1 - s) * 3}%) scale(${0.97 + s * 0.03})`}}><Phone u={u} w={52}><MoneyScreen u={u} /></Phone></div>
       </div>
       <div style={{opacity: cap, transform: `translateY(${(1 - cap) * 14}px)`, fontFamily: BRIC, fontWeight: 800, fontSize: 4.4 * u, letterSpacing: '-0.02em', color: C.sand, textAlign: 'center'}}>One tap. Paid.</div>
+      <AbsoluteFill style={{background: '#fffef8', opacity: fromWhite, pointerEvents: 'none'}} />
     </AbsoluteFill>
   );
 };
@@ -332,13 +343,14 @@ const CtaScene: React.FC = () => {
 export const CurbGetPaid: React.FC = () => {
   const {width, height} = useVideoConfig();
   const t = linearTiming({durationInFrames: TR});
+  const tWhite = linearTiming({durationInFrames: 16});
   return (
     <AbsoluteFill style={{background: C.asphalt}}>
       <TransitionSeries>
         <TransitionSeries.Sequence durationInFrames={SEQ[0]}><ProblemScene /></TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={slide({direction: 'from-bottom'})} timing={t} />
         <TransitionSeries.Sequence durationInFrames={SEQ[1]}><BeforeScene /></TransitionSeries.Sequence>
-        <TransitionSeries.Transition presentation={wipe({direction: 'from-left'})} timing={t} />
+        <TransitionSeries.Transition presentation={fade()} timing={tWhite} />
         <TransitionSeries.Sequence durationInFrames={SEQ[2]}><AfterScene /></TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={slide({direction: 'from-left'})} timing={t} />
         <TransitionSeries.Sequence durationInFrames={SEQ[3]}><WidenScene /></TransitionSeries.Sequence>
