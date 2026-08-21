@@ -11,6 +11,7 @@ import {StorefrontWhy, FPS as SW_FPS, DURATION as SW_DURATION} from './Storefron
 import {StorefrontHow, FPS as SH_FPS, DURATION as SH_DURATION} from './StorefrontHow';
 import {CurbGetPaid, FPS as GP_FPS, DURATION as GP_DURATION} from './CurbGetPaid';
 import {CurbFiveWays, FPS as FW_FPS, DURATION as FW_DURATION} from './CurbFiveWays';
+import {CurbTipRoute, FPS as TR_FPS, DURATION as TR_DURATION} from './CurbTipRoute';
 
 // Each format your platforms need. Render any of them by id.
 const SIZES = [
@@ -138,6 +139,14 @@ export const RemotionRoot: React.FC = () => (
       fps={FW_FPS}
       width={1080}
       height={1350}
+    />
+    <Composition
+      id="CurbTipRoute"
+      component={CurbTipRoute}
+      durationInFrames={TR_DURATION}
+      fps={TR_FPS}
+      width={1080}
+      height={1920}
     />
   </>
 );
