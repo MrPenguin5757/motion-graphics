@@ -9,6 +9,7 @@ import {CurbSlowSeason, FPS as SS_FPS, DURATION as SS_DURATION} from './CurbSlow
 import {StorefrontAd, FPS as SF_FPS, DURATION as SF_DURATION} from './StorefrontAd';
 import {StorefrontWhy, FPS as SW_FPS, DURATION as SW_DURATION} from './StorefrontWhy';
 import {StorefrontHow, FPS as SH_FPS, DURATION as SH_DURATION} from './StorefrontHow';
+import {CurbGetPaid, FPS as GP_FPS, DURATION as GP_DURATION} from './CurbGetPaid';
 
 // Each format your platforms need. Render any of them by id.
 const SIZES = [
@@ -114,6 +115,17 @@ export const RemotionRoot: React.FC = () => (
         component={StorefrontHow}
         durationInFrames={SH_DURATION}
         fps={SH_FPS}
+        width={f.width}
+        height={f.height}
+      />
+    ))}
+    {SIZES.map((f) => (
+      <Composition
+        key={`getpaid-${f.suffix}`}
+        id={`CurbGetPaid-${f.suffix}`}
+        component={CurbGetPaid}
+        durationInFrames={GP_DURATION}
+        fps={GP_FPS}
         width={f.width}
         height={f.height}
       />

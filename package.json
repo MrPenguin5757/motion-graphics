@@ -40,7 +40,11 @@
     "how:9x16": "remotion render StorefrontHow-9x16 out/storefront-how-9x16.mp4",
     "how:1x1": "remotion render StorefrontHow-1x1 out/storefront-how-1x1.mp4",
     "how:4x5": "remotion render StorefrontHow-4x5 out/storefront-how-4x5.mp4",
-    "how:all": "npm run how:9x16 && npm run how:1x1 && npm run how:4x5"
+    "how:all": "npm run how:9x16 && npm run how:1x1 && npm run how:4x5",
+    "getpaid:9x16": "remotion render CurbGetPaid-9x16 out/curb-getpaid-9x16.mp4",
+    "getpaid:4x5": "remotion render CurbGetPaid-4x5 out/curb-getpaid-4x5.mp4",
+    "getpaid:1x1": "remotion render CurbGetPaid-1x1 out/curb-getpaid-1x1.mp4",
+    "getpaid:all": "npm run getpaid:9x16 && npm run getpaid:4x5 && npm run getpaid:1x1"
   },
   "dependencies": {
     "@remotion/cli": "4.0.192",
