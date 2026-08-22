@@ -46,7 +46,10 @@
     "getpaid:1x1": "remotion render CurbGetPaid-1x1 out/curb-getpaid-1x1.mp4",
     "getpaid:all": "npm run getpaid:9x16 && npm run getpaid:4x5 && npm run getpaid:1x1",
     "fiveways": "remotion render CurbFiveWays out/curb-fiveways-4x5.mp4",
-    "tiproute": "remotion render CurbTipRoute out/curb-tip-route-9x16.mp4"
+    "tiproute": "remotion render CurbTipRoute out/curb-tip-route-9x16.mp4",
+    "lookedup:9x16": "remotion render StorefrontLookedUp-9x16 out/storefront-lookedup-9x16.mp4",
+    "lookedup:4x5": "remotion render StorefrontLookedUp-4x5 out/storefront-lookedup-4x5.mp4",
+    "lookedup:all": "npm run lookedup:9x16 && npm run lookedup:4x5"
   },
   "dependencies": {
     "@remotion/cli": "4.0.192",

@@ -12,6 +12,7 @@ import {StorefrontHow, FPS as SH_FPS, DURATION as SH_DURATION} from './Storefron
 import {CurbGetPaid, FPS as GP_FPS, DURATION as GP_DURATION} from './CurbGetPaid';
 import {CurbFiveWays, FPS as FW_FPS, DURATION as FW_DURATION} from './CurbFiveWays';
 import {CurbTipRoute, FPS as TR_FPS, DURATION as TR_DURATION} from './CurbTipRoute';
+import {StorefrontLookedUp, FPS as LU_FPS, DURATION as LU_DURATION} from './StorefrontLookedUp';
 
 // Each format your platforms need. Render any of them by id.
 const SIZES = [
@@ -117,6 +118,17 @@ export const RemotionRoot: React.FC = () => (
         component={StorefrontHow}
         durationInFrames={SH_DURATION}
         fps={SH_FPS}
+        width={f.width}
+        height={f.height}
+      />
+    ))}
+    {SIZES.map((f) => (
+      <Composition
+        key={`storefrontlookedup-${f.suffix}`}
+        id={`StorefrontLookedUp-${f.suffix}`}
+        component={StorefrontLookedUp}
+        durationInFrames={LU_DURATION}
+        fps={LU_FPS}
         width={f.width}
         height={f.height}
       />
