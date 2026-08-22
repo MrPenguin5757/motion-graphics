@@ -207,16 +207,42 @@ const FramedScene: React.FC<{u: number; top: React.ReactNode; url: string; chip:
 };
 
 /* ---------- scenes ---------- */
+const SocialCard: React.FC<{u: number}> = ({u}) => {
+  const a = useSpr(3, 15, 0.8);
+  const rows: [string, string, string][] = [['Hours', 'Not listed', S.inkMut], ['Website', 'None', S.red], ['Latest post', '2 years ago', S.red]];
+  return (
+    <div style={{width: 66 * u, opacity: a, transform: `translateY(${(1 - Math.min(a, 1)) * 3 * u}px) scale(${0.94 + Math.min(a, 1) * 0.06})`, borderRadius: 2.6 * u, overflow: 'hidden', background: '#fff', boxShadow: `0 ${2.2 * u}px ${6 * u}px rgba(0,0,0,.45)`}}>
+      <div style={{height: 12 * u, background: '#e6e9f0'}} />
+      <div style={{padding: `0 ${2.8 * u}px ${2.8 * u}px`}}>
+        <div style={{width: 10 * u, height: 10 * u, borderRadius: '50%', background: '#cfd3dc', border: `${0.5 * u}px solid #fff`, marginTop: -5 * u}} />
+        <div style={{fontFamily: FRAU, fontWeight: 700, fontSize: 3.4 * u, color: S.ink, marginTop: 1 * u}}>Verde Cafe</div>
+        <div style={{fontFamily: INTER, fontSize: 1.9 * u, color: S.inkMut}}>Page · Coffee shop · Ooltewah</div>
+        <div style={{marginTop: 2 * u, display: 'grid', gridTemplateColumns: '1fr auto', fontFamily: INTER, fontSize: 2.1 * u}}>
+          {rows.map(([k, v, c]) => (
+            <React.Fragment key={k}>
+              <span style={{color: S.inkMut, borderTop: '1px solid #f0f0ee', padding: `${1.2 * u}px 0`}}>{k}</span>
+              <span style={{color: c, fontWeight: 600, textAlign: 'right', borderTop: '1px solid #f0f0ee', padding: `${1.2 * u}px 0`}}>{v}</span>
+            </React.Fragment>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const HookScene: React.FC = () => {
   const u = useU();
-  const kick = useSpr(2);
-  const h = useSpr(8);
-  const sub = useSpr(22);
+  const kick = useSpr(18);
+  const h = useSpr(24);
+  const sub = useSpr(38);
   return (
-    <AbsoluteFill style={{background: S.ink, flexDirection: 'column', justifyContent: 'center', padding: `0 ${8 * u}px`, fontFamily: INTER}}>
-      <div style={{opacity: kick, transform: `translateY(${(1 - kick) * 16}px)`, color: S.terra, fontWeight: 600, fontSize: 2.7 * u, letterSpacing: '0.22em'}}>8:47 PM · TONIGHT</div>
-      <h1 style={{opacity: h, transform: `translateY(${(1 - h) * 20}px)`, margin: `${1.8 * u}px 0 0`, fontFamily: FRAU, fontWeight: 900, fontSize: 9.6 * u, lineHeight: 1.0, letterSpacing: '-0.02em', color: S.cream}}>Someone just<br /><span style={{color: S.terra}}>looked you up.</span></h1>
-      <div style={{opacity: sub, transform: `translateY(${(1 - sub) * 16}px)`, marginTop: 2.4 * u, fontFamily: INTER, fontWeight: 400, fontSize: 3.2 * u, lineHeight: 1.4, color: 'rgba(250,248,244,.62)'}}>Here is what they found.</div>
+    <AbsoluteFill style={{background: S.ink, flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', gap: 5 * u, padding: `0 ${8 * u}px`, fontFamily: INTER}}>
+      <div style={{alignSelf: 'center'}}><SocialCard u={u} /></div>
+      <div>
+      <div style={{opacity: kick, transform: `translateY(${(1 - kick) * 16}px)`, color: S.terra, fontWeight: 600, fontSize: 2.7 * u, letterSpacing: '0.22em'}}>LET'S BE HONEST</div>
+      <h1 style={{opacity: h, transform: `translateY(${(1 - h) * 20}px)`, margin: `${1.8 * u}px 0 0`, fontFamily: FRAU, fontWeight: 900, fontSize: 9 * u, lineHeight: 1.02, letterSpacing: '-0.02em', color: S.cream}}>A Facebook page<br /><span style={{color: S.terra}}>isn't a website.</span></h1>
+      <div style={{opacity: sub, transform: `translateY(${(1 - sub) * 16}px)`, marginTop: 2.4 * u, fontFamily: INTER, fontWeight: 400, fontSize: 3.2 * u, lineHeight: 1.4, color: 'rgba(250,248,244,.62)'}}>Here is what your customers actually see.</div>
+      </div>
     </AbsoluteFill>
   );
 };
