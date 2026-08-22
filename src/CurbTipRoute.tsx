@@ -90,7 +90,15 @@ const CaptionPill: React.FC<{u: number}> = ({u}) => {
 const MapScene: React.FC<{order: number[]; trailColor: string; carStart: number; carEnd: number; pinStart: number}> = ({order, trailColor, carStart, carEnd, pinStart}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const pts = order.map((i) => [PINS[i][0], PINS[i][1]] as [number, number]);
+  // route along the grid: each leg turns a right angle (drives the "roads")
+  const stops = order.map((i) => [PINS[i][0], PINS[i][1]] as [number, number]);
+  const pts: [number, number][] = [stops[0]];
+  for (let i = 1; i < stops.length; i++) {
+    const a = stops[i - 1];
+    const b = stops[i];
+    const corner: [number, number] = i % 2 === 1 ? [b[0], a[1]] : [a[0], b[1]];
+    pts.push(corner, b);
+  }
   const segs: {x0: number; y0: number; x1: number; y1: number; len: number; acc: number}[] = [];
   let total = 0;
   for (let i = 1; i < pts.length; i++) {
@@ -127,16 +135,12 @@ const MapScene: React.FC<{order: number[]; trailColor: string; carStart: number;
         {[24, 52, 80].map((x) => <rect key={'v' + x} x={x} y="0" width="3" height="178" fill={C.pebble} />)}
         <path d={d} fill="none" stroke={trailColor} strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round" pathLength={1} strokeDasharray={1} strokeDashoffset={1 - carP} opacity={0.85} />
         {PINS.map((p, i) => {
-          const drop = spring({frame: frame - (pinStart + i * 4), fps, config: {damping: 11, mass: 0.6}});
-          const pulse = 1 + 0.05 * Math.sin(frame / 9 + i);
-          const s = Math.min(drop, 1) * pulse;
+          const drop = Math.min(spring({frame: frame - (pinStart + i * 4), fps, config: {damping: 13, mass: 0.6}}), 1);
           return (
-            <g key={i} transform={`translate(${p[0]} ${p[1]})`} opacity={drop > 0.02 ? 1 : 0}>
-              <circle cx="0" cy="0" r={6} fill={GRP_COLOR[p[2]]} opacity={0.13 * Math.min(drop, 1)} />
-              <g transform={`translate(0 ${(1 - Math.min(drop, 1)) * -6}) scale(${s})`} style={{transformOrigin: 'center'}}>
-                <circle cx="0" cy="0" r={3.4} fill={GRP_COLOR[p[2]]} />
-                <circle cx="0" cy="0" r={1.3} fill="#fff" />
-              </g>
+            <g key={i} transform={`translate(${p[0]} ${p[1] + (1 - drop) * -6})`} opacity={drop > 0.02 ? drop : 0}>
+              <circle cx="0" cy="0" r={6} fill={GRP_COLOR[p[2]]} opacity={0.13 * drop} />
+              <circle cx="0" cy="0" r={3.4 * drop} fill={GRP_COLOR[p[2]]} />
+              <circle cx="0" cy="0" r={1.3 * drop} fill="#fff" />
             </g>
           );
         })}
